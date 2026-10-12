@@ -2,7 +2,7 @@ import React from 'react'
 import { Card, Col, Dropdown, Row } from 'antd';
 
 const AboutPage = () => {
-  return (
+  return ( //trygrrgrgrg
     <div>
         <div classname="navbar-login">
             <h2 id="logo-name-2">NexDrive</h2>

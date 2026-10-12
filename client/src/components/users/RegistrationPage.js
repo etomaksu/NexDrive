@@ -8,7 +8,7 @@ const RegistrationPage = () => {
     email: "",
     phone: "",
     password: "",
-    confirmPassword: "",
+    confirmPassword: ""
   });
 
   return (

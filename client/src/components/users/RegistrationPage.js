@@ -9,7 +9,7 @@ const RegistrationPage = () => {
     password: "",
     confirmPassword: "",
   });
-//trygrrgrgr
+//trygrr
   return (
     <div>
         <div classname="">

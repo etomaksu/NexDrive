@@ -66,7 +66,7 @@ const LoginPage = () => {
             })
     }
 
-    return ( //trygrrgrgr
+    return ( //trygrr
         <div>
             <div classname="">
                 <h2 id="logo-name-1">NexDrive</h2>

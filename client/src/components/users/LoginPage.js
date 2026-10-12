@@ -69,39 +69,40 @@ const LoginPage = () => {
     return (
         <div>
             <div classname="">
-                <h2 classname="logo-name">NexDrive</h2>
-                <h1 classname="" >Your next trip starts here.</h1>
-                <p classname="">Create an account to book faster, track your bookings, and manage your payment.</p>
+                <h2 id="logo-name">NexDrive</h2>
+                <h1 id="hl-1" >Your next trip starts here.</h1>
+                <p id="desc-2">Create an account to book faster, track your bookings, and manage your payment.</p>
             </div>
 
-            <div classname="">
-                <h1>Welcome back</h1>
-                <p>Log in to manage your bookings.</p>
+            <div classname="login-form">
+                <h1 id="hl-2">Welcome back</h1>
+                <p id="desc-1">Log in to manage your bookings.</p>
                 
                 <nav></nav> //for the login or register option
 
-                <label className="email-input">Email</label>
-                <input
-                    type='email'
-                    placeholder='Email'
-                    value={login.email}
-                    onChange={(e) => { setLogin({ ...login, email: e.target.value }) }}
-                />
+                <form>
+                    <label className="email-input">Email</label>
+                    <input
+                        type='email'
+                        placeholder='Email'
+                        value={login.email}
+                        onChange={(e) => { setLogin({ ...login, email: e.target.value }) }}
+                    />
 
-                <label className="password-input">Password</label>
-                <input
-                    type='password'
-                    placeholder='Password'
-                    value={login.password}
-                    onChange={(e) => { setLogin({ ...login, password: e.target.value }) }}
-                />
+                    <label className="password-input">Password</label>
+                    <input
+                        type='password'
+                        placeholder='Password'
+                        value={login.password}
+                        onChange={(e) => { setLogin({ ...login, password: e.target.value }) }}
+                    />
 
-                <button classname="login-btn" onClick={handleLogin}>LOG IN</button>
+                    <button classname="login-btn" onClick={handleLogin}>LOG IN</button>
 
-                <button classname="forgotpass-btn" onClick={() => { setForgot({ email: '' }) }}>FORGOT PASSWORD</button>
-                <Link to="/register">REGISTER</Link>
-
+                    <button classname="forgotpass-btn" onClick={() => { setForgot({ email: '' }) }}>FORGOT PASSWORD</button>
+                </form>
                 
+                <Link to="/register">REGISTER</Link>
                     </div>
 
             </div>

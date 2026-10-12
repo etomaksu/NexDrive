@@ -24,22 +24,22 @@ const RegistrationPage = () => {
             <nav></nav> //for the login or register option
         
         <form>
-            <label>Full Name</label>
-            <input id="label" name="fullName" type="text" required/>
+            <label id="lbl-1">Full Name</label>
+            <input id="inpt-1" name="fullName" type="text" required/>
             
-            <label>Email</label>
-            <input id="label" name="email" type="email" required/>
+            <label id="lbl-2">Email</label>
+            <input id="inpt-1" name="email" type="email" required/>
 
-            <label>Phone Number</label>
-            <input id="label" name="phoneNum" type="number" required/>
+            <label id="lbl-1">Phone Number</label>
+            <input id="inpt-1" name="phoneNum" type="number" required/>
 
-            <label>Password</label>
-            <input id="label" name="password" type="password" required/>
+            <label id="lbl-1">Password</label>
+            <input id="inpt-1" name="password" type="password" required/>
 
-            <label>Confirm Password</label>
-            <input id="label" name="confirmPass" type="password" required/>
+            <label id="lbl-1">Confirm Password</label>
+            <input id="inpt-1" name="confirmPass" type="password" required/>
 
-            <button type="submit">Create Account</button>
+            <button id="btn-1" type="submit">Create Account</button>
         </form>
 
         </div>

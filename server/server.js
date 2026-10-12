@@ -7,7 +7,7 @@ app.use(express.urlencoded({extended:true}))
 
 app.get("/api/tryserver", (req,res) =>{
     res.json({
-        message:"wow"
+        message:"wiw"
     })
 })
 

@@ -1,4 +1,5 @@
-import React from 'react'
+import React, {useState, useEffect }from 'react'
+
 
 const RegistrationPage = () => {
 
@@ -21,7 +22,7 @@ const RegistrationPage = () => {
         <div classname="registration-form">
             <h1 id="hl-2">Create account</h1>
             <p id="desc-1">Register to start renting.</p>
-            <nav></nav> //for the login or register option
+            <nav></nav> 
         
         <form>
             <label>Full Name</label>

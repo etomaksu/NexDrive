@@ -66,7 +66,7 @@ const LoginPage = () => {
             })
     }
 
-    return (
+    return ( //testtt
         <div>
             <div classname="">
                 <h2 id="">NexDrive</h2>
@@ -75,13 +75,13 @@ const LoginPage = () => {
             </div>
 
             <div classname="login-form">
-                <h1 id="">Welcome back</h1>
-                <p id="">Log in to manage your bookings.</p>
+                <h1 id="hl-2">Welcome back</h1>
+                <p id="desc-1">Log in to manage your bookings.</p>
                 
                 <nav></nav>
 
                 <form>
-                    <label className="email-input">Email</label>
+                    <label id="">Email</label>
                     <input
                         id=""
                         type='email'
@@ -90,7 +90,7 @@ const LoginPage = () => {
                         onChange={(e) => { setLogin({ ...login, email: e.target.value }) }}
                     />
 
-                    <label className="password-input">Password</label>
+                    <label id="">Password</label>
                     <input
                         id=""
                         type='password'
@@ -99,9 +99,9 @@ const LoginPage = () => {
                         onChange={(e) => { setLogin({ ...login, password: e.target.value }) }}
                     />
 
-                    <button classname="login-btn" onClick={handleLogin}>LOG IN</button>
+                    <button id=""  onClick={handleLogin}>LOG IN</button>
 
-                    <button classname="forgotpass-btn" onClick={() => { setForgot({ email: '' }) }}>FORGOT PASSWORD</button>
+                    <button id=""  onClick={() => { setForgot({ email: '' }) }}>FORGOT PASSWORD</button>
                 </form>
                 
                 <Link to="/register">REGISTER</Link>

@@ -11,7 +11,7 @@ const RegistrationPage = () => {
     password: "",
     confirmPassword: ""
   });
-
+//testtt
   return (
     <div>
         <div classname="">
@@ -21,27 +21,27 @@ const RegistrationPage = () => {
         </div>
 
         <div classname="registration-form">
-            <h1 id="">Create account</h1>
-            <p id="">Register to start renting.</p>
+            <h1 id="hl-2">Create account</h1>
+            <p id="desc-1">Register to start renting.</p>
             <nav></nav> 
         
         <form>
-            <label>Full Name</label>
-            <input id="label" name="fullName" type="text" required/>
+            <label id="">Full Name</label>
+            <input id="" name="fullName" type="text" required/>
             
-            <label>Email</label>
-            <input id="label" name="email" type="email" required/>
+            <label id="">Email</label>
+            <input id="" name="email" type="email" required/>
 
-            <label>Phone Number</label>
-            <input id="label" name="phoneNum" type="number" required/>
+            <label id="">Phone Number</label>
+            <input id="" name="phoneNum" type="number" required/>
 
-            <label>Password</label>
-            <input id="label" name="password" type="password" required/>
+            <label id="">Password</label>
+            <input id="" name="password" type="password" required/>
 
-            <label>Confirm Password</label>
-            <input id="label" name="confirmPass" type="password" required/>
+            <label id="">Confirm Password</label>
+            <input id="" name="confirmPass" type="password" required/>
 
-            <button type="submit">Create Account</button>
+            <button id="" type="submit">Create Account</button>
         </form>
 
         </div>

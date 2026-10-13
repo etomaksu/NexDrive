@@ -78,7 +78,7 @@ const LoginPage = () => {
                 <h1 id="">Welcome back</h1>
                 <p id="">Log in to manage your bookings.</p>
                 
-                <nav></nav> //for the login or register option
+                <nav></nav>
 
                 <form>
                     <label id="">Email</label>

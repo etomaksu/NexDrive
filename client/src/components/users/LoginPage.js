@@ -66,42 +66,42 @@ const LoginPage = () => {
             })
     }
 
-    return ( //test
+    return ( //testtt
         <div>
             <div classname="">
-                <h2 id="logo-name-1">NexDrive</h2>
-                <h1 id="hl-1" >Your next trip starts here.</h1>
-                <p id="desc-2">Create an account to book faster, track your bookings, and manage your payment.</p>
+                <h2 id="">NexDrive</h2>
+                <h1 id="" >Your next trip starts here.</h1>
+                <p id="">Create an account to book faster, track your bookings, and manage your payment.</p>
             </div>
 
-            <div classname="login-form">
-                <h1 id="hl-2">Welcome back</h1>
-                <p id="desc-1">Log in to manage your bookings.</p>
+            <div classname="">
+                <h1 id="">Welcome back</h1>
+                <p id="">Log in to manage your bookings.</p>
                 
                 <nav></nav> //for the login or register option
 
                 <form>
-                    <label id="lbl-1">Email</label>
+                    <label id="">Email</label>
                     <input
-                        id="inpt-1"
+                        id=""
                         type='email'
                         placeholder='Email'
                         value={login.email}
                         onChange={(e) => { setLogin({ ...login, email: e.target.value }) }}
                     />
 
-                    <label id="lbl-1">Password</label>
+                    <label id="">Password</label>
                     <input
-                        id="inpt-1"
+                        id=""
                         type='password'
                         placeholder='Password'
                         value={login.password}
                         onChange={(e) => { setLogin({ ...login, password: e.target.value }) }}
                     />
 
-                    <button id="btn-1" classname="login-btn" onClick={handleLogin}>LOG IN</button>
+                    <button id=""  onClick={handleLogin}>LOG IN</button>
 
-                    <button id="btn-2" classname="forgotpass-btn" onClick={() => { setForgot({ email: '' }) }}>FORGOT PASSWORD</button>
+                    <button id=""  onClick={() => { setForgot({ email: '' }) }}>FORGOT PASSWORD</button>
                 </form>
                 
                 <Link to="/register">REGISTER</Link>

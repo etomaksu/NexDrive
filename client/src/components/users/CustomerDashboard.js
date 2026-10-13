@@ -1,67 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 
-// the five steps of a reservation, in order
-const STEPS = ['Requested', 'Approved', 'Pickup', 'Return', 'Completed']
-
-const sidebarLinks = [
-  { text: 'Dashboard', to: '/dashboard' },
-  { text: 'My Bookings', to: '/dashboard/bookings' },
-  { text: 'Payments', to: '/dashboard/payments' },
-  { text: 'Profile', to: '/dashboard/profile' },
-  { text: 'Notifications', to: '/dashboard/notifications' },
-]
-
-const formatDate = (iso) =>
-  new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-
-const formatTime = (iso) =>
-  new Date(iso).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
-
-// "Oct 10 – 13" if same month, otherwise "Oct 28 – Nov 2"
-const formatRange = (start, end) => {
-  const s = new Date(start)
-  const e = new Date(end)
-  const sameMonth = s.getMonth() === e.getMonth()
-  return sameMonth
-    ? `${formatDate(start)} – ${e.getDate()}`
-    : `${formatDate(start)} – ${formatDate(end)}`
-}
 
 const CustomerDashboard = () => {
-  const navigate = useNavigate()
-
-  const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
-
-  useEffect(() => {
-    const fetchDashboard = async () => {
-      try {
-        const res = await fetch('/api/dashboard', { credentials: 'include' })
-        if (!res.ok) throw new Error('Could not load your dashboard')
-        setData(await res.json())
-      } catch (err) {
-        setError(err.message)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchDashboard()
-  }, [])
-
-  const handleLogout = () => {
-    // clear your token / call your logout endpoint here
-    navigate('/login')
-  }
-
-  if (loading) return <p>Loading...</p>
-  if (error) return <p>{error}</p>
-  if (!data) return null
-
-  const { user, activeReservation, stats, upcomingBookings, notifications } = data
-
   return (
     <section id="dashboard">
       {/* ---------- SIDEBAR ---------- */}

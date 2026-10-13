@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Home({ setCurrentPage }) {
+function HomePage({ setCurrentPage }) {
   const cars = [
     {
       id: 1,
@@ -248,4 +248,4 @@ function Home({ setCurrentPage }) {
   );
 }
 
-export default Home;
+export default HomePage;

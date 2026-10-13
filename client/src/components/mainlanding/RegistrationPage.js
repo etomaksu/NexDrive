@@ -1,5 +1,5 @@
 import React, {useState, useEffect }from 'react'
-import VerificationPopUp from './VerificationPopUp';
+import VerificationPopUp from '../users/VerificationPopUp';
 
 
 const RegistrationPage = () => {

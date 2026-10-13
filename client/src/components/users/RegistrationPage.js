@@ -1,4 +1,5 @@
 import React, {useState, useEffect }from 'react'
+import VerificationPopUp from './VerificationPopUp';
 
 
 const RegistrationPage = () => {
@@ -44,6 +45,10 @@ const RegistrationPage = () => {
         </form>
 
         </div>
+
+        {showVerify && (
+        <VerificationPopUp email={email} onClose={() => setShowVerify(false)} />
+      )}
     </div>
   )
 }

@@ -36,16 +36,10 @@ function HomePage({ setCurrentPage }) {
             NexDrive
           </span>
           <nav className="navLinks">
-            <button className="navLinkBtn active" onClick={() => setCurrentPage('home')}>
-              Home
-            </button>
-            <button className="navLinkBtn" onClick={() => setCurrentPage('cars')}>
-              Cars
-            </button>
-            <button className="navLinkBtn" onClick={() => setCurrentPage('about')}>
-              About
-            </button>
-            <button className="navLinkBtn">Contact</button>
+            <button className="navLinkBtn active" onClick={() => setCurrentPage('home')}>Home</button>
+            <button className="navLinkBtn" onClick={() => setCurrentPage('cars')}>Cars</button>
+            <button className="navLinkBtn" onClick={() => setCurrentPage('about')}>About</button>
+            <button className="navLinkBtn" onClick={() => setCurrentPage('contact')}>Contact</button>
           </nav>
         </div>
 
@@ -129,7 +123,6 @@ function HomePage({ setCurrentPage }) {
         </div>
       </div>
 
-      {/* 4. Why Renters Pick Section */}
       <section className="benefitsSection">
         <div className="benefitsTitle">
           <h2>Why renters pick<br />NexDrive</h2>

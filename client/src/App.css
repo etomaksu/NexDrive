@@ -344,8 +344,8 @@ body {
 }
 
 .badge-mpv { background: #e0f2fe; color: #0369a1; }
-.badge-suv { background: #e0e7ff; color: #4338ca; }
-.badge-sedan { background: #dbeafe; color: #1d4ed8; }
+.badge-suv { background: #e0e7ff; color: #0369a1; }
+.badge-sedan { background: #dbeafe; color: #0369a1; }
 
 .carDetails {
   font-size: 12px;

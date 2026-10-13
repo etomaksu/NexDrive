@@ -14,14 +14,14 @@ const RegistrationPage = () => {
   return (
     <div>
         <div classname="">
-            <h2 id="logo-name-1">NexDrive</h2>
-            <h1 id="hl-1" >Your next trip starts here.</h1>
-            <p id="desc-2">Create an account to book faster, trak your bookings, and manage your payment.</p>
+            <h2 id="">NexDrive</h2>
+            <h1 id="" >Your next trip starts here.</h1>
+            <p id="">Create an account to book faster, trak your bookings, and manage your payment.</p>
         </div>
 
         <div classname="registration-form">
-            <h1 id="hl-2">Create account</h1>
-            <p id="desc-1">Register to start renting.</p>
+            <h1 id="">Create account</h1>
+            <p id="">Register to start renting.</p>
             <nav></nav> 
         
         <form>

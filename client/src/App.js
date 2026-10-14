@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import './App.css';
 
 import HomePage from './components/users/HomePage';
-import LoginPage from './components/users/LoginPage';
-import RegistrationPage from './components/users/RegistrationPage';
+import LoginPage from './components/mainlanding/LoginPage';
+import RegistrationPage from './components/mainlanding/RegistrationPage';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');

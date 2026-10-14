@@ -522,7 +522,6 @@ position: absolute;
 color: #a5b7d4;
   font-size: 15px;
   max-width: 380px;
-  white-space: nowrap;
 }
 
 /* login!!!! */
@@ -574,11 +573,20 @@ color: #a5b7d4;
   justify-content: center;
 }
 
+.forgotPass {
+  background: none;
+  border: none;
+  color: #991b1b;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: left;
+}
+
 #hl-2 {
   font-family: Georgia, serif;
   font-size: 26px;
   color: #0f172a;
-  margin-bottom: 6px;
+  margin-bottom: 10px;
 }
 
 #desc-1 {
@@ -629,9 +637,9 @@ color: #a5b7d4;
   background: none;
   border: none;
   color: #991b1b;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  text-align: right;
+  text-align: left;
 }
 
 .login-form a {

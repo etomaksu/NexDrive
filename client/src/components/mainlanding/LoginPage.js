@@ -101,7 +101,7 @@ const LoginPage = () => {
 
                     <button id=""  onClick={handleLogin}>LOG IN</button>
 
-                    <button id=""  onClick={() => { setForgot({ email: '' }) }}>FORGOT PASSWORD</button>
+                    <button className="forgotPass"  onClick={() => { setForgot({ email: '' }) }}>Forgot password?</button>
                 </form>
 
                 

@@ -74,9 +74,9 @@ const LoginPage = () => {
                 <p id="">Create an account to book faster, track your bookings, and manage your payment.</p>
             </div>
 
-            <div classname="">
-                <h1 id="">Welcome back</h1>
-                <p id="">Log in to manage your bookings.</p>
+            <div classname="login-form">
+                <h1 id="hl-2">Welcome back</h1>
+                <p id="desc-1">Log in to manage your bookings.</p>
                 
                 <nav></nav>
 

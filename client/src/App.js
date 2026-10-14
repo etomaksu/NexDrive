@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 
-import LoginPage from './components/users/LoginPage'
+import LoginPage from './components/mainlanding/LoginPage'
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 
 import HomePage from './components/users/HomePage';
+import About from './components/mainlanding/About';
 import LoginPage from './components/mainlanding/LoginPage';
 import RegistrationPage from './components/mainlanding/RegistrationPage';
 
@@ -13,7 +14,7 @@ function App() {
       {currentPage === 'home' && <HomePage setCurrentPage={setCurrentPage} />}
       {currentPage === 'login' && <LoginPage setCurrentPage={setCurrentPage} />}
       {currentPage === 'register' && <RegistrationPage setCurrentPage={setCurrentPage} />}
-
+      {currentPage === 'about' && <About setCurrentPage={setCurrentPage} />}
     </div>
   );
 }

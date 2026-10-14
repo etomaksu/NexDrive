@@ -11,8 +11,8 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div>
-      <div className="">
+    <div className="forgotpassword-page">
+      <div className="forgotpassword-left">
         <h2 id="">NexDrive</h2>
         <h1 id="">We will get you back on the road.</h1>
       </div>

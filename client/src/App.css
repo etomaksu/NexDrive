@@ -946,3 +946,39 @@ color: #a5b7d4;
   margin-bottom: 8px;
   color: #ffffff;
 }
+
+/* forgot password */
+.forgotpassword-page {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.forgotpassword-left {
+  flex: 1;
+  background: radial-gradient(circle at 65% 50%, #17428f 0%, #001E56 65%);
+  color: white;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* set new password */
+.setnewpass-page {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.setnewpass-left {
+  flex: 1;
+  background: radial-gradient(circle at 65% 50%, #17428f 0%, #001E56 65%);
+  color: white;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

@@ -13,44 +13,40 @@ const RegistrationPage = () => {
   });
 //testtt
   return (
-    <div>
-        <div classname="">
-            <h2 id="">NexDrive</h2>
-            <h1 id="" >Your next trip starts here.</h1>
-            <p id="">Create an account to book faster, trak your bookings, and manage your payment.</p>
-        </div>
+    <div className="register-page">
+    <div className="register-left">
+        <h2 id="brandLogo2">NexDrive</h2>
+        <h1 id="heading" >Your next trip starts here.</h1>
+        <p id="subheading">Create an account to book faster, track your bookings, and manage your payment.</p>
+    </div>
 
-        <div classname="registration-form">
-            <h1 id="hl-2">Create account</h1>
-            <p id="desc-1">Register to start renting.</p>
-            <nav></nav> 
-        
+    <div className="register-form">
+        <h1 id="heading">Create account</h1>
+        <p id="desc-1">Register to start renting.</p>
+        <nav></nav> 
+    
         <form>
-            <label id="">Full Name</label>
-            <input id="" name="fullName" type="text" required/>
+            <label id="register-form-label">Full Name</label>
+            <input id="register-form-input" name="fullName" type="text" required/>
             
-            <label id="">Email</label>
-            <input id="" name="email" type="email" required/>
+            <label id="register-form-label">Email</label>
+            <input id="register-form-input" name="email" type="email" required/>
 
-            <label id="">Phone Number</label>
-            <input id="" name="phoneNum" type="number" required/>
+            <label id="register-form-label">Phone Number</label>
+            <input id="register-form-input" name="phoneNum" type="number" required/>
 
-            <label id="">Password</label>
-            <input id="" name="password" type="password" required/>
+            <label id="register-form-label">Password</label>
+            <input id="register-form-input" name="password" type="password" required/>
 
-            <label id="">Confirm Password</label>
-            <input id="" name="confirmPass" type="password" required/>
+            <label id="register-form-label">Confirm Password</label>
+            <input id="register-form-input" name="confirmPass" type="password" required/>
 
-            <button id="" type="submit">Create Account</button>
+            <button id="register-form-button" type="submit">Create Account</button>
         </form>
 
         </div>
-
-        {showVerify && (
-        <VerificationPopUp email={email} onClose={() => setShowVerify(false)} />
-      )}
     </div>
   )
 }
 
-export default RegistrationPage
+export default RegistrationPage;

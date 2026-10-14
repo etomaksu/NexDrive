@@ -1,0 +1,238 @@
+/* Scoped to the cars page only. Navbar and footer come from App.css. */
+.carsPage {
+  --bg: #f3f1f2;
+  --surface: #ffffff;
+  --border: #e6e3e5;
+  --text: #1a1a1a;
+  --muted: #6b6b6b;
+  --navy: #001e56;
+  --blue-soft: #e8f0fe;
+  --blue-text: #1d5fd6;
+  --track: #e5e2e3;
+
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ---------- Fleet section ---------- */
+.carsPage #fleet {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 48px 64px;
+}
+
+.carsPage #fleet-title {
+  font-family: Georgia, serif;
+  font-size: 32px;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.carsPage #fleet-subtitle {
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 32px;
+}
+
+.carsPage #fleet-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* ---------- Filters ---------- */
+.carsPage #filters {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  position: sticky;
+  top: 96px;
+}
+
+.carsPage #filters-title {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.carsPage #filters fieldset {
+  border: none;
+  border-top: 1px solid var(--border);
+  padding: 14px 0;
+}
+
+.carsPage #filters legend {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  padding-right: 8px;
+}
+
+.carsPage #filters label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.carsPage #filters input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--navy);
+}
+
+.carsPage #filter-price {
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+
+.carsPage #price-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.carsPage #price-value {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.carsPage #price-range {
+  width: 100%;
+  accent-color: var(--navy);
+}
+
+/* ---------- Results ---------- */
+.carsPage #results-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.carsPage #result-count {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.carsPage #sort {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.carsPage #car-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.carsPage .car-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transform: scale(1.2);
+}
+/* ---------- Car card ---------- */
+.carsPage .car-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.carsPage .car-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: contain;
+  margin-bottom: 16px;
+}
+
+.carsPage .car-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.carsPage .car-header h4 {
+  font-size: 16px;
+  color: #0f172a;
+}
+
+.carsPage .car-card .badge {
+  background: var(--blue-soft);
+  color: var(--blue-text);
+  white-space: nowrap;
+}
+
+.carsPage .car-specs {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+.carsPage .car-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.carsPage .car-price {
+  font-weight: 700;
+  font-size: 15px;
+  color: #0f172a;
+}
+
+.carsPage .book-btn {
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.carsPage .book-btn:hover {
+  background: #17428f;
+}
+
+@media (max-width: 1000px) {
+  .carsPage #car-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 800px) {
+  .carsPage #fleet {
+    padding: 24px 16px 48px;
+  }
+
+  .carsPage #fleet-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .carsPage #filters {
+    position: static;
+  }
+
+  .carsPage #car-grid {
+    grid-template-columns: 1fr;
+  }
+}

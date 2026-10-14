@@ -12,12 +12,16 @@ body {
 
 /* navigation bar */
 .navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 16px 48px;
   background-color: #ffffff;
   border-bottom: 1px solid #e2e8f0;
+  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.1);
 }
 
 .navLeft {
@@ -111,6 +115,7 @@ body {
 .headContent {
   max-width: 48%;
   z-index: 2;
+  margin-left: 50px;
 }
 
 .headContent h1 {
@@ -123,9 +128,9 @@ body {
 
 .headContent .heroSubtext {
   color: #93c5fd;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.5;
-  margin-bottom: 32px;
+  margin-bottom: 10px;
 }
 
 .heroFeatures {
@@ -165,6 +170,8 @@ body {
   max-width: 520px;
   height: auto;
   object-fit: contain;
+  transform: scale(1.4);      
+  transform-origin: center;
 }
 
 .searchCardWrap {
@@ -172,7 +179,7 @@ body {
   margin: -50px auto 0 auto;
   padding: 0 24px;
   position: relative;
-  z-index: 10;
+  z-index: 1;
 }
 
 .searchCard {
@@ -319,9 +326,9 @@ body {
   margin-bottom: 16px;
 }
 
-.carCardImg {
+.carImgContainer .carCardImg {
   max-width: 100%;
-  max-height: 100%;
+  max-height: 120%;
   object-fit: contain;
 }
 
@@ -981,4 +988,18 @@ color: #a5b7d4;
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+/* car listings */
+#fleet {
+  --bg: #f3f1f2;
+  --surface: #ffffff;
+  --border: #e6e3e5;
+  --text: #1a1a1a;
+  --muted: #6b6b6b;
+  --blue: #003a82;
+  --blue-soft: #e8f0fe;
+  --blue-text: #1d5fd6;
+  --track: #e5e2e3;
+  --radius: 16px;
 }

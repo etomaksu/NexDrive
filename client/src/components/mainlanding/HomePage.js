@@ -1,4 +1,8 @@
 import React from 'react';
+import innova from './images/toyotainnova.png'
+import fortuner from './images/toyotafortuner.png'
+import vios from './images/toyotavios.png'
+
 
 function HomePage({ setCurrentPage }) {
   const cars = [
@@ -8,7 +12,7 @@ function HomePage({ setCurrentPage }) {
       type: 'MPV',
       details: 'Automatic · 7 seats · Gas',
       price: '₱1,800 /day',
-      image: '', 
+      image: innova, 
     },
     {
       id: 2,
@@ -16,7 +20,7 @@ function HomePage({ setCurrentPage }) {
       type: 'SUV',
       details: 'Automatic · 7 seats · Diesel',
       price: '₱3,500 /day',
-      image: '', 
+      image: fortuner, 
     },
     {
       id: 3,
@@ -24,7 +28,7 @@ function HomePage({ setCurrentPage }) {
       type: 'Sedan',
       details: 'Manual · 5 seats · Gas',
       price: '₱2,600 /day',
-      image: '', 
+      image: vios, 
     },
   ];
 
@@ -158,8 +162,7 @@ function HomePage({ setCurrentPage }) {
           {cars.map((car) => (
             <div key={car.id} className="carCard">
               <div className="carImgContainer">
-                <img src={car.image} alt={car.name} className="carCardImg" />
-              </div>
+              {car.image && <img className="carCardImg" src={car.image} alt={car.name} />}              </div>
               <div className="carCardHeader">
                 <h3>{car.name}</h3>
                 <span className={`badge badge-${car.type.toLowerCase()}`}>{car.type}</span>

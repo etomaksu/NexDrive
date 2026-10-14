@@ -1,16 +1,25 @@
 import React, { useState } from 'react'
+import vios from './images/toyotavios.png'
+import fordRanger from './images/fordranger.png'
+import hondaCity from './images/hondacity.png'
+import xpander from './images/mitsubishixpander.png'
+import hiace from './images/toyotahiace.png'
+import fortuner from './images/toyotafortuner.png'
+import bydHan from './images/bydhan.png'
+import tesla from './images/tesla.png'
+import accent from './images/hyundaiaccent.png'
 import './CarListings.css'
 
 const cars = [
-  { id: 1, name: 'Toyota Vios', type: 'Sedan', transmission: 'Automatic', seats: 5, fuel: 'Gas', price: 1800, image: '/images/toyota-vios.png' },
-  { id: 2, name: 'Toyota Fortuner', type: 'SUV', transmission: 'Automatic', seats: 7, fuel: 'Diesel', price: 3500, image: '/images/toyota-fortuner.png' },
-  { id: 3, name: 'Mitsubishi Xpander', type: 'MPV', transmission: 'Manual', seats: 7, fuel: 'Gas', price: 2600, image: '/images/mitsubishi-xpander.png' },
-  { id: 4, name: 'Toyota Hiace', type: 'Van', transmission: 'Manual', seats: 15, fuel: 'Diesel', price: 4500, image: '/images/toyota-hiace.png' },
-  { id: 5, name: 'Honda City', type: 'Sedan', transmission: 'Automatic', seats: 5, fuel: 'Gas', price: 2000, image: '/images/honda-city.png' },
-  { id: 6, name: 'Ford Ranger', type: 'Pickup', transmission: 'Automatic', seats: 5, fuel: 'Diesel', price: 3800, image: '/images/ford-ranger.png' },
-  { id: 7, name: 'BYD Han', type: 'EV', transmission: 'Automatic', seats: 6, fuel: 'Electric', price: 7500, image: '/images/byd-han.png' },
-  { id: 8, name: 'Tesla', type: 'EV', transmission: 'Automatic', seats: 5, fuel: 'Electric', price: 9800, image: '/images/tesla.png' },
-  { id: 9, name: 'Hyundai Accent', type: 'Sedan', transmission: 'Automatic', seats: 5, fuel: 'Diesel', price: 2300, image: '/images/hyundai-accent.png' },
+  { id: 1, name: 'Toyota Vios', type: 'Sedan', transmission: 'Automatic', seats: 5, fuel: 'Gas', price: 1800, image: vios },
+  { id: 2, name: 'Toyota Fortuner', type: 'SUV', transmission: 'Automatic', seats: 7, fuel: 'Diesel', price: 3500, image: fortuner },
+  { id: 3, name: 'Mitsubishi Xpander', type: 'MPV', transmission: 'Manual', seats: 7, fuel: 'Gas', price: 2600, image: xpander },
+  { id: 4, name: 'Toyota Hiace', type: 'Van', transmission: 'Manual', seats: 15, fuel: 'Diesel', price: 4500, image: hiace },
+  { id: 5, name: 'Honda City', type: 'Sedan', transmission: 'Automatic', seats: 5, fuel: 'Gas', price: 2000, image: hondaCity },
+  { id: 6, name: 'Ford Ranger', type: 'Pickup', transmission: 'Automatic', seats: 5, fuel: 'Diesel', price: 3800, image: fordRanger },
+  { id: 7, name: 'BYD Han', type: 'EV', transmission: 'Automatic', seats: 6, fuel: 'Electric', price: 7500, image: bydHan },
+  { id: 8, name: 'Tesla', type: 'EV', transmission: 'Automatic', seats: 5, fuel: 'Electric', price: 9800, image: tesla },
+  { id: 9, name: 'Hyundai Accent', type: 'Sedan', transmission: 'Automatic', seats: 5, fuel: 'Diesel', price: 2300, image: accent },
 ]
 
 const filterOptions = {
@@ -33,7 +42,7 @@ const seatRange = (seats) => {
   return '9+'
 }
 
-const CarListings = () => {
+const CarListings = ({setCurrentPage}) => {
   const [filters, setFilters] = useState({
     type: [],
     transmission: [],
@@ -69,6 +78,36 @@ const CarListings = () => {
     .sort((a, b) => (sort === 'low' ? a.price - b.price : b.price - a.price))
 
   return (
+    <div className="carsPage">
+      <header className="navbar">
+        <div className="navLeft">
+          <span className="brandLogo" onClick={() => setCurrentPage('home')}>
+            NexDrive
+          </span>
+          <nav className="navLinks">
+            <button className="navLinkBtn" onClick={() => setCurrentPage('home')}>Home</button>
+            <button className="navLinkBtn active" onClick={() => setCurrentPage('cars')}>Cars</button>
+            <button className="navLinkBtn" onClick={() => setCurrentPage('about')}>About</button>
+            <button className="navLinkBtn" onClick={() => setCurrentPage('contact')}>Contact</button>
+          </nav>
+        </div>
+
+        <div className="navCenter">
+          <div className="searchBar">
+            <span className="search-icon">🔍</span>
+            <input type="text" placeholder="Search cars, bookings" />
+          </div>
+        </div>
+
+        <div className="navRight">
+          <button className="btnLogin" onClick={() => setCurrentPage('login')}>
+            Login
+          </button>
+          <button className="btnRegister" onClick={() => setCurrentPage('register')}>
+            Register
+          </button>
+        </div>
+      </header>
     <section id="fleet">
       <h1 id="fleet-title">Browse our fleet</h1>
       <p id="fleet-subtitle">Vehicles Available · Oct 10 – 13</p>
@@ -124,7 +163,7 @@ const CarListings = () => {
           <div id="car-grid">
             {visibleCars.map((car) => (
               <article className="car-card" key={car.id}>
-                <img src={car.image} alt={car.name} />
+                <img className="car-image" src={car.image} alt={car.name} />
                 <div className="car-header">
                   <h4>{car.name}</h4>
                   <span className="badge">{car.type}</span>
@@ -141,8 +180,12 @@ const CarListings = () => {
           </div>
         </main>
       </div>
+      
     </section>
+    
+    </div>
+    
   )
 }
 
-export default CarListings
+export default CarListings;

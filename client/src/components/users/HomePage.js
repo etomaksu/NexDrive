@@ -1,4 +1,9 @@
 import React from 'react';
+import xpander2 from './images/mitsubishixpander2.png'
+import innova from './images/toyotainnova.png'
+import fortuner from './images/toyotafortuner.png'
+import vios from './images/toyotavios.png'
+
 
 function HomePage({ setCurrentPage }) {
   const cars = [
@@ -8,7 +13,7 @@ function HomePage({ setCurrentPage }) {
       type: 'MPV',
       details: 'Automatic · 7 seats · Gas',
       price: '₱1,800 /day',
-      image: '', 
+      image: innova, 
     },
     {
       id: 2,
@@ -16,7 +21,7 @@ function HomePage({ setCurrentPage }) {
       type: 'SUV',
       details: 'Automatic · 7 seats · Diesel',
       price: '₱3,500 /day',
-      image: '', 
+      image: fortuner, 
     },
     {
       id: 3,
@@ -24,7 +29,7 @@ function HomePage({ setCurrentPage }) {
       type: 'Sedan',
       details: 'Manual · 5 seats · Gas',
       price: '₱2,600 /day',
-      image: '', 
+      image: vios, 
     },
   ];
 
@@ -36,16 +41,10 @@ function HomePage({ setCurrentPage }) {
             NexDrive
           </span>
           <nav className="navLinks">
-            <button className="navLinkBtn active" onClick={() => setCurrentPage('home')}>
-              Home
-            </button>
-            <button className="navLinkBtn" onClick={() => setCurrentPage('cars')}>
-              Cars
-            </button>
-            <button className="navLinkBtn" onClick={() => setCurrentPage('about')}>
-              About
-            </button>
-            <button className="navLinkBtn">Contact</button>
+            <button className="navLinkBtn active" onClick={() => setCurrentPage('home')}>Home</button>
+            <button className="navLinkBtn" onClick={() => setCurrentPage('cars')}>Cars</button>
+            <button className="navLinkBtn" onClick={() => setCurrentPage('about')}>About</button>
+            <button className="navLinkBtn" onClick={() => setCurrentPage('contact')}>Contact</button>
           </nav>
         </div>
 
@@ -69,9 +68,9 @@ function HomePage({ setCurrentPage }) {
       <section className="headSection">
         <div className="headContent">
           <h1>Book a car in<br />three minutes.<br />Pick it up today.</h1>
-          <p className="headContent .heroSubtext">
-            Self-drive rentals from Imus, Cavite. Choose your dates,
-            add what you need and pay online. <br /><br />
+          <p className="heroSubtext">
+            Self-drive rentals from Imus, Cavite. <br /> 
+            Choose your dates, add what you need and pay online. <br /><br />
           </p>
 
           <div className="heroFeatures">
@@ -92,7 +91,7 @@ function HomePage({ setCurrentPage }) {
 
         <div className="headImgContainer">
           <img
-            src="/car-xpander.png"
+            src={xpander2}
             alt="Mitsubishi Xpander"
             className="headCarImg"
           />
@@ -164,8 +163,7 @@ function HomePage({ setCurrentPage }) {
           {cars.map((car) => (
             <div key={car.id} className="carCard">
               <div className="carImgContainer">
-                <img src={car.image} alt={car.name} className="carCardImg" />
-              </div>
+              {car.image && <img className="carCardImg" src={car.image} alt={car.name} />}              </div>
               <div className="carCardHeader">
                 <h3>{car.name}</h3>
                 <span className={`badge badge-${car.type.toLowerCase()}`}>{car.type}</span>
@@ -238,8 +236,8 @@ function HomePage({ setCurrentPage }) {
           </div>
           <div className="footerCol">
             <h4>Support</h4>
-            <p>nexdrive@gmail.com</p>
-            <p>+63 910 117 6684</p>
+            <p>help@nexdrive.ph</p>
+            <p>+63 900 000 0000</p>
           </div>
         </div>
       </footer>

@@ -3,17 +3,17 @@ import React from 'react';
 function AboutPage({ setCurrentPage }) {
   return (
     <div className="pageWrapper">
-      <header className="naviBar">
-        <div className="naviLeft">
-          <span className="brand-logo" onClick={() => setCurrentPage('home')} style={{cursor: 'pointer'}}>NexDrive</span>
-          <nav className="naviLinks">
-            <button className="naviLinkBtn" onClick={() => setCurrentPage('home')}>Home</button>
-            <button className="naviLinkBtn" onClick={() => setCurrentPage('cars')}>Cars</button>
-            <button className="naviLinkBtn active" onClick={() => setCurrentPage('about')}>About</button>
-            <button className="naviLinkBtn">Contact</button>
+      <header className="navbar">
+        <div className="navLeft">
+          <span className="brandLogo" onClick={() => setCurrentPage('home')} style={{cursor: 'pointer'}}>NexDrive</span>
+          <nav className="navLinks">
+            <button className="navLinkBtn" onClick={() => setCurrentPage('home')}>Home</button>
+            <button className="navLinkBtn" onClick={() => setCurrentPage('cars')}>Cars</button>
+            <button className="navLinkBtn active" onClick={() => setCurrentPage('about')}>About</button>
+            <button className="navLinkBtn" onClick={() => setCurrentPage('contact')}>Contact</button>
           </nav>
         </div>
-        <div className="naviRight">
+        <div className="navRight">
           <button className="btnLogin" onClick={() => setCurrentPage('login')}>Login</button>
           <button className="btnRegister" onClick={() => setCurrentPage('register')}>Register</button>
         </div>
@@ -127,9 +127,6 @@ function AboutPage({ setCurrentPage }) {
             <h4>Support</h4>
             <p>help@nexdrive.ph</p>
             <p>+63 900 000 0000</p>
-            <button className="btnPrevious" onClick={() => setCurrentPage('home')}>
-              back
-            </button>
           </div>
         </div>
       </footer>

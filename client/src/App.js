@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
 import './App.css';
 
-import LoginPage from './components/users/LoginPage'
+import HomePage from './components/users/HomePage';
+import LoginPage from './components/users/LoginPage';
+import RegistrationPage from './components/users/RegistrationPage';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
 
   return (
     <div className="App">
-      <LoginPage/>
+      {currentPage === 'home' && <HomePage setCurrentPage={setCurrentPage} />}
+      {currentPage === 'login' && <LoginPage setCurrentPage={setCurrentPage} />}
+      {currentPage === 'register' && <RegistrationPage setCurrentPage={setCurrentPage} />}
+
     </div>
   );
 }
-//testtt
+
 export default App;

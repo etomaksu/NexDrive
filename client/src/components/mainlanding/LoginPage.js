@@ -67,14 +67,14 @@ const LoginPage = () => {
     }
 
     return ( //testtt
-        <div>
-            <div classname="">
-                <h2 id="">NexDrive</h2>
-                <h1 id="" >Your next trip starts here.</h1>
-                <p id="">Create an account to book faster, track your bookings, and manage your payment.</p>
+        <div className="login-page">
+            <div className="login-left">
+                <h2 id="brandLogo2">NexDrive</h2>
+                <h1 id="heading" >Your next trip starts here.</h1>
+                <p id="subheading">Create an account to book faster, track your bookings, and manage your payment.</p>
             </div>
 
-            <div classname="login-form">
+            <div className="login-form">
                 <h1 id="hl-2">Welcome back</h1>
                 <p id="desc-1">Log in to manage your bookings.</p>
                 
@@ -103,6 +103,7 @@ const LoginPage = () => {
 
                     <button id=""  onClick={() => { setForgot({ email: '' }) }}>FORGOT PASSWORD</button>
                 </form>
+
                 
                 <Link to="/register">REGISTER</Link>
                     </div>

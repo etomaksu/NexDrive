@@ -10,6 +10,7 @@ body {
   color: #1e293b;
 }
 
+/* navigation bar */
 .navbar {
   display: flex;
   align-items: center;
@@ -343,6 +344,7 @@ body {
   font-weight: 600;
 }
 
+/* basta ung indicator */
 .badge-mpv { background: #e0f2fe; color: #0369a1; }
 .badge-suv { background: #e0e7ff; color: #0369a1; }
 .badge-sedan { background: #dbeafe; color: #0369a1; }
@@ -497,4 +499,257 @@ body {
 .footer ul li {
   margin-bottom: 8px;
   cursor: pointer;
+}
+
+#brandLogo2 {
+position: absolute;
+  top: 40px;
+  left: 60px;          
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: 24px;
+  color: white;
+}
+
+#heading {
+  font-family: Georgia, serif;
+  font-size: 38px;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+#subheading {
+color: #a5b7d4;
+  font-size: 15px;
+  max-width: 380px;
+  white-space: nowrap;
+}
+
+/* login!!!! */
+.login-page {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+.login-form > * {
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-form {
+  flex: 1;
+  background-color: white;
+  padding: 40px 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+}
+
+.login-left {
+  position: relative;
+  flex: 1;
+  background: radial-gradient(circle at 65% 50%, #17428f 0%, #001E56 65%);
+  color: white;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-left h2 {
+  font-family: Georgia, serif;
+  font-size: 24px;
+  margin-bottom: 24px;
+}
+
+.login-form {
+  flex: 1;
+  background-color: white;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#hl-2 {
+  font-family: Georgia, serif;
+  font-size: 26px;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+#desc-1 {
+  color: #64748b;
+  font-size: 13px;
+  margin-bottom: 24px;
+}
+
+.login-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 400px;
+}
+
+.login-form label {
+  font-size: 12px;
+  color: #475569;
+  font-weight: 500;
+}
+
+.login-form input {
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+}
+
+.login-form input:focus {
+  border-color: #001E56;
+}
+
+.login-form button {
+  cursor: pointer;
+}
+
+.login-form button:first-of-type {
+  background-color: #001E56;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.login-form button:last-of-type {
+  background: none;
+  border: none;
+  color: #991b1b;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: right;
+}
+
+.login-form a {
+  margin-top: 20px;
+  color: #2563eb;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* register or wtv */
+.register-page {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.register-form > * {
+  width: 100%;
+  max-width: 400px;
+}
+
+.register-form {
+  flex: 1;
+  background-color: white;
+  padding: 40px 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+}
+
+.register-form h1 {
+  font-family: Georgia, serif;
+  font-size: 26px;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.register-form p {
+  color: #64748b;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+.register-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 400px;
+}
+
+.register-form label {
+  font-size: 12px;
+  color: #475569;
+  font-weight: 500;
+}
+
+.register-form input {
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+}
+
+.register-form input:focus {
+  border-color: #001E56;
+}
+
+.register-form button {
+  background-color: #001E56;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 6px;
+}
+
+.register-form a {
+  margin-top: 16px;
+  color: #2563eb;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+  max-width: 400px;
+}
+
+.register-left {
+  flex: 1;
+  background: radial-gradient(circle at 65% 50%, #17428f 0%, #001E56 65%);
+  color: white;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.register-left h2 {
+  font-family: Georgia, serif;
+  font-size: 24px;
+  margin-bottom: 24px;
+}
+
+.register-left h1 {
+  font-family: Georgia, serif;
+  font-size: 38px;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.register-left p {
+  color: #94a3b8;
+  font-size: 13px;
+  max-width: 380px;
 }

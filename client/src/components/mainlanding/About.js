@@ -1,6 +1,6 @@
 import React from 'react';
 
-function About({ setCurrentPage }) {
+function AboutPage({ setCurrentPage }) {
   return (
     <div className="pageWrapper">
       <header className="naviBar">
@@ -137,4 +137,4 @@ function About({ setCurrentPage }) {
   );
 }
 
-export default About;
+export default AboutPage;

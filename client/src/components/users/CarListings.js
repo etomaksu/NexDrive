@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import Cars from './data/Cars'
-import CarCards from './CarCards'
+import Cars from '../../data/Cars'
+import CarCards from '../CarCards'
 import './CarListings.css'
 
 // get the unique values straight from the car list, so the filters always match the data

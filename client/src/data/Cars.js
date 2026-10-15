@@ -1,12 +1,12 @@
-import bydhan from './assets/images/bydhan.png'
-import fordranger from './assets/images/fordranger.png'
-import hondacity from './assets/images/hondacity.png'
-import hyundaiaccent from './assets/images/hyundaiaccent.png'
-import mitsubishixpander from './assets/images/mitsubishixpander.png'
-import tesla from './assets/images/tesla.png'
-import toyotafortuner from './assets/images/toyotafortuner.png'
-import toyotahiace from './assets/images/toyotahiace.png'
-import toyotavios from './assets/images/toyotavios.png'
+import bydhan from '../assets/images/bydhan.png'
+import fordranger from '../assets/images/fordranger.png'
+import hondacity from '../assets/images/hondacity.png'
+import hyundaiaccent from '../assets/images/hyundaiaccent.png'
+import mitsubishixpander from '../assets/images/mitsubishixpander.png'
+import tesla from '../assets/images/tesla.png'
+import toyotafortuner from '../assets/images/toyotafortuner.png'
+import toyotahiace from '../assets/images/toyotahiace.png'
+import toyotavios from '../assets/images/toyotavios.png'
 
 const cars = [
 { id: 1, name: 'Toyota Vios', type: 'Sedan', transmission: 'Automatic', seats: 5, fuel: 'Gas', price: 1800, image: toyotavios, luggage: 3, year: 2022, doors: 4, mileage: 28000, description: 'Easy to drive and saves on gas. Great for city trips.' },

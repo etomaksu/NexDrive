@@ -1,37 +1,12 @@
 import React from 'react';
-import xpander2 from './images/mitsubishixpander2.png'
-import innova from './images/toyotainnova.png'
-import fortuner from './images/toyotafortuner.png'
-import vios from './images/toyotavios.png'
+import xpander2 from '../../assets/images/mitsubishixpander2.png'
+import fortuner from '../../assets/images/toyotafortuner.png'
+import vios from '../../assets/images/toyotavios.png'
 import './HomePage.css';
+import Cars from '../../data/Cars'
 
 function HomePage({ setCurrentPage }) {
-  const cars = [
-    {
-      id: 1,
-      name: 'Toyota Innova 2025',
-      type: 'MPV',
-      details: 'Automatic · 7 seats · Gas',
-      price: '₱1,800 /day',
-      image: innova, 
-    },
-    {
-      id: 2,
-      name: 'Toyota Fortuner',
-      type: 'SUV',
-      details: 'Automatic · 7 seats · Diesel',
-      price: '₱3,500 /day',
-      image: fortuner, 
-    },
-    {
-      id: 3,
-      name: 'Toyota Vios',
-      type: 'Sedan',
-      details: 'Manual · 5 seats · Gas',
-      price: '₱2,600 /day',
-      image: vios, 
-    },
-  ];
+  const cars = [Cars[0], Cars[1], Cars[2]];
 
   return (
     <div className="pageWrap">

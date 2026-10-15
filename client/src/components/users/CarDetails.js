@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Tag, Button, message } from 'antd'
-import Cars from './data/Cars'
-import './CarDetails.css'
+import Cars from '../../data/Cars'
+//import './CarDetails.css'
 //changes
 // Booked days in October 2026, per car id.
 // Replace this with real booking data later (API / database).

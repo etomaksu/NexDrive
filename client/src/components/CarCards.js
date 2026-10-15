@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, Tag, Button } from "antd";
-import Cars from "./data/Cars";
+import Cars from "../data/Cars";
 
 const CarCards = ({car, onView}) => {
     return (

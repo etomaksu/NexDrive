@@ -1,6 +1,8 @@
 import React from 'react'
+import Cars from '../../data/Cars'
 
 const BookingsPage = () => {
+  const car = Cars
   return (
     <div>
           <section id="booking">

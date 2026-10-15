@@ -214,9 +214,10 @@ body {
   margin-bottom: 6px;
 }
 
-.inputGroup input,
-.inputGroup select {
-  padding: 10px 12px;
+.inputGroup > input,
+.inputGroup > select {
+  height: 40px;
+  padding: 0 12px;
   border: 1px solid #cbd5e1;
   border-radius: 8px;
   outline: none;

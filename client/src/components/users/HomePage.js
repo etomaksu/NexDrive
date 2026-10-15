@@ -1,12 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
 import xpander2 from '../../assets/images/mitsubishixpander2.png'
-import fortuner from '../../assets/images/toyotafortuner.png'
-import vios from '../../assets/images/toyotavios.png'
+import dayjs from "dayjs";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import './HomePage.css';
 import Cars from '../../data/Cars'
 
+const theme = createTheme({
+    palette: { primary: { main: "#00418B" } }, // green selected day
+  });
+
+const pickerSx = {
+  width: "100%",
+  "& .MuiPickersOutlinedInput-root": {
+    height: 40,
+    borderRadius: "8px",
+    fontSize: "14px",
+    backgroundColor: "#fff",
+    paddingRight: "8px",
+    "& .MuiPickersOutlinedInput-notchedOutline": {
+      border: "1px solid #cbd5e1",
+    },
+    "&:hover .MuiPickersOutlinedInput-notchedOutline": {
+      borderColor: "#cbd5e1",
+    },
+    "&.Mui-focused .MuiPickersOutlinedInput-notchedOutline": {
+      border: "1px solid #001E56",
+    },
+  },
+  "& .MuiPickersInputBase-sectionsContainer": {
+    padding: 0,
+  },
+  "& .MuiSvgIcon-root": {
+    fontSize: "20px",
+  },
+};
+
 function HomePage({ setCurrentPage }) {
   const cars = [Cars[0], Cars[1], Cars[2]];
+  const [pickup, setPickup] = useState(dayjs().hour(9).minute(0));
+  const [dropoff, setDropoff] = useState(dayjs().add(1, "day").hour(9).minute(0));
+
+  
 
   return (
     <div className="pageWrap">
@@ -80,14 +117,34 @@ function HomePage({ setCurrentPage }) {
               <label>Pick-up location</label>
               <input type="text" defaultValue="Imus, Cavite" />
             </div>
-            <div className="inputGroup">
-              <label>Pick-up date</label>
-              <input type="text" defaultValue="Today Oct 12, 9:00 AM" />
-            </div>
-            <div className="inputGroup">
-              <label>Return date</label>
-              <input type="text" defaultValue="Oct 13, 9:00 AM" />
-            </div>
+            <ThemeProvider theme={theme}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <div className="inputGroup">
+                  <label>Pick-up date</label>
+                  <DateTimePicker
+                    value={pickup}
+                    onChange={(v) => {
+                      setPickup(v);
+                      if (dropoff && dropoff.isBefore(v)) setDropoff(null);
+                    }}
+                    minDateTime={dayjs()}
+                    format="MMM D, h:mm A"
+                    slotProps={{ textField: { sx: pickerSx } }}
+                  />
+                </div>
+
+                <div className="inputGroup">
+                  <label>Return date</label>
+                  <DateTimePicker
+                    value={dropoff}
+                    onChange={setDropoff}
+                    minDateTime={pickup}
+                    format="MMM D, h:mm A"
+                    slotProps={{ textField: { sx: pickerSx } }}
+                  />
+                </div>
+              </LocalizationProvider>
+            </ThemeProvider>
             <div className="inputGroup">
               <label>Car type</label>
               <select defaultValue="All types">

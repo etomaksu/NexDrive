@@ -71,7 +71,7 @@ const CarListings = ({ setCurrentPage, setSelectedCarId }) => {
           ← Back to home
         </button>
         <h1 id="fleet-title">Browse our fleet</h1>
-        <p id="fleet-subtitle">Vehicles Available · Oct 10 – 13</p>
+        <p id="fleet-subtitle">Filter by type, seats, or budget to find your match.</p>
 
         <div id="fleet-layout">
           {/* FILTERS */}

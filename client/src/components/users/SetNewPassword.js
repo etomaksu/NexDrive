@@ -2,13 +2,13 @@ import React from 'react'
 
 const SetNewPassword = () => {
   return (
-    <div>
-      <div classname="">
+    <div className="setnewpass-page">
+      <div className="setnewpass-left">
             <h2 id="">NexDrive</h2>
             <h1 id="" >A fresh start for your account.</h1>
         </div>
 
-        <div classname="setnewpass-form">
+        <div className="setnewpass-form">
             <h1 id="">Set a new password</h1>
             <p id="">Use at least 8 characters, including a number.</p>
         

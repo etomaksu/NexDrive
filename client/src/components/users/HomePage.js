@@ -1,4 +1,9 @@
 import React from 'react';
+import xpander2 from './images/mitsubishixpander2.png'
+import innova from './images/toyotainnova.png'
+import fortuner from './images/toyotafortuner.png'
+import vios from './images/toyotavios.png'
+import './HomePage.css';
 
 function HomePage({ setCurrentPage }) {
   const cars = [
@@ -8,7 +13,7 @@ function HomePage({ setCurrentPage }) {
       type: 'MPV',
       details: 'Automatic · 7 seats · Gas',
       price: '₱1,800 /day',
-      image: '', 
+      image: innova, 
     },
     {
       id: 2,
@@ -16,7 +21,7 @@ function HomePage({ setCurrentPage }) {
       type: 'SUV',
       details: 'Automatic · 7 seats · Diesel',
       price: '₱3,500 /day',
-      image: '', 
+      image: fortuner, 
     },
     {
       id: 3,
@@ -24,7 +29,7 @@ function HomePage({ setCurrentPage }) {
       type: 'Sedan',
       details: 'Manual · 5 seats · Gas',
       price: '₱2,600 /day',
-      image: '', 
+      image: vios, 
     },
   ];
 
@@ -36,16 +41,9 @@ function HomePage({ setCurrentPage }) {
             NexDrive
           </span>
           <nav className="navLinks">
-            <button className="navLinkBtn active" onClick={() => setCurrentPage('home')}>
-              Home
-            </button>
-            <button className="navLinkBtn" onClick={() => setCurrentPage('cars')}>
-              Cars
-            </button>
-            <button className="navLinkBtn" onClick={() => setCurrentPage('about')}>
-              About
-            </button>
-            <button className="navLinkBtn">Contact</button>
+            <button className="navLinkBtn active" onClick={() => setCurrentPage('home')}>Home</button>
+            <button className="navLinkBtn" onClick={() => setCurrentPage('cars')}>Cars</button>
+            <button className="navLinkBtn" onClick={() => setCurrentPage('contact')}>Contact</button>
           </nav>
         </div>
 
@@ -69,9 +67,9 @@ function HomePage({ setCurrentPage }) {
       <section className="headSection">
         <div className="headContent">
           <h1>Book a car in<br />three minutes.<br />Pick it up today.</h1>
-          <p className="headContent .heroSubtext">
-            Self-drive rentals from Imus, Cavite. Choose your dates,
-            add what you need and pay online. <br /><br />
+          <p className="heroSubtext">
+            Self-drive rentals from Imus, Cavite. <br /> 
+            Choose your dates, add what you need and pay online. <br /><br />
           </p>
 
           <div className="heroFeatures">
@@ -92,7 +90,7 @@ function HomePage({ setCurrentPage }) {
 
         <div className="headImgContainer">
           <img
-            src="/car-xpander.png"
+            src={xpander2}
             alt="Mitsubishi Xpander"
             className="headCarImg"
           />
@@ -164,8 +162,7 @@ function HomePage({ setCurrentPage }) {
           {cars.map((car) => (
             <div key={car.id} className="carCard">
               <div className="carImgContainer">
-                <img src={car.image} alt={car.name} className="carCardImg" />
-              </div>
+              {car.image && <img className="carCardImg" src={car.image} alt={car.name} />}              </div>
               <div className="carCardHeader">
                 <h3>{car.name}</h3>
                 <span className={`badge badge-${car.type.toLowerCase()}`}>{car.type}</span>
@@ -211,35 +208,31 @@ function HomePage({ setCurrentPage }) {
         </div>
       </section>
 
+      {/* Footer */}
       <footer className="footer">
-        <div className="footerContainer">
-          <div className="footerCol brandCol">
-            <h3 className="footerBrand">NexDrive</h3>
-            <p>Car rental made simple.</p>
-            <p className="footerLoc">Imus, Cavite, Philippines</p>
+        <div className="footerInner">
+          <div>
+            <h3 className="footerLogo">NexDrive</h3>
+            <ul>
+              <li>Car rental made simple. <br /> Imus, Cavite, Philippines</li>
+          </ul>
           </div>
-          <div className="footerCol">
+          <div>
             <h4>Company</h4>
             <ul>
-              <li onClick={() => setCurrentPage('about')}>About Us</li>
+              <li onClick={() => setCurrentPage('about')}>About us</li>
               <li>Contact</li>
               <li>FAQ</li>
             </ul>
           </div>
-          <div className="footerCol">
-            <h4>Fleet</h4>
-            <ul>
-              <li>SUVs</li>
-              <li>Sedans</li>
-              <li>Vans</li>
-              <li>Pickups</li>
-              <li>EV</li>
-            </ul>
+          <div>
+            <div>
+          <h4>Support</h4>
+          <ul>
+              <li>help@nexdrive.ph</li>
+              <li>+63 900 000 0000</li>
+          </ul>
           </div>
-          <div className="footerCol">
-            <h4>Support</h4>
-            <p>nexdrive@gmail.com</p>
-            <p>+63 910 117 6684</p>
           </div>
         </div>
       </footer>

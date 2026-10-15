@@ -3,7 +3,7 @@ import xpander2 from './images/mitsubishixpander2.png'
 import innova from './images/toyotainnova.png'
 import fortuner from './images/toyotafortuner.png'
 import vios from './images/toyotavios.png'
-
+import './HomePage.css';
 
 function HomePage({ setCurrentPage }) {
   const cars = [
@@ -43,7 +43,6 @@ function HomePage({ setCurrentPage }) {
           <nav className="navLinks">
             <button className="navLinkBtn active" onClick={() => setCurrentPage('home')}>Home</button>
             <button className="navLinkBtn" onClick={() => setCurrentPage('cars')}>Cars</button>
-            <button className="navLinkBtn" onClick={() => setCurrentPage('about')}>About</button>
             <button className="navLinkBtn" onClick={() => setCurrentPage('contact')}>Contact</button>
           </nav>
         </div>
@@ -209,35 +208,31 @@ function HomePage({ setCurrentPage }) {
         </div>
       </section>
 
+      {/* Footer */}
       <footer className="footer">
-        <div className="footerContainer">
-          <div className="footerCol brandCol">
-            <h3 className="footerBrand">NexDrive</h3>
-            <p>Car rental made simple.</p>
-            <p className="footerLoc">Imus, Cavite, Philippines</p>
+        <div className="footerInner">
+          <div>
+            <h3 className="footerLogo">NexDrive</h3>
+            <ul>
+              <li>Car rental made simple. <br /> Imus, Cavite, Philippines</li>
+          </ul>
           </div>
-          <div className="footerCol">
+          <div>
             <h4>Company</h4>
             <ul>
-              <li onClick={() => setCurrentPage('about')}>About Us</li>
+              <li onClick={() => setCurrentPage('about')}>About us</li>
               <li>Contact</li>
               <li>FAQ</li>
             </ul>
           </div>
-          <div className="footerCol">
-            <h4>Fleet</h4>
-            <ul>
-              <li>SUVs</li>
-              <li>Sedans</li>
-              <li>Vans</li>
-              <li>Pickups</li>
-              <li>EV</li>
-            </ul>
+          <div>
+            <div>
+          <h4>Support</h4>
+          <ul>
+              <li>help@nexdrive.ph</li>
+              <li>+63 900 000 0000</li>
+          </ul>
           </div>
-          <div className="footerCol">
-            <h4>Support</h4>
-            <p>help@nexdrive.ph</p>
-            <p>+63 900 000 0000</p>
           </div>
         </div>
       </footer>

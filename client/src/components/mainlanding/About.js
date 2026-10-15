@@ -1,4 +1,5 @@
 import React from 'react';
+import './About.css';
 
 function AboutPage({ setCurrentPage }) {
   return (
@@ -9,7 +10,6 @@ function AboutPage({ setCurrentPage }) {
           <nav className="navLinks">
             <button className="navLinkBtn" onClick={() => setCurrentPage('home')}>Home</button>
             <button className="navLinkBtn" onClick={() => setCurrentPage('cars')}>Cars</button>
-            <button className="navLinkBtn active" onClick={() => setCurrentPage('about')}>About</button>
             <button className="navLinkBtn" onClick={() => setCurrentPage('contact')}>Contact</button>
           </nav>
         </div>
@@ -99,11 +99,12 @@ function AboutPage({ setCurrentPage }) {
 
       {/* Footer */}
       <footer className="footer">
-        <div className="aboutContainer footerGrid">
+        <div className="footerInner">
           <div>
             <h3 className="footerLogo">NexDrive</h3>
-            <p>Car rental made simple.</p>
-            <p className="footerLoc">Imus, Cavite, Philippines</p>
+            <ul>
+              <li>Car rental made simple. <br /> Imus, Cavite, Philippines</li>
+          </ul>
           </div>
           <div>
             <h4>Company</h4>
@@ -114,19 +115,13 @@ function AboutPage({ setCurrentPage }) {
             </ul>
           </div>
           <div>
-            <h4>Fleet</h4>
-            <ul>
-              <li>SUVs</li>
-              <li>Sedans</li>
-              <li>Vans</li>
-              <li>Pickup</li>
-              <li>EV</li>
-            </ul>
+            <div>
+          <h4>Support</h4>
+          <ul>
+              <li>help@nexdrive.ph</li>
+              <li>+63 900 000 0000</li>
+          </ul>
           </div>
-          <div>
-            <h4>Support</h4>
-            <p>help@nexdrive.ph</p>
-            <p>+63 900 000 0000</p>
           </div>
         </div>
       </footer>

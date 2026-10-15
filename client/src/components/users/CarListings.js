@@ -87,7 +87,6 @@ const CarListings = ({setCurrentPage}) => {
           <nav className="navLinks">
             <button className="navLinkBtn" onClick={() => setCurrentPage('home')}>Home</button>
             <button className="navLinkBtn active" onClick={() => setCurrentPage('cars')}>Cars</button>
-            <button className="navLinkBtn" onClick={() => setCurrentPage('about')}>About</button>
             <button className="navLinkBtn" onClick={() => setCurrentPage('contact')}>Contact</button>
           </nav>
         </div>

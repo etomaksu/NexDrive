@@ -15,7 +15,7 @@ function App() {
       {currentPage === 'home' && <HomePage setCurrentPage={setCurrentPage} />}
       {currentPage === 'login' && <LoginPage setCurrentPage={setCurrentPage} />}
       {currentPage === 'register' && <RegistrationPage setCurrentPage={setCurrentPage} />}
-      {currentPage === 'about' && <About setCurrentPage={setCurrentPage} />}
+      {currentPage === 'contact' && <About setCurrentPage={setCurrentPage} />}
       {currentPage === 'cars' && <CarListings setCurrentPage={setCurrentPage} />}
     </div>
   );

@@ -229,7 +229,7 @@ function HomePage({ setCurrentPage }) {
           <h4>Support</h4>
           <ul>
               <li>help@nexdrive.ph</li>
-              <li>+63 900 000 0000</li>
+              <li>+63 910 117 6684</li>
           </ul>
           </div>
           </div>

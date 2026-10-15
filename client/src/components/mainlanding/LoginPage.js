@@ -66,7 +66,7 @@ const LoginPage = () => {
             })
     }
 
-    return ( //testtt
+    return ( 
         <div className="login-page">
             <div className="login-left">
                 <h2 id="brandLogo2">NexDrive</h2>
@@ -88,6 +88,7 @@ const LoginPage = () => {
                         placeholder='Email'
                         value={login.email}
                         onChange={(e) => { setLogin({ ...login, email: e.target.value }) }}
+                        required
                     />
 
                     <label id="">Password</label>
@@ -97,6 +98,7 @@ const LoginPage = () => {
                         placeholder='Password'
                         value={login.password}
                         onChange={(e) => { setLogin({ ...login, password: e.target.value }) }}
+                        required
                     />
 
                     <button id=""  onClick={handleLogin}>LOG IN</button>

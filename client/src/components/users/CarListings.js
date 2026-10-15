@@ -13,7 +13,7 @@ const filterOptions = {
   fuel: unique('fuel'),
 }
 
-// highest price in the list, rounded up to the nearest 1000
+// highest price in the list, rounded gi to the nearest 1000
 const maxCarPrice = Math.ceil(Math.max(...Cars.map((car) => car.price)) / 1000) * 1000
 
 const filterTitles = {

@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 
+const sidebarLinks = [
+  { to: '/dashboard', text: 'Overview' },
+  { to: '/dashboard/bookings', text: 'My bookings' },
+  { to: '/dashboard/profile', text: 'Profile' },
+]
 
-const CustomerDashboard = () => {
+
+const CustomerDashboard = ({user, onLogout}) => {
+  const handleLogout = onLogout
   return (
     <section id="dashboard">
       {/* ---------- SIDEBAR ---------- */}
@@ -33,7 +40,7 @@ const CustomerDashboard = () => {
       <main id="dashboard-main">
         {/* Welcome */}
         <div id="welcome">
-          <h1 id="welcome-title">Welcome back, {user.name}</h1>
+          <h1 id="welcome-title">Welcome back, {user.firstName}</h1>
 
           {activeReservation && (
             <p id="welcome-text">

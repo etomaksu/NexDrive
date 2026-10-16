@@ -12,23 +12,16 @@ const LoginPage = ({ setCurrentPage, onLogin }) => {
     const [newPass, setNewPass] = useState(null)
 
     const handleLogin = (e) => {
-        e.preventDefault() // stop the form from reloading the page
-
-        axios.post("http://localhost:8000/NexDrive/login", login)
+        e.preventDefault()
+        axios.post("http://localhost:8000/api/login", login)
             .then((response) => {
                 localStorage.setItem('token', response.data.token)
-
-                // use the name your backend returns; falls back to the part of the email before "@"
-                const name =
-                    response.data.name ||
-                    (response.data.user && response.data.user.name) ||
-                    login.email.split('@')[0]
-
-                onLogin(name) // App.js sets the user and goes to the home page
+                localStorage.setItem('role', response.data.user.role)
+                window.location.href = response.data.user.role === 'customer' ? '/dashboard' : '/admin'
             })
             .catch((error) => {
                 console.log(error)
-                alert('Invalid email or password')
+                alert(error.response?.data?.message || 'Something went wrong')
             })
     }
 
@@ -110,7 +103,7 @@ const LoginPage = ({ setCurrentPage, onLogin }) => {
                         required
                     />
 
-                    <button type="submit">LOG IN</button>
+                    <button id="" type="submit">LOG IN</button>
 
                     <button
                         type="button"

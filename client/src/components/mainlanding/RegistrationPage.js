@@ -12,6 +12,8 @@ const RegistrationPage = () => {
     confirmPassword: ""
   });
 
+  
+
   return (
     <div className="register-page">
     <div className="register-left">

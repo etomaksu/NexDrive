@@ -14,7 +14,9 @@ import CarDetails from './components/users/CarDetails';
 const pagesWithoutNavbar = ['login', 'register'];
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('home');
+  const [currentPage, setCurrentPage] = useState(
+    localStorage.getItem('token') ? 'home' : 'login'
+  );
   const [selectedCarId, setSelectedCarId] = useState(null);
 
   // null = logged out, "Althea Lois" = logged in

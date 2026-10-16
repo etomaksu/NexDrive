@@ -1,0 +1,96 @@
+/* Fonts: add this once at the top of index.css / App.css if you haven't already
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Manrope:wght@400;500;600&display=swap');
+*/
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 80px;                 /* fixed height keeps every page's navbar identical */
+  padding: 0 90px;              /* left/right page margin, as in the design */
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  font-family: 'Manrope', system-ui, sans-serif;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbarLeft {
+  display: flex;
+  align-items: center;
+  gap: 40px;                    /* logo -> links -> search */
+}
+
+/* logo: serif, bold, tight letter-spacing */
+.navbar .navLogo {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: #1a1a1a;
+}
+
+/* links: 15px, regular weight, grey; active = navy + medium */
+.navbar .navMenu {
+  border-bottom: none;
+  background: transparent;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 80px;
+  min-width: 0;
+}
+
+.navbar .navMenu .ant-menu-item {
+  padding: 0 20px;              /* 20 + 20 = 40px between links */
+  color: #666;
+}
+
+.navbar .navMenu .ant-menu-item-selected {
+  color: #003b86;
+  font-weight: 500;
+}
+
+/* remove antd's underline so it matches the design */
+.navbar .navMenu .ant-menu-item::after {
+  display: none;
+}
+
+/* search: 316 x 48, soft grey fill, 14px placeholder */
+.navbar .navSearch {
+  width: 316px;
+  height: 48px;
+  border-radius: 10px;
+  background: #f4f2f2;
+  font-size: 14px;
+}
+
+/* right side */
+.navbarRight {
+  gap: 16px;                    /* Login <-> Register */
+}
+
+.navbar .ant-btn {
+  height: 40px;
+  padding: 0 22px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 8px;
+}
+
+/* icon-only bell keeps its round shape */
+.navbar .ant-btn-icon-only {
+  width: 40px;
+  padding: 0;
+}
+
+@media (max-width: 900px) {
+  .navbar {
+    padding: 0 20px;
+  }
+
+  .navbar .navSearch {
+    display: none;
+  }
+}

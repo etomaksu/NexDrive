@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Cars from '../../data/Cars'
 import CarCards from '../CarCards'
 import './CarListings.css'
+import { useNavigate } from 'react-router-dom';
 
 // get the unique values straight from the car list, so the filters always match the data
 const unique = (key) => [...new Set(Cars.map((car) => car[key]))]
@@ -29,7 +30,9 @@ const seatRange = (seats) => {
   return '9+'
 }
 
-const CarListings = ({ setCurrentPage, setSelectedCarId }) => {
+const CarListings = () => {
+  const navigate = useNavigate()
+
   const [filters, setFilters] = useState({
     type: [],
     transmission: [],
@@ -67,7 +70,7 @@ const CarListings = ({ setCurrentPage, setSelectedCarId }) => {
   return (
     <div className="carsPage">
       <section id="fleet">
-        <button className="backBtn" onClick={() => setCurrentPage('home')}>
+        <button className="backBtn" onClick={() => navigate('/')}>
           ← Back to home
         </button>
         <h1 id="fleet-title">Browse our fleet</h1>
@@ -126,10 +129,7 @@ const CarListings = ({ setCurrentPage, setSelectedCarId }) => {
                 <CarCards
                   key={car.id}
                   car={car}
-                  onView={(id) => {
-                    setSelectedCarId(id)
-                    setCurrentPage('cardetails')
-                  }}
+                  onView={(id) => navigate(`/cars/${id}`)}
                 />
               ))}
             </div>

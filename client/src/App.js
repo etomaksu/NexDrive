@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ConfigProvider } from 'antd';
 import './App.css';
-import {Routes, Route, Navigate, useNavigate} from 'react-router-dom'
+import {Routes, Route, Navigate, useNavigate, useLocation} from 'react-router-dom'
 import HomePage from './components/HomePage';
 
 import Navbar from './components/NavBar';
@@ -14,24 +14,41 @@ import CarDetails from './components/users/CarDetails';
 // pages that have their own full-screen layout, so no navbar
 const pagesWithoutNavbar = ['login', 'register'];
 
-function App() {
-  const [currentPage, setCurrentPage] = useState(
-    localStorage.getItem('token') ? 'home' : 'login'
-  );
-  const [selectedCarId, setSelectedCarId] = useState(null);
+const paths = {
+  home: '/',
+  login: '/login',
+  register: '/register',
+  cars: '/cars',
+  contact: '/contact',
+  about: '/contact'
+}
 
-  // null = logged out, "Althea Lois" = logged in
+const getCurrentPage = (pathname) => {
+  if (pathname.startsWith('/cars')) return 'cardetails'
+  const match = Object.entries(paths).find(([, p]) => p === pathname)
+  return match ? match[0] : 'home'
+}
+
+const ProtectedRoute = ({isLoggedIn, children}) => isLoggedIn ? children : <Navigate to="/login" replace />
+
+function App() {
+  const navigate = useNavigate()
+  const location = useLocation()
+
   const [user, setUser] = useState(() => 
     JSON.parse(localStorage.getItem('user') || 'null')  
   );
 
   const isLoggedIn = Boolean(user);
 
-  // LoginPage calls this after a successful login: onLogin('Althea Lois')
+  const currentPage = getCurrentPage(location.pathname)
+  const setCurrentPage = (page) => navigate(paths[page] || '/')
+  const hideNavbar = ['/login', '/register'].includes(location.pathname);
+
   const handleLogin = (userData) => {
     localStorage.setItem('user', JSON.stringify(userData));
     setUser(userData);
-    setCurrentPage('home');
+    navigate('/')
   };
 
   const handleLogout = () => {
@@ -39,7 +56,7 @@ function App() {
     localStorage.removeItem('role');
     localStorage.removeItem('user');
     setUser(null);
-    setCurrentPage('login');
+    navigate('/login')
   };
 
   return (
@@ -53,7 +70,7 @@ function App() {
       }}
     >
       <div className="App">
-        {!pagesWithoutNavbar.includes(currentPage) && (
+        {!hideNavbar && (
           <Navbar
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
@@ -63,39 +80,22 @@ function App() {
           />
         )}
 
-        {currentPage === 'home' && (
-          <HomePage
-            isLoggedIn={isLoggedIn}
-            setCurrentPage={setCurrentPage}
-            setSelectedCarId={setSelectedCarId}
-          />
-        )}
+        <Routes>
+          <Route path="/" element={<HomePage isLoggedIn={isLoggedIn} setCurrentPage={setCurrentPage} />} />
+          <Route path="/login" element={<LoginPage setCurrentPage={setCurrentPage} onLogin={handleLogin} />} />
+          <Route path="/register" element={<RegistrationPage setCurrentPage={setCurrentPage} />} />
+          <Route path="/contact" element={<About setCurrentPage={setCurrentPage} />} />
 
-        {currentPage === 'login' && (
-          <LoginPage setCurrentPage={setCurrentPage} onLogin={handleLogin} />
-        )}
+          <Route path="/cars" element={
+            <ProtectedRoute isLoggedIn={isLoggedIn}><CarListings /></ProtectedRoute>
+          } />
+          <Route path="/cars/:carId" element={
+            <ProtectedRoute isLoggedIn={isLoggedIn}><CarDetails /></ProtectedRoute>
+          } />
 
-        {currentPage === 'register' && (
-          <RegistrationPage setCurrentPage={setCurrentPage} />
-        )}
-
-        {(currentPage === 'contact' || currentPage === 'about') && (
-          <About setCurrentPage={setCurrentPage} />
-        )}
-
-        {currentPage === 'cars' && (
-          <CarListings
-            setCurrentPage={setCurrentPage}
-            setSelectedCarId={setSelectedCarId}
-          />
-        )}
-
-        {currentPage === 'cardetails' && (
-          <CarDetails
-            selectedCarId={selectedCarId}
-            setCurrentPage={setCurrentPage}
-          />
-        )}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+        
       </div>
     </ConfigProvider>
   );

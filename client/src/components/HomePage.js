@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button, Card, Col, DatePicker, Input, Row, Select, Typography } from 'antd'
+import { useNavigate } from 'react-router-dom'
 import dayjs from 'dayjs'
 import Cars from '../data/Cars'
 import CarCards from './CarCards'
@@ -36,15 +37,15 @@ const heroCarId = 6
 //   isLoggedIn = false -> landing page: cards say "Book" and go to the Login page
 //   isLoggedIn = true  -> member home:  cards say "View" and go to the Booking page
 const HomePage = ({ isLoggedIn = false, setCurrentPage, setSelectedCarId }) => {
+  const navigate = useNavigate()
   const featuredCars = featuredIds.map((id) => Cars.find((c) => c.id === id)).filter(Boolean)
   const heroCar = Cars.find((c) => c.id === heroCarId)
 
   const handleCarAction = (id) => {
     if (isLoggedIn) {
-      setSelectedCarId(id)
-      setCurrentPage('booking')
+      navigate(`/cars/${id}`)
     } else {
-      setCurrentPage('login')
+      navigate('/login')
     }
   }
 
@@ -94,7 +95,8 @@ const HomePage = ({ isLoggedIn = false, setCurrentPage, setSelectedCarId }) => {
                 size="large"
                 showTime={{ format: 'h:mm A' }}
                 format="MMM D, h:mm A"
-                defaultValue={dayjs('2026-10-10 09:00')}
+                defaultValue={dayjs().hour(9).minute(0)}
+                disabledDate={(d) => d && d < dayjs().startOf('day')}
               />
             </Col>
             <Col xs={12} lg={5}>
@@ -104,7 +106,8 @@ const HomePage = ({ isLoggedIn = false, setCurrentPage, setSelectedCarId }) => {
                 size="large"
                 showTime={{ format: 'h:mm A' }}
                 format="MMM D, h:mm A"
-                defaultValue={dayjs('2026-10-13 09:00')}
+                defaultValue={dayjs().add(1, 'day').hour(9).minute(0)}
+                disabledDate={(d) => d && d < dayjs().startOf('day')}
               />
             </Col>
             <Col xs={24} lg={4}>

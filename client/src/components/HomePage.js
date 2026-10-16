@@ -6,6 +6,7 @@ import './HomePage.css'
 import { fetchCars } from '../api/cars'
 import CarCards from './CarCards'
 import './HomePage.css'
+import heroImage from '../assets/images/expander_heroimage.png'
 
 const { Title, Paragraph, Text } = Typography
 
@@ -45,7 +46,7 @@ const HomePage = ({ isLoggedIn = false, setCurrentPage, setSelectedCarId }) => {
 
 
   const featuredCars = cars.filter((c) => c.featured)
-  const heroCar = featuredCars.find((c) => c.name === 'Mitsubishi Xpander') || featuredCars[0]
+  const heroCar = featuredCars.find((c) => c.name === 'Mitsubishi Xpander') || featuredCars[0] 
 
   const handleCarAction = (id) => {
     if (isLoggedIn) {
@@ -80,7 +81,7 @@ const HomePage = ({ isLoggedIn = false, setCurrentPage, setSelectedCarId }) => {
           </div>
 
           {heroCar && (
-            <img className="heroCar" src={heroCar.image} alt={heroCar.name} />
+            <img className="heroCar" src={heroImage} alt={heroCar.name} />
           )}
         </div>
       </section>

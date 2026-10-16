@@ -1,0 +1,254 @@
+.homePage {
+  background: #fff;
+  color: #1a1a1a;
+}
+
+.homePage .homeInner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 90px;
+  box-sizing: border-box;
+}
+
+.homePage .homeSection {
+  padding-top: 64px;
+  padding-bottom: 16px;
+}
+
+.homePage .serif,
+.homePage .heroTitle,
+.homePage .footerLogo {
+  font-family: 'Fraunces', 'Playfair Display', Georgia, serif;
+}
+
+.homePage .fullWidth {
+  width: 100%;
+}
+
+/* ---------- hero ---------- */
+.homePage .hero {
+  position: relative;
+  min-height: 460px;
+  overflow: hidden;
+}
+
+/* grey slanted panel + navy block, as in the design */
+.homePage .hero::before {
+  content: '';
+  position: absolute;
+  inset: 0 44% 0 0;
+  background: #a9a9ad;
+  clip-path: polygon(36% 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.homePage .hero::after {
+  content: '';
+  position: absolute;
+  inset: 0 0 0 56%;
+  background: #00247a;
+}
+
+.homePage .heroInner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  min-height: 460px;
+}
+
+.homePage .heroCopy {
+  width: 46%;
+  padding: 40px 0 90px;
+}
+
+.homePage .heroTitle {
+  margin: 0 0 16px;
+  font-size: 52px;
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+
+.homePage .heroText {
+  max-width: 420px;
+  margin-bottom: 24px;
+  color: #1a1a1a;
+  font-size: 15px;
+}
+
+.homePage .heroFeatures {
+  display: flex;
+}
+
+.homePage .heroFeature {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 20px;
+  border-left: 1px solid rgba(0, 0, 0, 0.35);
+  font-size: 13px;
+}
+
+.homePage .heroFeature:first-child {
+  padding-left: 0;
+  border-left: none;
+}
+
+.homePage .heroFeature strong {
+  font-family: 'Fraunces', Georgia, serif;
+}
+
+.homePage .heroCar {
+  position: absolute;
+  right: 90px;
+  bottom: 70px;
+  width: 44%;
+  max-width: 640px;
+  object-fit: contain;
+}
+
+/* ---------- find a car ---------- */
+.homePage .findCard {
+  position: relative;
+  z-index: 2;
+  margin-top: -70px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.homePage .findTitle {
+  margin: 0 0 12px;
+  font-family: 'Fraunces', Georgia, serif;
+}
+
+/* ---------- why renters pick us ---------- */
+.homePage .whySection {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.homePage .whyGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.homePage .whyItem {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 18px;
+  border-left: 1px solid #e4e4e4;
+  font-size: 13px;
+  color: #6b6b6b;
+}
+
+.homePage .whyItem strong {
+  color: #1a1a1a;
+  font-size: 14px;
+}
+
+/* ---------- how it works ---------- */
+.homePage .stepCard {
+  border-radius: 16px;
+}
+
+.homePage .stepNumber {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-bottom: 12px;
+  border-radius: 50%;
+  background: #e6efff;
+  color: #003b86;
+  font-weight: 600;
+}
+
+/* ---------- footer ---------- */
+.homePage .homeFooter {
+  margin-top: 80px;
+  padding: 48px 0;
+  background: #00133b;
+  color: #cfd6e6;
+  font-size: 13px;
+}
+
+.homePage .footerGrid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 32px;
+}
+
+.homePage .footerGrid h4 {
+  margin: 0 0 12px;
+  color: #fff;
+  font-size: 14px;
+}
+
+.homePage .footerGrid a,
+.homePage .footerGrid span {
+  display: block;
+  margin-bottom: 6px;
+  color: #cfd6e6;
+  cursor: pointer;
+}
+
+.homePage .footerLogo {
+  margin-bottom: 8px;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* ---------- small screens ---------- */
+@media (max-width: 900px) {
+  .homePage .homeInner {
+    padding: 0 20px;
+  }
+
+  .homePage .hero::before,
+  .homePage .hero::after {
+    display: none;
+  }
+
+  .homePage .hero {
+    background: #00247a;
+    color: #fff;
+  }
+
+  .homePage .heroInner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .homePage .heroCopy {
+    width: 100%;
+    padding-bottom: 20px;
+  }
+
+  .homePage .heroText,
+  .homePage .heroFeature {
+    color: #fff;
+  }
+
+  .homePage .heroCar {
+    position: static;
+    width: 100%;
+  }
+
+  .homePage .whySection {
+    grid-template-columns: 1fr;
+  }
+
+  .homePage .whyGrid {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 20px;
+  }
+
+  .homePage .footerGrid {
+    grid-template-columns: 1fr;
+  }
+}

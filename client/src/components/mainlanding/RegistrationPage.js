@@ -1,17 +1,43 @@
 import React, {useState, useEffect }from 'react'
 import VerificationPopUp from '../users/VerificationPopUp';
+import axios from 'axios'
 
 
-const RegistrationPage = () => {
+const RegistrationPage = ({setCurrentPage}) => {
 
-    const [form, setForm] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    password: "",
-    confirmPassword: ""
+  const [form, setForm] = useState({
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
+  password: "",
+  confirmPassword: ""
   });
-//testtt
+
+  const [confirmPass, setConfirmPass] = useState('')
+
+  const handleRegister = (e) => {
+    e.preventDefault()
+
+    if(form.password !== confirmPass) {
+      alert('Passwords do not match')
+      return
+    }
+
+    axios.post("http://localhost:8000/api/register", form)
+    .then (() => {
+      alert('Account created! Please log in')
+      setCurrentPage('login')
+    })
+    .catch((error) => {
+      console.log(error)
+      alert(error.response?.data?.message || 'Something went wrong')
+    })
+  }
+
+
+  
+
   return (
     <div className="register-page">
     <div className="register-left">
@@ -25,21 +51,72 @@ const RegistrationPage = () => {
         <p id="desc-1">Register to start renting.</p>
         <nav></nav> 
     
-        <form>
-            <label id="register-form-label">Full Name</label>
-            <input id="register-form-input" name="fullName" type="text" required/>
+        <form onSubmit={handleRegister}>
+            <label id="register-form-label">First Name</label>
+              <input 
+                  id="register-form-input" 
+                  name="firstName" 
+                  type="text" 
+                  required
+                  placeholder='Enter First Name'
+                  value={form.firstName}
+                  onChange={(e) => setForm({...form, firstName: e.target.value})}
+              />
+
+            <label id="register-form-label">Last Name</label>
+              <input 
+                  id="register-form-input" 
+                  name="lastName" 
+                  type="text" 
+                  required
+                  placeholder='Enter Last Name'
+                  value={form.lastName}
+                  onChange={(e) => setForm({...form, lastName: e.target.value})}
+              />
             
             <label id="register-form-label">Email</label>
-            <input id="register-form-input" name="email" type="email" required/>
+              <input 
+                  id="register-form-input" 
+                  name="email" 
+                  type="email" 
+                  required
+                  placeholder='Enter Email'
+                  value={form.email}
+                  onChange={(e) => setForm({...form, email: e.target.value})}
+              />
 
             <label id="register-form-label">Phone Number</label>
-            <input id="register-form-input" name="phoneNum" type="number" required/>
+              <input 
+                  id="register-form-input" 
+                  name="phone" 
+                  type="number" 
+                  required
+                  placeholder='Enter Phone Number'
+                  value={form.phone}
+                  onChange={(e) => setForm({...form, phone: e.target.value})}
+              />
 
             <label id="register-form-label">Password</label>
-            <input id="register-form-input" name="password" type="password" required/>
+              <input 
+                  id="register-form-input" 
+                  name="password" 
+                  type="password" 
+                  required
+                  placeholder='Enter Password'
+                  value={form.password}
+                  onChange={(e) => setForm({...form, password: e.target.value})}
+              />
 
             <label id="register-form-label">Confirm Password</label>
-            <input id="register-form-input" name="confirmPass" type="password" required/>
+              <input 
+                  id="register-form-input" 
+                  name="confirmPass" 
+                  type="password"
+                  required
+                  placeholder='Confirm Password'
+                  value={confirmPass}
+                  onChange={(e) => setConfirmPass(e.target.value)}
+              />
 
             <button id="register-form-button" type="submit">Create Account</button>
         </form>

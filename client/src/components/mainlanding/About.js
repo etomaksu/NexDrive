@@ -4,20 +4,6 @@ import './About.css';
 function AboutPage({ setCurrentPage }) {
   return (
     <div className="pageWrapper">
-      <header className="navbar">
-        <div className="navLeft">
-          <span className="brandLogo" onClick={() => setCurrentPage('home')} style={{cursor: 'pointer'}}>NexDrive</span>
-          <nav className="navLinks">
-            <button className="navLinkBtn" onClick={() => setCurrentPage('home')}>Home</button>
-            <button className="navLinkBtn" onClick={() => setCurrentPage('cars')}>Cars</button>
-            <button className="navLinkBtn" onClick={() => setCurrentPage('contact')}>Contact</button>
-          </nav>
-        </div>
-        <div className="navRight">
-          <button className="btnLogin" onClick={() => setCurrentPage('login')}>Login</button>
-          <button className="btnRegister" onClick={() => setCurrentPage('register')}>Register</button>
-        </div>
-      </header>
 
       <section className="aboutHead">
         <div className="aboutContainer">

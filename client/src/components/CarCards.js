@@ -1,5 +1,6 @@
 import React from 'react'
 import { Card, Tag, Button } from 'antd'
+import './CarCards.css'
 
 // buttonLabel: "View" (default) or "Book" -- onView receives the car id
 const CarCards = ({ car, onView, buttonLabel = 'View' }) => {

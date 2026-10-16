@@ -119,6 +119,11 @@
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btnSubmit:hover {
+  background-color: #2450a0;  
 }
 
 /* faq */

@@ -1,3 +1,14 @@
+.ant-btn-primary {
+  background: #003b86;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.ant-btn-primary:not(:disabled):hover {
+  background: #1d5fd6 !important;
+  transform: translateY(-1px);    
+  box-shadow: 0 4px 10px rgba(0, 59, 134, 0.25);
+}
+
 .homePage {
   background: #fff;
   color: #1a1a1a;
@@ -5,7 +16,7 @@
 
 .homePage .homeInner {
   max-width: 1440px;
-  margin: 0 auto;
+  margin: 10px auto;
   padding: 0 90px;
   box-sizing: border-box;
 }
@@ -28,7 +39,7 @@
 /* ---------- hero ---------- */
 .homePage .hero {
   position: relative;
-  min-height: 460px;
+  min-height: 4px;
   overflow: hidden;
   color: #ffffff;
   background: radial-gradient(circle at 50% 50%, #17428f 0%, #001E56 65%);
@@ -87,6 +98,7 @@
   position: absolute;
   right: 90px;
   bottom: 70px;
+  top: 1px;
   width: 44%;
   max-width: 640px;
   object-fit: contain;
@@ -137,6 +149,7 @@
 /* ---------- how it works ---------- */
 .homePage .stepCard {
   border-radius: 16px;
+  margin-bottom: 40px;
 }
 
 .homePage .stepNumber {

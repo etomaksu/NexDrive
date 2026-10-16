@@ -30,7 +30,7 @@ const steps = [
 
 // ids from data/Cars.js: Xpander, Fortuner, Vios
 const featuredIds = [6, 8, 1]
-const heroCarId = 6
+const heroCarId = 10
 
 // One component, two versions:
 //   isLoggedIn = false -> landing page: cards say "Book" and go to the Login page

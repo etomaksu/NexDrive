@@ -1,5 +1,6 @@
 import React, {useState, useEffect }from 'react'
 import VerificationPopUp from '../users/VerificationPopUp';
+import './RegistrationPage.css'
 
 
 const RegistrationPage = () => {
@@ -66,7 +67,7 @@ const RegistrationPage = () => {
                   required
               />
 
-            <button id="register-form-button" type="submit">Create Account</button>
+            <button type="submit">Create Account</button>
         </form>
 
         </div>

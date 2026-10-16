@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import './LoginPage.css'
 
 // App.js passes in:
 //   setCurrentPage -> to move between pages
@@ -111,7 +112,7 @@ const LoginPage = ({ setCurrentPage, onLogin }) => {
                     />
 
                     <button type="submit">LOG IN</button>
-
+                    
                     <button
                         type="button"
                         className="forgotPass"
@@ -119,11 +120,12 @@ const LoginPage = ({ setCurrentPage, onLogin }) => {
                     >
                         Forgot password?
                     </button>
+                    <button type="button" className="forgotPass" onClick={() => setCurrentPage('register')}>
+                        Register an account
+                    </button>
                 </form>
 
-                <button type="button" onClick={() => setCurrentPage('register')}>
-                    REGISTER
-                </button>
+                
             </div>
         </div>
     )

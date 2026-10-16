@@ -1,0 +1,17 @@
+.carCardFooter {
+  display: flex;
+  justify-content: space-between;  
+  align-items: center;
+  margin-top: 12px;
+}
+
+.carCardHeader {
+  display: flex;
+  justify-content: space-between;  
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.carCard .ant-card-cover {
+  height: 150px;
+}

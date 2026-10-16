@@ -182,23 +182,31 @@ const HomePage = ({ isLoggedIn = false, setCurrentPage, setSelectedCarId }) => {
         </Row>
       </section>
 
-      {/* FOOTER */}
-      <footer className="homeFooter">
-        <div className="homeInner footerGrid">
+      {/* Footer */}
+      <footer className="footer">
+        <div className="footerInner">
           <div>
-            <div className="footerLogo">{BRAND}</div>
-            <p>Car rental made simple.<br />Imus, Cavite, Philippines</p>
+            <h3 className="footerLogo">NexDrive</h3>
+            <ul>
+              <li>Car rental made simple. <br /> Imus, Cavite, Philippines</li>
+          </ul>
           </div>
           <div>
             <h4>Company</h4>
-            <a onClick={() => setCurrentPage('about')}>About us</a>
-            <a onClick={() => setCurrentPage('contact')}>Contact</a>
-            <a>FAQ</a>
+            <ul>
+              <li onClick={() => setCurrentPage('about')}>About us</li>
+              <li>Contact</li>
+              <li>FAQ</li>
+            </ul>
           </div>
           <div>
-            <h4>Support</h4>
-            <span>help@webname.ph</span>
-            <span>+63 900 000 0000</span>
+            <div>
+          <h4>Support</h4>
+          <ul>
+              <li>help@nexdrive.ph</li>
+              <li>+63 900 000 0000</li>
+          </ul>
+          </div>
           </div>
         </div>
       </footer>

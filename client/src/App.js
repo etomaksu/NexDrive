@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { ConfigProvider } from 'antd';
 import './App.css';
+import {Routes, Route, Navigate, useNavigate} from 'react-router-dom'
+import HomePage from './components/users/HomePage';
 
 import Navbar from './components/NavBar';
-import HomePage from './components/HomePage';
 import About from './components/mainlanding/About';
 import LoginPage from './components/mainlanding/LoginPage';
 import RegistrationPage from './components/mainlanding/RegistrationPage';

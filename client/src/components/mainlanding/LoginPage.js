@@ -17,6 +17,7 @@ const LoginPage = ({ setCurrentPage, onLogin }) => {
             .then((response) => {
                 localStorage.setItem('token', response.data.token)
                 localStorage.setItem('role', response.data.user.role)
+                localStorage.setItem('user', JSON.stringify(response.data.user))
                 window.location.href = response.data.user.role === 'customer' ? '/dashboard' : '/admin'
             })
             .catch((error) => {

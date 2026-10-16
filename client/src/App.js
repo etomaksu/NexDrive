@@ -5,9 +5,9 @@ import {Routes, Route, Navigate, useNavigate, useLocation} from 'react-router-do
 import HomePage from './components/HomePage';
 
 import Navbar from './components/NavBar';
-import About from './components/mainlanding/About';
-import LoginPage from './components/mainlanding/LoginPage';
-import RegistrationPage from './components/mainlanding/RegistrationPage';
+import About from './components/users/mainlanding/About';
+import LoginPage from './components/users/mainlanding/LoginPage';
+import RegistrationPage from './components/users/mainlanding/RegistrationPage';
 import CarListings from './components/users/CarListings';
 import CarDetails from './components/users/CarDetails';
 import CustomerDashboard from './components/users/CustomerDashboard';

@@ -4,6 +4,7 @@ import './App.css';
 import {Routes, Route, Navigate, useNavigate, useLocation} from 'react-router-dom'
 import HomePage from './components/HomePage';
 
+//Customer Landing Page
 import Navbar from './components/NavBar';
 import About from './components/users/mainlanding/About';
 import LoginPage from './components/users/mainlanding/LoginPage';
@@ -12,8 +13,15 @@ import CarListings from './components/users/CarListings';
 import CarDetails from './components/users/CarDetails';
 import CustomerDashboard from './components/users/CustomerDashboard';
 
-// pages that have their own full-screen layout, so no navbar
-const pagesWithoutNavbar = ['login', 'register'];
+//Admin Dashboard
+import AdminLayout from "./components/admin/layout/AdminLayout";
+import AdminDashboard from "./components/admin/pages/AdminDashboard";
+import Vehicles from "./components/admin/pages/Vehicles";
+import StaffList from "./components/admin/pages/StaffList";
+import Archive from "./components/admin/pages/Archive";
+import Reports from "./components/admin/pages/Reports";
+import Transactions from "./components/admin/pages/Transactions";
+import Messages from "./components/admin/pages/Messages";
 
 const paths = {
   home: '/',
@@ -32,7 +40,14 @@ const getCurrentPage = (pathname) => {
   return match ? match[0] : 'home'
 }
 
+const isAdmin = (user) => user?.role === 'admin'
+
 const ProtectedRoute = ({isLoggedIn, children}) => isLoggedIn ? children : <Navigate to="/login" replace />
+const AdminRoute = ({ user, children }) => {
+  if (!user) return <Navigate to="/login" replace />
+  if (!isAdmin(user)) return <Navigate to="/" replace />
+  return children
+}
 
 function App() {
   const navigate = useNavigate()
@@ -46,12 +61,13 @@ function App() {
 
   const currentPage = getCurrentPage(location.pathname)
   const setCurrentPage = (page) => navigate(paths[page] || '/')
-  const hideNavbar = ['/login', '/register'].includes(location.pathname);
+  const hideNavbar = ['/login', '/register'].includes(location.pathname)
+                      || location.pathname.startsWith('/admin');
 
   const handleLogin = (userData) => {
     localStorage.setItem('user', JSON.stringify(userData));
     setUser(userData);
-    navigate('/')
+    navigate(userData.role === 'admin' ? '/admin' : '/')
   };
 
   const handleLogout = () => {
@@ -101,6 +117,23 @@ function App() {
           <Route path="/cars/:carId" element={
             <ProtectedRoute isLoggedIn={isLoggedIn}><CarDetails /></ProtectedRoute>
           } />
+
+            <Route
+              path="/admin"
+              element={
+                <AdminRoute user={user}>
+                  <AdminLayout onLogout={handleLogout} />
+                </AdminRoute>
+              }
+            >
+              <Route index element={<AdminDashboard />} />
+              <Route path="vehicles" element={<Vehicles />} />
+              <Route path="staff" element={<StaffList />} />
+              <Route path="archive" element={<Archive />} />
+              <Route path="reports" element={<Reports />} />
+              <Route path="transactions" element={<Transactions />} />
+              <Route path="messages" element={<Messages />} />
+            </Route>
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

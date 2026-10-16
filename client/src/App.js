@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './App.css';
-
 import HomePage from './components/users/HomePage';
 import About from './components/mainlanding/About';
 import LoginPage from './components/mainlanding/LoginPage';
@@ -9,7 +8,9 @@ import CarListings from './components/users/CarListings';
 import CarDetails from './components/users/CarDetails';
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('home');
+  const [currentPage, setCurrentPage] = useState(
+    localStorage.getItem('token') ? 'home' : 'login'
+  );
   const [selectedCarId, setSelectedCarId] = useState(null);
 
   return (

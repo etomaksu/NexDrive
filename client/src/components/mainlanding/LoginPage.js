@@ -9,15 +9,17 @@ const LoginPage = () => {
     const [verify, setVerify] = useState(null)
     const [newPass, setNewPass] = useState(null)
 
-    const handleLogin = () => {
-        axios.post("http://localhost:8000/NexDrive/login", login)
+    const handleLogin = (e) => {
+        e.preventDefault()
+        axios.post("http://localhost:8000/api/login", login)
             .then((response) => {
                 localStorage.setItem('token', response.data.token)
-                window.location.href = '/dashboard'
+                localStorage.setItem('role', response.data.user.role)
+                window.location.href = response.data.user.role === 'customer' ? '/dashboard' : '/admin'
             })
             .catch((error) => {
                 console.log(error)
-                alert('Invalid email or password')
+                alert(error.response?.data?.message || 'Something went wrong')
             })
     }
 
@@ -80,7 +82,7 @@ const LoginPage = () => {
                 
                 <nav></nav>
 
-                <form>
+                <form onSubmit={handleLogin}>
                     <label id="">Email</label>
                     <input
                         id=""
@@ -101,7 +103,7 @@ const LoginPage = () => {
                         required
                     />
 
-                    <button id=""  onClick={handleLogin}>LOG IN</button>
+                    <button id="" type="submit">LOG IN</button>
 
                     <button className="forgotPass"  onClick={() => { setForgot({ email: '' }) }}>Forgot password?</button>
                 </form>

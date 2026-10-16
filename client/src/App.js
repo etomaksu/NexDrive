@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ConfigProvider } from 'antd';
 import './App.css';
 import {Routes, Route, Navigate, useNavigate} from 'react-router-dom'
-import HomePage from './components/users/HomePage';
+import HomePage from './components/HomePage';
 
 import Navbar from './components/NavBar';
 import About from './components/mainlanding/About';
@@ -21,18 +21,25 @@ function App() {
   const [selectedCarId, setSelectedCarId] = useState(null);
 
   // null = logged out, "Althea Lois" = logged in
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => 
+    JSON.parse(localStorage.getItem('user') || 'null')  
+  );
+
   const isLoggedIn = Boolean(user);
 
   // LoginPage calls this after a successful login: onLogin('Althea Lois')
-  const handleLogin = (name) => {
-    setUser(name);
+  const handleLogin = (userData) => {
+    localStorage.setItem('user', JSON.stringify(userData));
+    setUser(userData);
     setCurrentPage('home');
   };
 
   const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    localStorage.removeItem('user');
     setUser(null);
-    setCurrentPage('home');
+    setCurrentPage('login');
   };
 
   return (
@@ -50,8 +57,9 @@ function App() {
           <Navbar
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
-            userName={user}
-            brandName="Webname"
+            userName={user ? user.firstName : null}
+            onLogout={handleLogout}
+            brandName="NexDrive"
           />
         )}
 

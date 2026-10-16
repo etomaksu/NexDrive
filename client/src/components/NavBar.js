@@ -19,7 +19,8 @@ const Navbar = ({
   currentPage,
   setCurrentPage,
   userName = null,
-  brandName = 'Webname',
+  onLogout,
+  brandName = 'NexDrive',
   onSearch,
   searchPlaceholder = 'Search cars, bookings',
 }) => {
@@ -71,6 +72,7 @@ const Navbar = ({
             <Space>
               <Avatar size="large" icon={<UserOutlined />} />
               <Typography.Text strong>Hi, {userName}</Typography.Text>
+              <button onClick={onLogout}>Log out</button>
             </Space>
           </>
         ) : (

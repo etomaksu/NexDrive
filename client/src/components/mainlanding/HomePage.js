@@ -32,6 +32,15 @@ function HomePage({ setCurrentPage }) {
     },
   ];
 
+  const user = JSON.parse(localStorage.getItem('user') || 'null')
+
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('role')
+    localStorage.removeItem('user')
+    setCurrentPage('login')
+  }
+
   return (
     <div className="pageWrap">
       <header className="navbar">
@@ -54,12 +63,24 @@ function HomePage({ setCurrentPage }) {
         </div>
 
         <div className="navRight">
-          <button className="btnLogin" onClick={() => setCurrentPage('login')}>
-            Login
-          </button>
-          <button className="btnRegister" onClick={() => setCurrentPage('register')}>
-            Register
-          </button>
+          {user ? (
+            <>
+              <span className="navUserName">Hi, {user.firstName}</span>
+              <button className="btnLogin" onClick={handleLogout}>
+                Log out
+              </button>
+            </>
+          ) : (
+            <>
+              <button className="btnLogin" onClick={() => setCurrentPage('login')}>
+                Login
+              </button>
+              <button className="btnRegister" onClick={() => setCurrentPage('register')}>
+                Register
+              </button>
+            </>
+          )}
+          
         </div>
       </header>
 

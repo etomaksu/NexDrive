@@ -11,7 +11,7 @@ const RegistrationPage = () => {
     password: "",
     confirmPassword: ""
   });
-//testtt
+
   return (
     <div className="register-page">
     <div className="register-left">
@@ -27,19 +27,44 @@ const RegistrationPage = () => {
     
         <form>
             <label id="register-form-label">Full Name</label>
-            <input id="register-form-input" name="fullName" type="text" required/>
+              <input 
+                  id="register-form-input" 
+                  name="fullName" 
+                  type="text" 
+                  required
+              />
             
             <label id="register-form-label">Email</label>
-            <input id="register-form-input" name="email" type="email" required/>
+              <input 
+                  id="register-form-input" 
+                  name="email" 
+                  type="email" 
+                  required
+              />
 
             <label id="register-form-label">Phone Number</label>
-            <input id="register-form-input" name="phoneNum" type="number" required/>
+              <input 
+                  id="register-form-input" 
+                  name="phoneNum" 
+                  type="number" 
+                  required
+              />
 
             <label id="register-form-label">Password</label>
-            <input id="register-form-input" name="password" type="password" required/>
+              <input 
+                  id="register-form-input" 
+                  name="password" 
+                  type="password" 
+                  required
+              />
 
             <label id="register-form-label">Confirm Password</label>
-            <input id="register-form-input" name="confirmPass" type="password" required/>
+              <input 
+                  id="register-form-input" 
+                  name="confirmPass" 
+                  type="password"
+                  required
+              />
 
             <button id="register-form-button" type="submit">Create Account</button>
         </form>

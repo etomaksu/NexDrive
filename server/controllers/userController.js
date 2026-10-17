@@ -18,6 +18,13 @@ const loginUser = async (req, res) => {
             return res.status(401).json({message: 'Invalid email or password'})
         }
 
+        if (user.status === 'blocked') {
+            return res.status(403).json({message: 'Your account is blocked.'})
+        }
+
+        user.lastActiveAt = new Date()
+        await user.save()
+
         const token = jwt.sign(
             {id: user._id, role: user.role},
             process.env.JWT_SECRET || 'dev_secret_change_me',

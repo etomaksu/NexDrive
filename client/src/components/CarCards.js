@@ -1,7 +1,6 @@
 import React from 'react'
 import { Card, Tag, Button } from 'antd'
 
-// buttonLabel: "View" (default) or "Book" -- onView receives the car id
 const CarCards = ({ car, onView, buttonLabel = 'View' }) => {
   return (
     <Card
@@ -20,8 +19,7 @@ const CarCards = ({ car, onView, buttonLabel = 'View' }) => {
             objectFit: 'contain',
             padding: '16px 16px 0',
           }}
-        />
-      }
+        />}
     >
       <div className="carCardHeader">
         <h4 className="carCardName">{car.name}</h4>
@@ -33,26 +31,22 @@ const CarCards = ({ car, onView, buttonLabel = 'View' }) => {
       </p>
 
       <div className="carCardFooter"
-          style={{
+        style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           gap: 12,
-          marginTop: 16,
+          marginTop: 'auto',
           paddingTop: 14,
           borderTop: '1px solid #eef0f3',
-        }}
-      >
+        }}>
         <span className="carCardPrice"
               style={{
-                fontSize: 18,
-                fontWeight: 700,
-                color: '#003b86',
-                whiteSpace: 'nowrap',
-              }}
-        >₱{car.price.toLocaleString()}
-        <small style={{ fontSize: 13, fontWeight: 400, color: '#6b7280' }}> /day</small>
-        </span>
+                      fontSize: 18,
+                      fontWeight: 700,
+                      color: '#003b86',
+                      whiteSpace: 'nowrap',
+                    }}>₱{car.price.toLocaleString()} /day</span>
         <Button type="primary" onClick={() => onView && onView(car.id)}>
           {buttonLabel}
         </Button>

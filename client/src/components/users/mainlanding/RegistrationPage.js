@@ -1,5 +1,5 @@
 import React, {useState, useEffect }from 'react'
-import VerificationPopUp from '../users/VerificationPopUp';
+import VerificationPopUp from '../popups/VerificationPopUp';
 import axios from 'axios'
 
 

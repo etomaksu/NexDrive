@@ -21,7 +21,7 @@ export default function StaffLayout({ user, onLogout }) {
 
   return (
     <div className="admin-shell">
-      <Sidebar title="Staff Dashboard" links={STAFF_LINKS} onLogout={onLogout} unread={unread} />
+      <Sidebar title="NexDrive" subtitle="Staff portal" links={STAFF_LINKS} onLogout={onLogout} unread={unread} />
       <div className="admin-main">
         <Topbar user={{ name, role: "Staff" }} homePath="/staff" />
         <main className="admin-content">

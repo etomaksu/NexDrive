@@ -10,7 +10,7 @@ export default function AdminLayout({ user, onLogout }) {
 
   return (
     <div className='admin-shell'>
-      <Sidebar onLogout={onLogout} unread={unread} />
+      <Sidebar title="NexDrive" subtitle="Admin portal" onLogout={onLogout} unread={unread} />
       <div className='admin-main'>
         <Topbar user={{ name, role: 'Admin' }} />
         <main className='admin-content'>

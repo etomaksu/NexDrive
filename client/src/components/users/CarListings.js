@@ -67,7 +67,7 @@ const CarListings = () => {
   const matches = (selected, value) =>
     selected.length === 0 || selected.includes(value)
 
-  const visibleCars = Cars
+  const visibleCars = cars
     .filter(
       (car) =>
         matches(filters.type, car.type) &&

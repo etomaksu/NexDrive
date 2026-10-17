@@ -1,42 +1,50 @@
-const stats = [
-  { label: "Total reservations", value: "248", note: "+12% vs last month" },
-  { label: "Revenue", value: "₱684,500", note: "+8.4%" },
-  { label: "Active rentals", value: "31", note: "5 returning today" },
-  { label: "Fleet available", value: "42 / 60", note: "18 in use or in service" },
-];
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { api } from '../../../api/admin'
+import { formatRange } from '../utils'
 
-const pipeline = [
-  { count: 12, title: "Requested", sub: "Awaiting approval" },
-  { count: 9, title: "Approved", sub: "Pickup scheduled" },
-  { count: 31, title: "Active rental", sub: "On the road", highlight: true },
-  { count: 7, title: "Returned", sub: "To be completed" },
-  { count: 189, title: "Completed", sub: "Ready to archive" },
-];
-
-const revenue = [
-  { month: "May", value: 40 },
-  { month: "Jun", value: 55 },
-  { month: "Jul", value: 47 },
-  { month: "Aug", value: 70 },
-  { month: "Sep", value: 63 },
-  { month: "Oct", value: 85 },
-];
-
-const fleet = [
-  { label: "Available", count: 42, color: "#16a34a" },
-  { label: "Rented", count: 13, color: "#8b1a2b" },
-  { label: "Maintenance", count: 5, color: "#dc2626" },
-];
-
-const reservations = [
-  { ref: "#DE-1058", customer: "Maria Santos", vehicle: "Honda City", dates: "Oct 28 – 30", stage: "Requested" },
-  { ref: "#DE-1051", customer: "Juan Dela Cruz", vehicle: "Toyota Fortuner", dates: "Oct 10 – 13", stage: "Approved" },
-  { ref: "#DE-1049", customer: "Ana Reyes", vehicle: "Toyota Vios", dates: "Oct 5 – 7", stage: "Active" },
-  { ref: "#DE-1047", customer: "Paolo Cruz", vehicle: "Ford Ranger", dates: "Oct 3 – 6", stage: "Returned" },
-];
+const label = (s) => s.charAt(0).toUpperCase() + s.slice(1)
+const growth = (n) => (n === null ? '' : `${n >= 0 ? '+' : ''}${n}% vs last month`)
 
 export default function AdminDashboard() {
-  const totalFleet = fleet.reduce((sum, f) => sum + f.count, 0);
+    const navigate = useNavigate()
+    const [data, setData] = useState(null)
+    const [error, setError] = useState('')
+
+    useEffect(() => {
+        api.get('/admin/dashboard')
+        .then((res) => setData(res.data))
+        .catch((err) => setError(err.response?.data?.message || 'Could not load the dashboard'))
+    }, [])
+
+    if (error) return <p>{error}</p>
+    if (!data) return <p>Loading...</p>
+
+    const { stats: s, pipeline: p, fleet: f, revenue, recent, archive } = data
+
+    const stats = [
+        { label: 'Total reservations', value: s.totalReservations, note: growth(s.reservationGrowth) },
+        { label: 'Revenue', value: `₱${s.revenue.toLocaleString()}`, note: growth(s.revenueGrowth) },
+        { label: 'Active rentals', value: s.activeRentals, note: `${s.returningToday} returning today` },
+        { label: 'Fleet available', value: `${f.available} / ${f.total}`, note: `${f.total - f.available} in use or in service` },
+    ]
+
+    const pipeline = [
+        { count: p.requested, title: 'Requested', sub: 'Awaiting approval' },
+        { count: p.approved, title: 'Approved', sub: 'Pickup scheduled' },
+        { count: p.active, title: 'Active rental', sub: 'On the road', highlight: true },
+        { count: p.returned, title: 'Returned', sub: 'To be completed' },
+        { count: p.completed, title: 'Completed', sub: 'Ready to archive' },
+    ]
+
+    const fleet = [
+        { label: 'Available', count: f.available, color: '#16a34a' },
+        { label: 'Rented', count: f.rented, color: '#8b1a2b' },
+        { label: 'Maintenance', count: f.maintenance, color: '#dc2626' },
+    ]
+
+    const totalFleet = Math.max(f.total, 1)
+    const maxRevenue = Math.max(...revenue.map((r) => r.value), 1)
 
   return (
     <>
@@ -120,13 +128,13 @@ export default function AdminDashboard() {
               </tr>
             </thead>
             <tbody>
-              {reservations.map((r) => (
-                <tr key={r.ref}>
-                  <td>{r.ref}</td>
+              {recent.map((r) => (
+                <tr key={r.id}>
+                  <td>#{r.ref}</td>
                   <td>{r.customer}</td>
                   <td>{r.vehicle}</td>
-                  <td>{r.dates}</td>
-                  <td><span className={`badge ${r.stage.toLowerCase()}`}>{r.stage}</span></td>
+                  <td>{formatRange(r.pickupAt, r.returnAt)}</td>
+                  <td><span className={`badge ${r.status}`}>{label(r.status)}</span></td>
                 </tr>
               ))}
             </tbody>

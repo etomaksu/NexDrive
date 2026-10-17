@@ -4,6 +4,8 @@ const mongoose = require('mongoose')
 const cors = require("cors")
 const userRoutes = require('./routes/userRoutes')
 const carRoutes = require('./routes/carRoutes')
+const adminRoutes = require('./routes/adminRoutes')
+
 
 app.use(cors())
 app.use(express.json())
@@ -15,6 +17,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/NexDrive")
 
 app.use('/api', userRoutes)
 app.use('/api', carRoutes)
+app.use('/api/admin', adminRoutes)
 
 app.listen(8000, () => {
     console.log("Server is running at http://127.0.0.1:8000")

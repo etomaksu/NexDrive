@@ -53,7 +53,7 @@ const inRange = (iso, range) => {
   return (Date.now() - date.getTime()) / 86400000 <= Number(range);
 };
 
-export default function Archive() {
+export default function Archive({canRestore = true}) {
   const [data, setData] = useState(initialData);
   const [tab, setTab] = useState("reservations");
   const [search, setSearch] = useState("");
@@ -193,8 +193,14 @@ export default function Archive() {
                 <td>{r.reason}</td>
                 <td>
                   <div className="row-actions">
-                    <button className="btn-restore" onClick={() => handleRestore(r)}>Restore</button>
-                    <button className="btn-edit" onClick={() => setViewing(r)}>View</button>
+                    {canRestore && (
+                      <button className="btn-restore" onClick={() => handleRestore(r)}>
+                        Restore
+                      </button>
+                    )}
+                    <button className="btn-edit" onClick={() => setViewing(r)}>
+                      View
+                    </button>
                   </div>
                 </td>
               </tr>
@@ -237,8 +243,14 @@ export default function Archive() {
               <dt>Reason</dt><dd>{viewing.reason}</dd>
             </dl>
             <div className="panel-actions">
-              <button className="btn-restore-lg" onClick={() => handleRestore(viewing)}>Restore</button>
-              <button className="btn-edit-lg" onClick={() => setViewing(null)}>Close</button>
+              {canRestore && (
+                <button className="btn-restore-lg" onClick={() => handleRestore(viewing)}>
+                  Restore
+                </button>
+              )}
+              <button className="btn-edit-lg" onClick={() => setViewing(null)}>
+                Close
+              </button>
             </div>
           </div>
         </div>

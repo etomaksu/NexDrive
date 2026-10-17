@@ -19,7 +19,9 @@ const UserSchema = new mongoose.Schema({
         type: String,
         enum: ['none', 'pending', 'verified', 'rejected'],
         default: 'none'
-    }
+    }, 
+    status: { type: String, enum: ['active', 'inactive', 'blocked'], default: 'active' },
+    lastActiveAt: { type: Date },
     }, { timestamps: true });
 
     // Unique license number, ignoring users who don't have one

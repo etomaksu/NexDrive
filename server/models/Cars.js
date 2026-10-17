@@ -14,7 +14,8 @@ const CarSchema = new mongoose.Schema({
     mileage:      { type: Number },
     description:  { type: String },
     featured:     { type: Boolean, default: false },
-    isAvailable:  { type: Boolean, default: true }
+    plate:  { type: String, trim: true, unique: true, sparse: true },
+    status: { type: String, enum: ['available', 'rented', 'maintenance'], default: 'available' },
     }, { timestamps: true, toJSON: { virtuals: true }
 })
 

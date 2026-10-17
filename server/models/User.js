@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const archiveFields = require('./archiveFields')
 
 const UserSchema = new mongoose.Schema({
     firstName: { type: String, required: true, trim: true },
@@ -22,6 +23,7 @@ const UserSchema = new mongoose.Schema({
     }, 
     status: { type: String, enum: ['active', 'inactive', 'blocked'], default: 'active' },
     lastActiveAt: { type: Date },
+    ...archiveFields,
     }, { timestamps: true });
 
     // Unique license number, ignoring users who don't have one

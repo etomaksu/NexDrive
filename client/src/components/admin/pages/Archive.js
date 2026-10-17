@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { message } from "antd";
+import { api } from "../../../api/admin";
 import { getPages } from "../utils";
 
 const PAGE_SIZE = 5;
@@ -9,31 +11,6 @@ const TABS = [
   { key: "users", label: "Users" },
 ];
 
-const initialData = {
-  reservations: [
-    { id: 1, record: "#DE-0931", details: "Ford Ranger · Ana Reyes", archivedOn: "2026-06-02", archivedBy: "Liza Ramos", reason: "Completed" },
-    { id: 2, record: "#DE-0902", details: "Honda City · Maria Santos", archivedOn: "2026-05-20", archivedBy: "Liza Ramos", reason: "Completed" },
-    { id: 3, record: "#DE-0877", details: "Toyota Vios · Paolo Cruz", archivedOn: "2026-05-04", archivedBy: "Carlo Mendoza", reason: "Cancelled" },
-    { id: 4, record: "#DE-0851", details: "Toyota Hiace · Ben Torres", archivedOn: "2026-04-18", archivedBy: "Carlo Mendoza", reason: "Completed" },
-    { id: 5, record: "#DE-0820", details: "Mitsubishi Xpander · Juan D.", archivedOn: "2026-04-02", archivedBy: "Liza Ramos", reason: "Completed" },
-    { id: 6, record: "#DE-0799", details: "Toyota Fortuner · Maria Santos", archivedOn: "2026-03-21", archivedBy: "Carlo Mendoza", reason: "Completed" },
-    { id: 7, record: "#DE-0764", details: "Byd Han · Ana Reyes", archivedOn: "2026-03-09", archivedBy: "Liza Ramos", reason: "Cancelled" },
-    { id: 8, record: "#DE-0731", details: "Honda City · Ben Torres", archivedOn: "2026-02-26", archivedBy: "Carlo Mendoza", reason: "Completed" },
-  ],
-  vehicles: [
-    { id: 101, record: "NAB 4410", details: "Toyota Innova", archivedOn: "2026-08-14", archivedBy: "Carlo Mendoza", reason: "Sold" },
-    { id: 102, record: "CXD 2087", details: "Nissan Almera", archivedOn: "2026-06-30", archivedBy: "Liza Ramos", reason: "Retired" },
-    { id: 103, record: "DEF 1193", details: "Suzuki Ertiga", archivedOn: "2026-05-11", archivedBy: "Carlo Mendoza", reason: "Retired" },
-  ],
-  users: [
-    { id: 201, record: "USR-0012", details: "Jenny Lim · Staff", archivedOn: "2026-09-12", archivedBy: "Carlo Mendoza", reason: "Inactive" },
-    { id: 202, record: "USR-0009", details: "Rico Alvarez · Customer", archivedOn: "2026-08-02", archivedBy: "Liza Ramos", reason: "Inactive" },
-    { id: 203, record: "USR-0007", details: "Dina Cruz · Customer", archivedOn: "2026-07-19", archivedBy: "Liza Ramos", reason: "Requested removal" },
-    { id: 204, record: "USR-0004", details: "Tom Reyes · Staff", archivedOn: "2026-06-05", archivedBy: "Carlo Mendoza", reason: "Resigned" },
-    { id: 205, record: "USR-0002", details: "Ella Tan · Customer", archivedOn: "2026-04-22", archivedBy: "Liza Ramos", reason: "Inactive" },
-  ],
-};
-
 const DATE_RANGES = [
   { value: "any", label: "Archived: any time" },
   { value: "30", label: "Last 30 days" },
@@ -42,27 +19,47 @@ const DATE_RANGES = [
 ];
 
 const formatDate = (iso) =>
-  new Date(iso + "T00:00:00").toLocaleDateString("en-US", {
-    month: "short", day: "numeric", year: "numeric",
-  });
+  iso
+    ? new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+    : "—";
 
 const inRange = (iso, range) => {
   if (range === "any") return true;
-  const date = new Date(iso + "T00:00:00");
+  if (!iso) return false;
+  const date = new Date(iso);
   if (range === "year") return date.getFullYear() === new Date().getFullYear();
   return (Date.now() - date.getTime()) / 86400000 <= Number(range);
 };
 
-export default function Archive({canRestore = true}) {
-  const [data, setData] = useState(initialData);
+export default function Archive({ canRestore = true }) {
+  const [data, setData] = useState({ reservations: [], vehicles: [], users: [] });
+  const [stats, setStats] = useState({ restoredThisMonth: 0, activeRecords: 0 });
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
+
   const [tab, setTab] = useState("reservations");
   const [search, setSearch] = useState("");
   const [range, setRange] = useState("any");
   const [reason, setReason] = useState("all");
   const [page, setPage] = useState(1);
   const [viewing, setViewing] = useState(null);
-  const [restoredThisMonth, setRestoredThisMonth] = useState(4);
-  const [activeRecords, setActiveRecords] = useState(318);
+
+  const loadArchive = useCallback(async () => {
+    try {
+      const { data: res } = await api.get("/admin/archive");
+      setData({ reservations: res.reservations, vehicles: res.vehicles, users: res.users });
+      setStats(res.stats);
+      setLoadError("");
+    } catch (err) {
+      setLoadError(err.response?.data?.message || "Could not load the archive.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadArchive();
+  }, [loadArchive]);
 
   const totalArchived = Object.values(data).reduce((sum, list) => sum + list.length, 0);
 
@@ -76,7 +73,10 @@ export default function Archive({canRestore = true}) {
   const filtered = rows.filter((r) => {
     const q = search.trim().toLowerCase();
     const matchesSearch =
-      !q || [r.record, r.details, r.archivedBy, r.reason].some((v) => v.toLowerCase().includes(q));
+      !q ||
+      [r.record, r.details, r.archivedBy, r.reason].some((v) =>
+        String(v ?? "").toLowerCase().includes(q)
+      );
     return matchesSearch && inRange(r.archivedOn, range) && (reason === "all" || r.reason === reason);
   });
 
@@ -86,19 +86,22 @@ export default function Archive({canRestore = true}) {
 
   const goTo = (p) => { if (p >= 1 && p <= totalPages) setPage(p); };
 
-  const handleRestore = (record) => {
+  const handleRestore = async (record) => {
     if (!window.confirm(`Restore ${record.record}?`)) return;
-    // TODO: call your backend, e.g. PATCH /api/admin/archive/:type/:id/restore
-    setData({ ...data, [tab]: data[tab].filter((r) => r.id !== record.id) });
-    setRestoredThisMonth((n) => n + 1);
-    setActiveRecords((n) => n + 1);
-    setViewing(null);
+    try {
+      await api.patch(`/admin/archive/${tab}/${record.id}/restore`);
+      message.success("Record restored");
+      setViewing(null);
+      await loadArchive();
+    } catch (err) {
+      message.error(err.response?.data?.message || "Could not restore the record.");
+    }
   };
 
   const handleExport = () => {
     const header = ["Record", "Details", "Archived on", "Archived by", "Reason"];
     const lines = filtered.map((r) =>
-      [r.record, r.details, r.archivedOn, r.archivedBy, r.reason]
+      [r.record, r.details, r.archivedOn ? r.archivedOn.slice(0, 10) : "", r.archivedBy, r.reason]
         .map((v) => `"${String(v).replace(/"/g, '""')}"`)
         .join(",")
     );
@@ -130,12 +133,12 @@ export default function Archive({canRestore = true}) {
         </div>
         <div className="card">
           <span className="muted">Restored this month</span>
-          <div className="stat-value">{restoredThisMonth}</div>
+          <div className="stat-value">{stats.restoredThisMonth}</div>
           <small className="positive">Moved back to active</small>
         </div>
         <div className="card">
           <span className="muted">Active records</span>
-          <div className="stat-value">{activeRecords}</div>
+          <div className="stat-value">{stats.activeRecords}</div>
           <small className="positive">Listed in their own pages</small>
         </div>
       </section>
@@ -184,7 +187,13 @@ export default function Archive({canRestore = true}) {
             </tr>
           </thead>
           <tbody>
-            {visible.map((r) => (
+            {loading && (
+              <tr><td colSpan={6} className="empty-row">Loading archive...</td></tr>
+            )}
+            {!loading && loadError && (
+              <tr><td colSpan={6} className="empty-row">{loadError}</td></tr>
+            )}
+            {!loading && !loadError && visible.map((r) => (
               <tr key={r.id}>
                 <td>{r.record}</td>
                 <td>{r.details}</td>
@@ -205,7 +214,7 @@ export default function Archive({canRestore = true}) {
                 </td>
               </tr>
             ))}
-            {visible.length === 0 && (
+            {!loading && !loadError && visible.length === 0 && (
               <tr>
                 <td colSpan={6} className="empty-row">No archived records found.</td>
               </tr>

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const archiveFields = require('./archiveFields')
 
 const ReservationSchema = new mongoose.Schema({
   ref:      { type: String, unique: true },   // "DE-1058"
@@ -26,7 +27,7 @@ const ReservationSchema = new mongoose.Schema({
     status: String,
     at: { type: Date, default: Date.now },
     by: { type: mongoose.Schema.Types.ObjectId, ref: 'userAccounts' }
-  }],
+  }], ...archiveFields,
 }, { timestamps: true })
 
 module.exports = mongoose.model('Reservation', ReservationSchema)

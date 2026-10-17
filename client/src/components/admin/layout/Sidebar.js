@@ -21,7 +21,7 @@ const LogoutIcon = () => (
 );
 
 export default function Sidebar({
-  title = "Webname Admin",
+  title = "Admin Dashboard",
   links = ADMIN_LINKS,
   onLogout,
   unread = 0,

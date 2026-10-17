@@ -1,22 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { api } from "../../../api/admin";
 import { getPages } from "../utils";
 
 const PAGE_SIZE = 6;
-const TODAY = "2026-10-13"; // demo "today" to match the design; use new Date().toISOString().slice(0, 10) with real data
+// Today in Manila time (YYYY-MM-DD)
+const TODAY = new Date(Date.now() + 8 * 60 * 60 * 1000).toISOString().slice(0, 10);
 
-const transactions = [
-  { id: "TXN-3308", customer: "Ben Torres", booking: "#DE-1060", type: "Downpayment (50%)", method: "Maya", amount: 1800, status: "Pending", date: "2026-10-12" },
-  { id: "TXN-3304", customer: "Ana Reyes", booking: "#DE-1049", type: "Balance (50%)", method: "Cash", amount: 3050, status: "Paid", date: "2026-10-05" },
-  { id: "TXN-3301", customer: "Juan Dela Cruz", booking: "#DE-1051", type: "Downpayment (50%)", method: "Card", amount: 6325, status: "Paid", date: "2026-10-01" },
-  { id: "TXN-3298", customer: "Ana Reyes", booking: "#DE-1049", type: "Downpayment (50%)", method: "GCash", amount: 3050, status: "Paid", date: "2026-09-30" },
-  { id: "TXN-3295", customer: "Maria Santos", booking: "#DE-1058", type: "Downpayment (50%)", method: "Maya", amount: 2700, status: "Pending", date: "2026-09-30" },
-  { id: "TXN-3290", customer: "Paolo Cruz", booking: "#DE-1047", type: "Downpayment (50%)", method: "Card", amount: 5700, status: "Refunded", date: "2026-09-28" },
-  { id: "TXN-3287", customer: "Maria Santos", booking: "#DE-1040", type: "Balance (50%)", method: "Cash", amount: 2700, status: "Paid", date: "2026-09-25" },
-  { id: "TXN-3283", customer: "Ben Torres", booking: "#DE-1038", type: "Downpayment (50%)", method: "GCash", amount: 2200, status: "Paid", date: "2026-09-22" },
-  { id: "TXN-3279", customer: "Juan Dela Cruz", booking: "#DE-1035", type: "Balance (50%)", method: "Card", amount: 4100, status: "Paid", date: "2026-09-18" },
-];
-
-const STATUSES = ["Pending", "Paid", "Refunded"];
+const STATUSES = ["Pending", "Paid", "Refunded", "Failed"];
 const METHODS = ["Cash", "Card", "GCash", "Maya"];
 const TYPES = ["Downpayment (50%)", "Balance (50%)"];
 
@@ -37,7 +27,7 @@ const fmt = (iso, withYear) =>
   new Date(iso + "T00:00:00Z").toLocaleDateString("en-US", {
     month: "short", day: "numeric", ...(withYear && { year: "numeric" }), timeZone: "UTC",
   });
-const peso = (n) => "₱" + n.toLocaleString();
+const peso = (n) => "₱" + Number(n).toLocaleString();
 
 const DEFAULT_FILTERS = {
   search: "", status: "all", method: "all", type: "all",
@@ -46,10 +36,22 @@ const DEFAULT_FILTERS = {
 const CLEARED_FILTERS = { ...DEFAULT_FILTERS, preset: "", start: "", end: "" };
 
 export default function Transactions() {
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
+
   const [draft, setDraft] = useState(DEFAULT_FILTERS);     // what's in the form
   const [applied, setApplied] = useState(DEFAULT_FILTERS); // what's actually filtering
   const [newestFirst, setNewestFirst] = useState(true);
   const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    api
+      .get("/admin/transactions")
+      .then(({ data }) => setTransactions(data))
+      .catch((err) => setLoadError(err.response?.data?.message || "Could not load transactions."))
+      .finally(() => setLoading(false));
+  }, []);
 
   const setField = (e) => setDraft({ ...draft, [e.target.name]: e.target.value });
 
@@ -210,8 +212,14 @@ export default function Transactions() {
             </tr>
           </thead>
           <tbody>
-            {visible.map((t) => (
-              <tr key={t.id}>
+            {loading && (
+              <tr><td colSpan={8} className="empty-row">Loading transactions...</td></tr>
+            )}
+            {!loading && loadError && (
+              <tr><td colSpan={8} className="empty-row">{loadError}</td></tr>
+            )}
+            {!loading && !loadError && visible.map((t) => (
+              <tr key={t.key}>
                 <td>{t.id}</td>
                 <td className="vehicle-name">{t.customer}</td>
                 <td>{t.booking}</td>
@@ -222,7 +230,7 @@ export default function Transactions() {
                 <td>{fmt(t.date)}</td>
               </tr>
             ))}
-            {visible.length === 0 && (
+            {!loading && !loadError && visible.length === 0 && (
               <tr><td colSpan={8} className="empty-row">No transactions match your filters.</td></tr>
             )}
           </tbody>

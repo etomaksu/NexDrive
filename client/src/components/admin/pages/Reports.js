@@ -1,26 +1,5 @@
-import { useState } from "react";
-
-// Monthly data (hardcoded for now, replace with your backend later)
-const MONTHS = [
-  { key: "2026-01", label: "Jan", bookings: 120, revenue: 330000, avgDays: 2.6 },
-  { key: "2026-02", label: "Feb", bookings: 135, revenue: 372000, avgDays: 2.7 },
-  { key: "2026-03", label: "Mar", bookings: 150, revenue: 415000, avgDays: 2.8 },
-  { key: "2026-04", label: "Apr", bookings: 148, revenue: 408000, avgDays: 2.7 },
-  { key: "2026-05", label: "May", bookings: 160, revenue: 441000, avgDays: 2.8 },
-  { key: "2026-06", label: "Jun", bookings: 190, revenue: 524000, avgDays: 3.0 },
-  { key: "2026-07", label: "Jul", bookings: 175, revenue: 482000, avgDays: 2.9 },
-  { key: "2026-08", label: "Aug", bookings: 235, revenue: 648000, avgDays: 3.1 },
-  { key: "2026-09", label: "Sep", bookings: 221, revenue: 631500, avgDays: 2.9 },
-  { key: "2026-10", label: "Oct", bookings: 248, revenue: 684500, avgDays: 3.2 },
-];
-
-// Each car's share of total bookings
-const CARS = [
-  { name: "Toyota Vios", share: 0.185 },
-  { name: "Mitsubishi Xpander", share: 0.153 },
-  { name: "Toyota Fortuner", share: 0.125 },
-  { name: "Honda City", share: 0.097 },
-];
+import { useEffect, useState } from "react";
+import { api } from "../../../api/admin";
 
 const PERIODS = [
   { key: "month", label: "This month" },
@@ -29,12 +8,11 @@ const PERIODS = [
   { key: "custom", label: "Custom" },
 ];
 
-const LAST = MONTHS.length - 1;
 const peso = (n) => "₱" + Math.round(n).toLocaleString();
 
 // Sum a slice of months into one summary
-const summarize = (from, to) => {
-  const slice = MONTHS.slice(from, to + 1);
+const summarize = (months, from, to) => {
+  const slice = months.slice(from, to + 1);
   const bookings = slice.reduce((s, m) => s + m.bookings, 0);
   const revenue = slice.reduce((s, m) => s + m.revenue, 0);
   const avgDays = bookings
@@ -43,31 +21,60 @@ const summarize = (from, to) => {
   return { bookings, revenue, avgDays };
 };
 
+// Returns null when the previous period is 0 (can't compute a percentage)
 const pct = (cur, prev, digits) => {
+  if (!prev) return null;
   const v = ((cur - prev) / prev) * 100;
   return `${v >= 0 ? "+" : ""}${v.toFixed(digits)}%`;
 };
 
 export default function Reports() {
-  const [period, setPeriod] = useState("month");
-  const [customFrom, setCustomFrom] = useState("2026-08");
-  const [customTo, setCustomTo] = useState("2026-10");
+  const [months, setMonths] = useState([]);
+  const [carMonths, setCarMonths] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
 
-  // Month range used for the stat cards: [from, to] as indexes into MONTHS
+  const [period, setPeriod] = useState("month");
+  const [customFrom, setCustomFrom] = useState("");
+  const [customTo, setCustomTo] = useState("");
+
+  useEffect(() => {
+    api
+      .get("/admin/reports")
+      .then(({ data }) => {
+        setMonths(data.months);
+        setCarMonths(data.cars);
+        const last = data.months.length - 1;
+        setCustomFrom(data.months[Math.max(0, last - 2)].key);
+        setCustomTo(data.months[last].key);
+      })
+      .catch((err) => setLoadError(err.response?.data?.message || "Could not load reports."))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return <p className="muted">Loading reports...</p>;
+  if (loadError) return <div className="card"><p className="muted">{loadError}</p></div>;
+
+  const LAST = months.length - 1;
+  const minKey = months[0].key;
+  const maxKey = months[LAST].key;
+  const yearStart = Math.max(0, months.findIndex((m) => m.key.startsWith(maxKey.slice(0, 4))));
+
+  // Month range used for the stat cards: [from, to] as indexes into months
   let range = null;
   if (period === "month") range = [LAST, LAST];
-  if (period === "3months") range = [LAST - 2, LAST];
-  if (period === "year") range = [0, LAST];
+  if (period === "3months") range = [Math.max(0, LAST - 2), LAST];
+  if (period === "year") range = [yearStart, LAST];
   if (period === "custom") {
-    const f = MONTHS.findIndex((m) => m.key === customFrom);
-    const t = MONTHS.findIndex((m) => m.key === customTo);
+    const f = months.findIndex((m) => m.key === customFrom);
+    const t = months.findIndex((m) => m.key === customTo);
     if (f !== -1 && t !== -1 && f <= t) range = [f, t];
   }
 
   // The chart shows the last 6 months for "This month", otherwise the same range
-  const chartRange = period === "month" ? [LAST - 5, LAST] : range;
+  const chartRange = period === "month" ? [Math.max(0, LAST - 5), LAST] : range;
 
-  const current = range ? summarize(range[0], range[1]) : null;
+  const current = range ? summarize(months, range[0], range[1]) : null;
 
   // Compare with the previous period of the same length (if data exists)
   let deltas = null;
@@ -75,7 +82,7 @@ export default function Reports() {
     const len = range[1] - range[0] + 1;
     const prevStart = range[0] - len;
     if (prevStart >= 0) {
-      const prev = summarize(prevStart, range[0] - 1);
+      const prev = summarize(months, prevStart, range[0] - 1);
       const diff = current.avgDays - prev.avgDays;
       deltas = {
         bookings: pct(current.bookings, prev.bookings, 0),
@@ -85,12 +92,22 @@ export default function Reports() {
     }
   }
 
-  const chartMonths = chartRange ? MONTHS.slice(chartRange[0], chartRange[1] + 1) : [];
+  const chartMonths = chartRange ? months.slice(chartRange[0], chartRange[1] + 1) : [];
   const maxBookings = Math.max(...chartMonths.map((m) => m.bookings), 1);
 
-  const cars = current
-    ? CARS.map((c) => ({ ...c, rentals: Math.round(current.bookings * c.share) }))
-    : [];
+  // Most rented cars in the selected range (top 4)
+  let cars = [];
+  if (range) {
+    const keys = new Set(months.slice(range[0], range[1] + 1).map((m) => m.key));
+    const totals = {};
+    carMonths.forEach((c) => {
+      if (keys.has(c.month)) totals[c.name] = (totals[c.name] || 0) + c.rentals;
+    });
+    cars = Object.entries(totals)
+      .map(([name, rentals]) => ({ name, rentals }))
+      .sort((a, b) => b.rentals - a.rentals)
+      .slice(0, 4);
+  }
   const maxRentals = Math.max(...cars.map((c) => c.rentals), 1);
 
   const deltaClass = (text) => (text.startsWith("-") ? "negative" : "positive");
@@ -98,7 +115,7 @@ export default function Reports() {
   const handleExport = () => {
     if (!range) return;
     const rows = [["Month", "Bookings", "Revenue", "Avg rental length (days)"]];
-    MONTHS.slice(range[0], range[1] + 1).forEach((m) =>
+    months.slice(range[0], range[1] + 1).forEach((m) =>
       rows.push([m.key, m.bookings, m.revenue, m.avgDays])
     );
     rows.push([]);
@@ -139,10 +156,10 @@ export default function Reports() {
 
         {period === "custom" && (
           <div className="custom-range">
-            <input type="month" value={customFrom} min="2026-01" max="2026-10"
+            <input type="month" value={customFrom} min={minKey} max={maxKey}
               onChange={(e) => setCustomFrom(e.target.value)} />
             <span className="muted">to</span>
-            <input type="month" value={customTo} min="2026-01" max="2026-10"
+            <input type="month" value={customTo} min={minKey} max={maxKey}
               onChange={(e) => setCustomTo(e.target.value)} />
           </div>
         )}
@@ -159,12 +176,12 @@ export default function Reports() {
             <div className="card">
               <span className="muted">Bookings</span>
               <div className="stat-value">{current.bookings.toLocaleString()}</div>
-              {deltas && <small className={deltaClass(deltas.bookings)}>{deltas.bookings}</small>}
+              {deltas?.bookings && <small className={deltaClass(deltas.bookings)}>{deltas.bookings}</small>}
             </div>
             <div className="card">
               <span className="muted">Revenue</span>
               <div className="stat-value">{peso(current.revenue)}</div>
-              {deltas && <small className={deltaClass(deltas.revenue)}>{deltas.revenue}</small>}
+              {deltas?.revenue && <small className={deltaClass(deltas.revenue)}>{deltas.revenue}</small>}
             </div>
             <div className="card">
               <span className="muted">Avg. rental length</span>
@@ -189,6 +206,7 @@ export default function Reports() {
 
             <div className="card">
               <h3>Most rented cars</h3>
+              {cars.length === 0 && <p className="muted">No rentals in this period.</p>}
               {cars.map((c) => (
                 <div key={c.name} className="fleet-row">
                   <div className="fleet-label">

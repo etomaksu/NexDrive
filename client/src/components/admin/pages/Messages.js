@@ -1,30 +1,45 @@
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
+import { message as toast } from "antd";
+import dayjs from "dayjs";
+import { api } from "../../../api/admin";
 import { getPages } from "../utils";
 
 const PAGE_SIZE = 5;
 
-const initialMessages = [
-  { id: 1, name: "Althea Lois Ramos", email: "althea@email.com", subject: "Question about my Toyota Vios booking", message: "Can I extend my rental by one more day? I'm still in Batangas and my meeting got moved.", received: "Today, 10:52 AM", status: "New" },
-  { id: 2, name: "Juan Dela Cruz", email: "juan@email.com", subject: "License verification", message: "I uploaded my license yesterday. How long does verification usually take?", received: "Oct 14", status: "New" },
-  { id: 3, name: "Maria Santos", email: "maria@email.com", subject: "Pick-up time change", message: "Can I pick up the Innova at 8:00 AM instead of 10:00 AM on Saturday?", received: "Oct 13", status: "Replied" },
-  { id: 4, name: "Paolo Cruz", email: "paolo@email.com", subject: "Refund for cancelled booking", message: "I cancelled my Fortuner booking. When will the refund reach my card?", received: "Oct 12", status: "Replied" },
-  { id: 5, name: "Ana Reyes", email: "ana@email.com", subject: "Delivery to Dasmariñas", message: "Do you offer delivery to Dasmariñas? And is there an extra fee?", received: "Oct 11", status: "Replied" },
-];
+// "Today, 10:52 AM" for today, otherwise "Oct 14" (with the year if it's an older year)
+const formatReceived = (iso) => {
+  const d = dayjs(iso);
+  if (d.isSame(dayjs(), "day")) return `Today, ${d.format("h:mm A")}`;
+  return d.isSame(dayjs(), "year") ? d.format("MMM D") : d.format("MMM D, YYYY");
+};
 
 export default function Messages() {
   const { setUnread } = useOutletContext();
-  const [messages, setMessages] = useState(initialMessages);
+  const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
   const [filter, setFilter] = useState("all");
   const [page, setPage] = useState(1);
   const [open, setOpen] = useState(null);
   const [reply, setReply] = useState("");
+  const [sending, setSending] = useState(false);
+
+  useEffect(() => {
+    api
+      .get("/admin/messages")
+      .then(({ data }) => setMessages(data))
+      .catch((err) => setLoadError(err.response?.data?.message || "Could not load messages."))
+      .finally(() => setLoading(false));
+  }, []);
 
   const unreadCount = messages.filter((m) => m.status === "New").length;
   const repliedCount = messages.filter((m) => m.status === "Replied").length;
 
-  // Keep the sidebar badge in sync
-  useEffect(() => { setUnread(unreadCount); }, [unreadCount, setUnread]);
+  // Keep the sidebar badge in sync (only after the real data has loaded)
+  useEffect(() => {
+    if (!loading && !loadError) setUnread(unreadCount);
+  }, [loading, loadError, unreadCount, setUnread]);
   useEffect(() => { setPage(1); }, [filter]);
 
   const filtered = messages.filter((m) => {
@@ -40,19 +55,27 @@ export default function Messages() {
 
   const openMessage = (m) => {
     // Opening a new message marks it as read
-    // TODO: PATCH /api/admin/messages/:id/read
     if (m.status === "New") {
       setMessages(messages.map((x) => (x.id === m.id ? { ...x, status: "Read" } : x)));
+      api.patch(`/admin/messages/${m.id}/read`).catch(() => {});
     }
     setOpen({ ...m, status: m.status === "New" ? "Read" : m.status });
     setReply("");
   };
 
-  const sendReply = () => {
+  const sendReply = async () => {
     if (!reply.trim()) return;
-    // TODO: POST /api/admin/messages/:id/reply (send the email, then mark as replied)
-    setMessages(messages.map((x) => (x.id === open.id ? { ...x, status: "Replied" } : x)));
-    setOpen(null);
+    try {
+      setSending(true);
+      const { data } = await api.post(`/admin/messages/${open.id}/reply`, { reply });
+      setMessages(messages.map((x) => (x.id === data.id ? data : x)));
+      toast.success("Reply saved");
+      setOpen(null);
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Could not send the reply.");
+    } finally {
+      setSending(false);
+    }
   };
 
   const tabs = [
@@ -86,7 +109,13 @@ export default function Messages() {
             </tr>
           </thead>
           <tbody>
-            {visible.map((m) => {
+            {loading && (
+              <tr><td colSpan={6} className="empty-row">Loading messages...</td></tr>
+            )}
+            {!loading && loadError && (
+              <tr><td colSpan={6} className="empty-row">{loadError}</td></tr>
+            )}
+            {!loading && !loadError && visible.map((m) => {
               const isNew = m.status === "New";
               return (
                 <tr key={m.id} className={isNew ? "row-unread" : ""}>
@@ -101,7 +130,7 @@ export default function Messages() {
                   </td>
                   <td className={isNew ? "vehicle-name" : ""}>{m.subject}</td>
                   <td><div className="msg-preview">{m.message}</div></td>
-                  <td className={isNew ? "vehicle-name" : ""}>{m.received}</td>
+                  <td className={isNew ? "vehicle-name" : ""}>{formatReceived(m.received)}</td>
                   <td><span className={`badge msg-${m.status.toLowerCase()}`}>{m.status}</span></td>
                   <td>
                     <button className={isNew ? "btn-open" : "btn-edit"} onClick={() => openMessage(m)}>
@@ -111,7 +140,7 @@ export default function Messages() {
                 </tr>
               );
             })}
-            {visible.length === 0 && (
+            {!loading && !loadError && visible.length === 0 && (
               <tr><td colSpan={6} className="empty-row">No messages here.</td></tr>
             )}
           </tbody>
@@ -141,12 +170,15 @@ export default function Messages() {
           <div className="modal modal-wide" onClick={(e) => e.stopPropagation()}>
             <h3>{open.subject}</h3>
             <p className="muted small">
-              {open.name} · {open.email} · {open.received}
+              {open.name} · {open.email} · {formatReceived(open.received)}
             </p>
             <p className="msg-body">{open.message}</p>
 
             {open.status === "Replied" ? (
-              <p className="positive">This message has already been replied to.</p>
+              <>
+                <p className="positive">This message has already been replied to.</p>
+                {open.reply && <p className="msg-body">{open.reply}</p>}
+              </>
             ) : (
               <>
                 <label className="reply-label">Your reply</label>
@@ -161,8 +193,8 @@ export default function Messages() {
 
             <div className="panel-actions">
               {open.status !== "Replied" && (
-                <button className="btn-restore-lg" onClick={sendReply} disabled={!reply.trim()}>
-                  Send reply
+                <button className="btn-restore-lg" onClick={sendReply} disabled={!reply.trim() || sending}>
+                  {sending ? "Sending..." : "Send reply"}
                 </button>
               )}
               <button className="btn-edit-lg" onClick={() => setOpen(null)}>Close</button>

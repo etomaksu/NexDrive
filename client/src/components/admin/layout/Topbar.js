@@ -5,12 +5,10 @@ export default function Topbar({
   homePath = "/admin",
 }) {
   const { pathname } = useLocation();
-  const showBack = pathname !== homePath;
 
   return (
     <header className="topbar">
       <div className="topbar-left">
-        {showBack && <Link to={homePath} className="topbar-back">← Dashboard</Link>}
         <input className="topbar-search" placeholder="Search reservations, users, vehicles" />
       </div>
       <div className="topbar-user">

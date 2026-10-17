@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const archiveFields = require('./archiveFields')
 
 const CarSchema = new mongoose.Schema({
     name:         { type: String, required: true, trim: true },
@@ -16,7 +17,8 @@ const CarSchema = new mongoose.Schema({
     featured:     { type: Boolean, default: false },
     plate:  { type: String, trim: true, unique: true, sparse: true },
     status: { type: String, enum: ['available', 'rented', 'maintenance'], default: 'available' },
-    }, { timestamps: true, toJSON: { virtuals: true }
+    ...archiveFields
+}, { timestamps: true, toJSON: { virtuals: true }
 })
 
 module.exports = mongoose.model('Car', CarSchema)

@@ -1,10 +1,19 @@
 import { useCallback, useEffect, useState } from "react";
-import { Form, Input, Modal, Select, message } from "antd";
-import { api } from "../../../api/admin";
+import { Modal, Form, Input, Select, message } from "antd";
+import dayjs from "dayjs";
+import {api} from "../../../api/admin";
 
-const ROLE_LABELS = { customer: "Customer", staff: "Staff", admin: "Admin" };
-const STATUS_LABELS = { active: "Active", inactive: "Inactive", blocked: "Blocked" };
-const EDITABLE_ROLES = ["staff", "admin"];
+// DB role -> label + badge class (admin reuses your existing red "role-super-admin" badge)
+const ROLE_META = {
+  customer: { label: "Customer", cls: "role-customer" },
+  staff: { label: "Staff", cls: "role-staff" },
+  admin: { label: "Admin", cls: "role-super-admin" },
+};
+
+const ASSIGNABLE_ROLES = [
+  { value: "staff", label: "Staff" },
+  { value: "admin", label: "Admin" },
+];
 
 const FILTERS = [
   { key: "all", label: "All users", match: () => true },
@@ -13,17 +22,19 @@ const FILTERS = [
   { key: "customers", label: "Customers", match: (u) => u.role === "customer" },
 ];
 
-// "Today", "Yesterday", "2 days ago", "Sep 12"
-function formatLastActive(iso) {
+const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+
+const formatLastActive = (iso) => {
   if (!iso) return "Never";
-  const d = new Date(iso);
-  const startOfDay = (x) => new Date(x.getFullYear(), x.getMonth(), x.getDate());
-  const days = Math.round((startOfDay(new Date()) - startOfDay(d)) / 86400000);
+  const d = dayjs(iso);
+  const days = dayjs().startOf("day").diff(d.startOf("day"), "day");
   if (days <= 0) return "Today";
   if (days === 1) return "Yesterday";
   if (days < 7) return `${days} days ago`;
-  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-}
+  return d.format("MMM D");
+};
+
+const errMsg = (err, fallback) => err.response?.data?.message || fallback;
 
 export default function StaffList() {
   const [users, setUsers] = useState([]);
@@ -41,11 +52,11 @@ export default function StaffList() {
 
   const loadUsers = useCallback(async () => {
     try {
-      const res = await api.get("/admin/users");
-      setUsers(res.data);
+      const { data } = await api.get("/admin/users");
+      setUsers(data);
       setLoadError("");
     } catch (err) {
-      setLoadError(err.response?.data?.message || "Could not load users");
+      setLoadError(errMsg(err, "Could not load users."));
     } finally {
       setLoading(false);
     }
@@ -65,28 +76,24 @@ export default function StaffList() {
       setForm({ name: selected.name, email: selected.email, role: selected.role });
       setError("");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedId]);
+  }, [selected]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSave = async () => {
-    if (!form.name.trim()) return setError("Full name is required.");
+    if (!/^\S+\s+\S+/.test(form.name.trim())) return setError("Enter first and last name.");
     if (!/^\S+@\S+\.\S+$/.test(form.email)) return setError("Enter a valid email.");
 
     try {
       setSaving(true);
-      // the server rejects role changes on your own account, so only send it when it changed
-      const body = { name: form.name, email: form.email };
-      if (form.role !== selected.role) body.role = form.role;
-      await api.put(`/admin/users/${selectedId}`, body);
-      setError("");
+      await api.put(`/admin/users/${selectedId}`, form);
       message.success("User updated");
+      setError("");
       await loadUsers();
     } catch (err) {
-      setError(err.response?.data?.message || "Could not save the user");
+      setError(errMsg(err, "Could not save changes."));
     } finally {
       setSaving(false);
     }
@@ -99,7 +106,7 @@ export default function StaffList() {
       });
       await loadUsers();
     } catch (err) {
-      message.error(err.response?.data?.message || "Could not update the user");
+      message.error(errMsg(err, "Could not update status."));
     }
   };
 
@@ -107,43 +114,39 @@ export default function StaffList() {
     if (!window.confirm("Archive this user?")) return;
     try {
       await api.patch(`/admin/users/${id}/archive`, { reason: "Archived" });
-      message.success("User archived");
       if (selectedId === id) setSelectedId(null);
       await loadUsers();
     } catch (err) {
-      message.error(err.response?.data?.message || "Could not archive the user");
+      message.error(errMsg(err, "Could not archive user."));
     }
   };
 
-  const handleAddUser = () => {
+  const openAdd = () => {
     addForm.resetFields();
-    addForm.setFieldsValue({ role: "staff" });
     setAddOpen(true);
   };
 
-  const submitAddUser = async () => {
+  const handleCreate = async (values) => {
     try {
-      const values = await addForm.validateFields();
       setAdding(true);
-      const res = await api.post("/admin/users", values);
-      message.success("User added");
+      const { data } = await api.post("/admin/users", values);
+      message.success("User created");
       setAddOpen(false);
       await loadUsers();
-      setSelectedId(res.data.id);
+      setSelectedId(data.id);
     } catch (err) {
-      if (err.errorFields) return;
-      message.error(err.response?.data?.message || "Could not add the user");
+      message.error(errMsg(err, "Could not create user."));
     } finally {
       setAdding(false);
     }
   };
 
-  // Role options: Staff + Admin, plus the user's current role so it still displays
+  // Customers and your own account can't have their role changed
+  const roleLocked = !selected || selected.role === "customer" || selected.isSelf;
   const roleOptions =
-    selected && !EDITABLE_ROLES.includes(selected.role)
-      ? [selected.role, ...EDITABLE_ROLES]
-      : EDITABLE_ROLES;
-  const roleLocked = !!selected?.isSelf; // you can't change your own role
+    selected?.role === "customer"
+      ? [{ value: "customer", label: "Customer" }]
+      : ASSIGNABLE_ROLES;
 
   return (
     <>
@@ -152,7 +155,7 @@ export default function StaffList() {
           <h1>Users &amp; roles</h1>
           <p className="muted">Manage accounts, roles and access permissions</p>
         </div>
-        <button className="btn-primary" onClick={handleAddUser}>+ Add user</button>
+        <button className="btn-primary" onClick={openAdd}>+ Add user</button>
       </div>
 
       {/* Filter pills */}
@@ -182,42 +185,39 @@ export default function StaffList() {
               </tr>
             </thead>
             <tbody>
-              {visible.map((u) => (
-                <tr key={u.id} className={u.id === selectedId ? "row-selected" : ""}>
-                  <td className="vehicle-name">{u.name}</td>
-                  <td><span className={`badge role-${u.role}`}>{ROLE_LABELS[u.role]}</span></td>
-                  <td><span className={`badge user-${u.status}`}>{STATUS_LABELS[u.status]}</span></td>
-                  <td>{formatLastActive(u.lastActiveAt)}</td>
-                  <td>
-                    <div className="row-actions">
-                      <button className="btn-edit" onClick={() => setSelectedId(u.id)}>Edit</button>
-
-                      {!u.isSelf && u.status === "inactive" && (
-                        <button className="btn-archive" onClick={() => archiveUser(u.id)}>Archive</button>
-                      )}
-                      {!u.isSelf && u.status !== "inactive" && (
-                        <button className="btn-archive" onClick={() => toggleBlock(u)}>
-                          {u.status === "blocked" ? "Unblock" : "Block"}
-                        </button>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
               {loading && (
-                <tr>
-                  <td colSpan={5} className="empty-row">Loading users...</td>
-                </tr>
+                <tr><td colSpan={5} className="empty-row">Loading users...</td></tr>
               )}
               {!loading && loadError && (
-                <tr>
-                  <td colSpan={5} className="empty-row">{loadError}</td>
-                </tr>
+                <tr><td colSpan={5} className="empty-row">{loadError}</td></tr>
               )}
+              {!loading && !loadError && visible.map((u) => {
+                const meta = ROLE_META[u.role] || { label: cap(u.role), cls: "" };
+                return (
+                  <tr key={u.id} className={u.id === selectedId ? "row-selected" : ""}>
+                    <td className="vehicle-name">{u.name}</td>
+                    <td><span className={`badge ${meta.cls}`}>{meta.label}</span></td>
+                    <td><span className={`badge user-${u.status}`}>{cap(u.status)}</span></td>
+                    <td>{formatLastActive(u.lastActiveAt)}</td>
+                    <td>
+                      <div className="row-actions">
+                        <button className="btn-edit" onClick={() => setSelectedId(u.id)}>Edit</button>
+
+                        {!u.isSelf && u.status === "inactive" && (
+                          <button className="btn-archive" onClick={() => archiveUser(u.id)}>Archive</button>
+                        )}
+                        {!u.isSelf && u.status !== "inactive" && (
+                          <button className="btn-archive" onClick={() => toggleBlock(u)}>
+                            {u.status === "blocked" ? "Unblock" : "Block"}
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
               {!loading && !loadError && visible.length === 0 && (
-                <tr>
-                  <td colSpan={5} className="empty-row">No users found.</td>
-                </tr>
+                <tr><td colSpan={5} className="empty-row">No users found.</td></tr>
               )}
             </tbody>
           </table>
@@ -238,9 +238,7 @@ export default function StaffList() {
               <label>Role</label>
               <select name="role" value={form.role} onChange={handleChange} disabled={roleLocked}>
                 {roleOptions.map((r) => (
-                  <option key={r} value={r} disabled={!EDITABLE_ROLES.includes(r)}>
-                    {ROLE_LABELS[r]}
-                  </option>
+                  <option key={r.value} value={r.value}>{r.label}</option>
                 ))}
               </select>
 
@@ -263,41 +261,54 @@ export default function StaffList() {
         </div>
       </div>
 
-      {/* ADD USER */}
+      {/* Add user modal */}
       <Modal
         title="Add user"
         open={addOpen}
-        onOk={submitAddUser}
         onCancel={() => setAddOpen(false)}
-        okText="Add user"
+        onOk={() => addForm.submit()}
+        okText="Create user"
         confirmLoading={adding}
         forceRender
       >
-        <Form form={addForm} layout="vertical">
-          <Form.Item name="name" label="Full name" rules={[{ required: true, message: "Required" }]}>
-            <Input placeholder="Liza Ramos" />
+        <Form
+          form={addForm}
+          layout="vertical"
+          initialValues={{ role: "staff" }}
+          onFinish={handleCreate}
+        >
+          <Form.Item
+            name="name"
+            label="Full name"
+            rules={[
+              { required: true, message: "Full name is required" },
+              { pattern: /^\S+\s+\S+/, message: "Enter first and last name" },
+            ]}
+          >
+            <Input />
           </Form.Item>
           <Form.Item
             name="email"
             label="Email"
-            rules={[{ required: true, type: "email", message: "Enter a valid email" }]}
+            rules={[
+              { required: true, message: "Email is required" },
+              { type: "email", message: "Enter a valid email" },
+            ]}
           >
-            <Input placeholder="liza@webname.ph" />
+            <Input />
+          </Form.Item>
+          <Form.Item name="role" label="Role" rules={[{ required: true }]}>
+            <Select options={ASSIGNABLE_ROLES} />
           </Form.Item>
           <Form.Item
             name="password"
             label="Temporary password"
-            rules={[{ required: true, min: 6, message: "At least 6 characters" }]}
+            rules={[
+              { required: true, message: "Password is required" },
+              { min: 8, message: "At least 8 characters" },
+            ]}
           >
             <Input.Password />
-          </Form.Item>
-          <Form.Item name="role" label="Role" rules={[{ required: true }]}>
-            <Select
-              options={[
-                { value: "staff", label: "Staff" },
-                { value: "admin", label: "Admin" },
-              ]}
-            />
           </Form.Item>
         </Form>
       </Modal>

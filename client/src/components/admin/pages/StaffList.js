@@ -129,7 +129,11 @@ export default function StaffList() {
   const handleCreate = async (values) => {
     try {
       setAdding(true);
-      const { data } = await api.post("/admin/users", values);
+      const { data } = await api.post("/admin/users", {
+        ...values,
+        firstName: values.firstName.trim(),
+        lastName: values.lastName.trim(),
+      });
       message.success("User created");
       setAddOpen(false);
       await loadUsers();
@@ -277,16 +281,25 @@ export default function StaffList() {
           initialValues={{ role: "staff" }}
           onFinish={handleCreate}
         >
-          <Form.Item
-            name="name"
-            label="Full name"
-            rules={[
-              { required: true, message: "Full name is required" },
-              { pattern: /^\S+\s+\S+/, message: "Enter first and last name" },
-            ]}
-          >
-            <Input />
-          </Form.Item>
+          <div style={{ display: "flex", gap: 12 }}>
+
+        <Form.Item
+          name="firstName"
+          label="First name"
+          style={{ flex: 1 }}
+          rules={[{ required: true, whitespace: true, message: "First name is required" }]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name="lastName"
+          label="Last name"
+          style={{ flex: 1 }}
+          rules={[{ required: true, whitespace: true, message: "Last name is required" }]}
+        >
+          <Input />
+        </Form.Item>
+      </div>
           <Form.Item
             name="email"
             label="Email"

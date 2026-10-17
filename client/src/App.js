@@ -23,6 +23,13 @@ import Reports from "./components/admin/pages/Reports";
 import Transactions from "./components/admin/pages/Transactions";
 import Messages from "./components/admin/pages/Messages";
 
+//Staff Dashboard
+//Staff Dashboard
+import StaffLayout from "./components/staff/layout/StaffLayout";
+import StaffReservations from "./components/staff/pages/StaffReservations";
+import StaffVehicles from "./components/staff/pages/StaffVehicles";
+import StaffCustomers from "./components/staff/pages/StaffCustomers";
+
 const paths = {
   home: '/',
   login: '/login',
@@ -48,6 +55,11 @@ const AdminRoute = ({ user, children }) => {
   if (!isAdmin(user)) return <Navigate to="/" replace />
   return children
 }
+const StaffRoute = ({ user, children }) => {
+  if (!user) return <Navigate to="/login" replace />
+  if (user.role !== 'staff' && user.role !== 'admin') return <Navigate to="/" replace />
+  return children
+}
 
 function App() {
   const navigate = useNavigate()
@@ -62,12 +74,13 @@ function App() {
   const currentPage = getCurrentPage(location.pathname)
   const setCurrentPage = (page) => navigate(paths[page] || '/')
   const hideNavbar = ['/login', '/register'].includes(location.pathname)
-                      || location.pathname.startsWith('/admin');
+                      || location.pathname.startsWith('/admin')
+                      || location.pathname.startsWith('/staff');
 
   const handleLogin = (userData) => {
     localStorage.setItem('user', JSON.stringify(userData));
     setUser(userData);
-    navigate(userData.role === 'admin' ? '/admin' : '/')
+    navigate({ admin: '/admin', staff: '/staff' }[userData.role] || '/')
   };
 
   const handleLogout = () => {
@@ -122,7 +135,7 @@ function App() {
               path="/admin"
               element={
                 <AdminRoute user={user}>
-                  <AdminLayout onLogout={handleLogout} />
+                  <AdminLayout user={user} onLogout={handleLogout} />
                 </AdminRoute>
               }
             >
@@ -134,7 +147,23 @@ function App() {
               <Route path="transactions" element={<Transactions />} />
               <Route path="messages" element={<Messages />} />
             </Route>
-
+              <Route
+                path="/staff"
+                element={
+                  <StaffRoute user={user}>
+                    <StaffLayout user={user} onLogout={handleLogout} />
+                  </StaffRoute>
+                }
+              >
+                <Route index element={<AdminDashboard />} />
+                <Route path="reservations" element={<StaffReservations />} />
+                <Route path="vehicles" element={<StaffVehicles />} />
+                <Route path="customers" element={<StaffCustomers />} />
+                <Route path="archive" element={<Archive canRestore={false} />} />
+                <Route path="reports" element={<Reports />} />
+                <Route path="transactions" element={<Transactions />} />
+                <Route path="messages" element={<Messages />} />
+              </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         

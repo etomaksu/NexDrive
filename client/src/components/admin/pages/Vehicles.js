@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Col, Form, Input, InputNumber, Modal, Row, Select, message } from "antd";
+import { Button, Col, Form, Input, InputNumber, Modal, Row, Select, Upload, message } from "antd";
 import { api } from "../../../api/admin";
 import { getPages } from "../utils";
 
@@ -17,6 +17,12 @@ const STATUSES = [
 const toOptions = (list) => list.map((v) => ({ value: v, label: v }));
 const label = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 const required = [{ required: true, message: "Required" }];
+
+// Pictures are saved by the server and served from /uploads, outside the /api path
+const FILE_BASE = (api.defaults.baseURL || "").replace(/\/api\/?$/, "");
+const fileUrl = (path) => (path ? `${FILE_BASE}${path}` : "");
+const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const MAX_IMAGE_MB = 5;
 
 // default values for the "Add vehicle" form
 const emptyForm = {
@@ -39,6 +45,8 @@ export default function Vehicles() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState(null); // null = adding a new vehicle
   const [saving, setSaving] = useState(false);
+  const [image, setImage] = useState({ file: null, url: "" }); // picture shown in the form (file = newly picked)
+  const [imageRemoved, setImageRemoved] = useState(false); // admin removed the saved picture
   const [form] = Form.useForm();
 
   const loadVehicles = useCallback(async () => {
@@ -66,6 +74,8 @@ export default function Vehicles() {
     setEditing(null);
     form.resetFields();
     form.setFieldsValue(emptyForm);
+    setImage({ file: null, url: "" });
+    setImageRemoved(false);
     setModalOpen(true);
   };
 
@@ -73,6 +83,8 @@ export default function Vehicles() {
     setEditing(vehicle);
     form.resetFields();
     form.setFieldsValue(vehicle);
+    setImage({ file: null, url: fileUrl(vehicle.imageUrl) });
+    setImageRemoved(false);
     setModalOpen(true);
   };
 
@@ -80,10 +92,20 @@ export default function Vehicles() {
     try {
       const values = await form.validateFields();
       setSaving(true);
+
+      // The picture travels with the form fields, so send everything as FormData
+      const body = new FormData();
+      Object.entries(values).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) body.append(key, value);
+      });
+      const newImage = image.file;
+      if (newImage) body.append("image", newImage);
+      else if (imageRemoved) body.append("removeImage", "true");
+
       if (editing) {
-        await api.put(`/admin/cars/${editing.id}`, values);
+        await api.put(`/admin/cars/${editing.id}`, body);
       } else {
-        await api.post("/admin/cars", values);
+        await api.post("/admin/cars", body);
       }
       message.success(editing ? "Vehicle updated" : "Vehicle added");
       setModalOpen(false);
@@ -111,6 +133,27 @@ export default function Vehicles() {
     if (p >= 1 && p <= totalPages) setPage(p);
   };
 
+  // Photo picker: checks the file, then keeps it until Save (nothing is uploaded yet)
+  const pickImage = (file) => {
+    if (!IMAGE_TYPES.includes(file.type)) {
+      message.error("Use a JPG, PNG or WebP image");
+      return Upload.LIST_IGNORE;
+    }
+    if (file.size / 1024 / 1024 > MAX_IMAGE_MB) {
+      message.error(`Image must be ${MAX_IMAGE_MB}MB or smaller`);
+      return Upload.LIST_IGNORE;
+    }
+    if (image.file) URL.revokeObjectURL(image.url);
+    setImage({ file, url: URL.createObjectURL(file) });
+    return false;
+  };
+
+  const removeImage = () => {
+    if (image.file) URL.revokeObjectURL(image.url);
+    setImage({ file: null, url: "" });
+    if (editing?.imageUrl) setImageRemoved(true); // the saved picture gets deleted on Save
+  };
+
   return (
     <>
       <div className="page-header">
@@ -133,7 +176,16 @@ export default function Vehicles() {
           <tbody>
             {visible.map((v) => (
               <tr key={v.id}>
-                <td className="vehicle-name">{v.name}</td>
+                <td className="vehicle-name">
+                  {v.imageUrl && (
+                    <img
+                      src={fileUrl(v.imageUrl)}
+                      alt=""
+                      style={{ width: 44, height: 30, objectFit: "cover", borderRadius: 4, marginRight: 10, verticalAlign: "middle" }}
+                    />
+                  )}
+                  {v.name}
+                </td>
                 <td>{v.plate || "—"}</td>
                 <td>{v.type}</td>
                 <td>₱{v.price.toLocaleString()}</td>
@@ -270,6 +322,44 @@ export default function Vehicles() {
               </Form.Item>
             </Col>
           </Row>
+
+          <Form.Item label="Vehicle photo">
+            <div
+              style={{
+                border: "1.5px dashed #c9cdd4",
+                borderRadius: 10,
+                background: "#fafafa",
+                padding: "20px 16px",
+                textAlign: "center",
+              }}
+            >
+              {image.url ? (
+                <>
+                  <img
+                    src={image.url}
+                    alt="Vehicle"
+                    style={{ maxWidth: "100%", maxHeight: 150, objectFit: "contain", borderRadius: 6 }}
+                  />
+                  <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 12 }}>
+                    <Upload accept={IMAGE_TYPES.join(",")} showUploadList={false} beforeUpload={pickImage}>
+                      <Button>Replace image</Button>
+                    </Upload>
+                    <Button danger onClick={removeImage}>Remove</Button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div style={{ color: "#0a3d91", fontWeight: 500 }}>Upload vehicle photo</div>
+                  <div style={{ color: "#8a8f98", fontSize: 12, margin: "4px 0 12px" }}>
+                    PNG, JPG or WebP, up to {MAX_IMAGE_MB} MB
+                  </div>
+                  <Upload accept={IMAGE_TYPES.join(",")} showUploadList={false} beforeUpload={pickImage}>
+                    <Button>Upload image</Button>
+                  </Upload>
+                </>
+              )}
+            </div>
+          </Form.Item>
         </Form>
       </Modal>
     </>

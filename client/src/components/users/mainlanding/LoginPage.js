@@ -10,7 +10,7 @@ const LoginPage = ({ setCurrentPage, onLogin }) => {
     const [forgot, setForgot] = useState(null)
     const [verify, setVerify] = useState(null)
     const [newPass, setNewPass] = useState(null)
-
+    const HOME = { customer: '/dashboard', admin: '/admin', staff: '/staff' }
     const handleLogin = (e) => {
         e.preventDefault()
         axios.post("http://localhost:8000/api/login", login)
@@ -18,7 +18,7 @@ const LoginPage = ({ setCurrentPage, onLogin }) => {
                 localStorage.setItem('token', response.data.token)
                 localStorage.setItem('role', response.data.user.role)
                 localStorage.setItem('user', JSON.stringify(response.data.user))
-                window.location.href = response.data.user.role === 'customer' ? '/dashboard' : '/admin'
+                window.location.href = HOME[response.data.user.role] || '/dashboard'
             })
             .catch((error) => {
                 console.log(error)

@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
 import { Tag, Button, message } from 'antd'
-import Cars from '../../data/Cars'
+import { useParams, useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { fetchCar } from '../../api/cars'
 //import './CarDetails.css'
 //changes
 // Booked days in October 2026, per car id.
@@ -27,16 +28,28 @@ const dayOfOctober = (iso) => {
   return y === YEAR && m === MONTH ? d : null
 }
 
-const CarDetails = ({ setCurrentPage, selectedCarId }) => {
+const CarDetails = () => {
+  const { carId } = useParams()
+  const [car, setCar] = useState(null)
+  const navigate = useNavigate()
   const [pickup, setPickup] = useState('2026-10-10')
   const [returnDate, setReturnDate] = useState('2026-10-13')
+  const [loading, setLoading] = useState(true)
 
-  const car = Cars.find((c) => c.id === selectedCarId)
+  useEffect(() => {
+    fetchCar(carId)
+    .then(setCar)
+    .catch(() => setCar(null))
+    .finally(() =>setLoading(false))
+  },[carId])
+
+  if (loading) return <p style={{ padding: 24 }}>Loading...</p>
+
 
   if (!car) {
     return (
       <div className="carDetailsPage">
-        <button className="backBtn" onClick={() => setCurrentPage('cars')}>
+        <button className="backBtn" onClick={() => navigate('/cars')}>
           ← Back to cars
         </button>
         <p>We couldn't find that car.</p>
@@ -76,7 +89,7 @@ const CarDetails = ({ setCurrentPage, selectedCarId }) => {
 
   return (
     <div className="carDetailsPage">
-      <button className="backBtn" onClick={() => setCurrentPage('cars')}>
+      <button className="backBtn" onClick={() => navigate('/cars')}>
         ← Back to cars
       </button>
 

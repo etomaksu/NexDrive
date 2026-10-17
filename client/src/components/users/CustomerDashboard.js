@@ -1,8 +1,80 @@
 import React, { useState, useEffect } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
+import carImages from '../../data/carImages'
+
+const sidebarLinks = [
+  { to: '/dashboard', text: 'Overview' },
+  { to: '/dashboard/bookings', text: 'My bookings' },
+  { to: '/dashboard/profile', text: 'Profile' },
+]
 
 
-const CustomerDashboard = () => {
+// ---------- helpers ----------
+const formatDate = (iso) =>
+  new Date(iso).toLocaleDateString('en-PH', { month: 'short', day: 'numeric' })
+
+const formatTime = (iso) =>
+  new Date(iso).toLocaleTimeString('en-PH', { hour: 'numeric', minute: '2-digit' })
+
+const formatRange = (from, to) => `${formatDate(from)} - ${formatDate(to)}`
+
+// dates relative to today, so the sample data never goes stale
+const daysFromNow = (n, hour = 9) => {
+  const d = new Date()
+  d.setDate(d.getDate() + n)
+  d.setHours(hour, 0, 0, 0)
+  return d.toISOString()
+}
+
+// ---------- sample data (replace with API data later) ----------
+const STEPS = ['Booked', 'Confirmed', 'Pickup', 'Return']
+
+const activeReservation = {
+  id: 'r1',
+  code: 'ND-1024',
+  carName: 'Toyota Vios',
+  status: 'Confirmed',
+  branch: 'Imus, Cavite',
+  pickupAt: daysFromNow(1),
+  currentStep: 1,
+  stepDates: [daysFromNow(-1), daysFromNow(0), daysFromNow(1), null],
+}
+
+const stats = [
+  { label: 'Active bookings', value: 1, note: 'Pickup tomorrow' },
+  { label: 'Total trips', value: 4, note: 'Since you joined' },
+  { label: 'License', value: 'Verified', note: 'Ready to rent' },
+]
+
+const upcomingBookings = [
+  {
+    id: 'r1',
+    carName: 'Toyota Vios',
+    carImage: carImages.toyotavios,
+    pickupAt: daysFromNow(1),
+    returnAt: daysFromNow(3),
+    location: 'Imus, Cavite',
+    status: 'Confirmed',
+  },
+  {
+    id: 'r2',
+    carName: 'Mitsubishi Xpander',
+    carImage: carImages.mitsubishixpander,
+    pickupAt: daysFromNow(14),
+    returnAt: daysFromNow(16),
+    location: 'Imus, Cavite',
+    status: 'Pending',
+  },
+]
+
+const notifications = [
+  { id: 1, title: 'Your Toyota Vios booking is confirmed', time: '2 hours ago' },
+  { id: 2, title: 'Pickup reminder for tomorrow, 9:00 AM', time: 'Yesterday' },
+]
+
+
+const CustomerDashboard = ({user, onLogout}) => {
+  const handleLogout = onLogout
   return (
     <section id="dashboard">
       {/* ---------- SIDEBAR ---------- */}
@@ -33,7 +105,7 @@ const CustomerDashboard = () => {
       <main id="dashboard-main">
         {/* Welcome */}
         <div id="welcome">
-          <h1 id="welcome-title">Welcome back, {user.name}</h1>
+          <h1 id="welcome-title">Welcome back, {user.firstName}</h1>
 
           {activeReservation && (
             <p id="welcome-text">

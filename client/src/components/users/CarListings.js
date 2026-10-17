@@ -1,20 +1,9 @@
-import React, { useState } from 'react'
-import Cars from '../../data/Cars'
+import React, { useState, useEffect } from 'react'
 import CarCards from '../CarCards'
 import './CarListings.css'
+import { useNavigate } from 'react-router-dom';
+import {fetchCars} from '../../api/cars'
 
-// get the unique values straight from the car list, so the filters always match the data
-const unique = (key) => [...new Set(Cars.map((car) => car[key]))]
-
-const filterOptions = {
-  type: unique('type'),
-  transmission: unique('transmission'),
-  seats: ['2-5', '6-8', '9+'],
-  fuel: unique('fuel'),
-}
-
-// highest price in the list, rounded gi to the nearest 1000
-const maxCarPrice = Math.ceil(Math.max(...Cars.map((car) => car.price)) / 1000) * 1000
 
 const filterTitles = {
   type: 'Vehicle type',
@@ -29,14 +18,39 @@ const seatRange = (seats) => {
   return '9+'
 }
 
-const CarListings = ({ setCurrentPage, setSelectedCarId }) => {
+const CarListings = () => {
+  const navigate = useNavigate()
+  const [cars, setCars] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchCars()
+    .then(setCars)
+    .catch((err) => console.log(err))
+    .finally(() => setLoading(false))
+  }, [])
+
+  const unique = (key) => [...new Set(cars.map((car) => car[key]))]
+
+  const filterOptions = {
+    type: unique('type'),
+    transmission: unique('transmission'),
+    seats: ['2-5', '6-8', '9+'],
+    fuel: unique('fuel'),
+  }
+
+  const maxCarPrice = cars.length
+    ? Math.ceil(Math.max(...cars.map((car) => car.price)) / 1000) * 1000
+    : 10000
+
   const [filters, setFilters] = useState({
     type: [],
     transmission: [],
     seats: [],
     fuel: [],
   })
-  const [maxPrice, setMaxPrice] = useState(maxCarPrice)
+  const [maxPrice, setMaxPrice] = useState(null)
+  const priceLimit = maxPrice ?? maxCarPrice
   const [sort, setSort] = useState('low')
 
   // tick / untick a checkbox
@@ -60,14 +74,15 @@ const CarListings = ({ setCurrentPage, setSelectedCarId }) => {
         matches(filters.transmission, car.transmission) &&
         matches(filters.seats, seatRange(car.seats)) &&
         matches(filters.fuel, car.fuel) &&
-        car.price <= maxPrice
+        car.price <= priceLimit
     )
     .sort((a, b) => (sort === 'low' ? a.price - b.price : b.price - a.price))
 
+    if (loading) return <p style={{ padding: 24 }}>Loading cars...</p>
   return (
     <div className="carsPage">
       <section id="fleet">
-        <button className="backBtn" onClick={() => setCurrentPage('home')}>
+        <button className="backBtn" onClick={() => navigate('/')}>
           ← Back to home
         </button>
         <h1 id="fleet-title">Browse our fleet</h1>
@@ -97,7 +112,7 @@ const CarListings = ({ setCurrentPage, setSelectedCarId }) => {
             <div id="filter-price">
               <div id="price-label">
                 <span>Max price / day</span>
-                <span id="price-value">₱{maxPrice.toLocaleString()}</span>
+                <span id="price-value">₱{priceLimit.toLocaleString()}</span>
               </div>
               <input
                 id="price-range"
@@ -105,7 +120,7 @@ const CarListings = ({ setCurrentPage, setSelectedCarId }) => {
                 min="1000"
                 max={maxCarPrice}
                 step="100"
-                value={maxPrice}
+                value={priceLimit}
                 onChange={(e) => setMaxPrice(Number(e.target.value))}
               />
             </div>
@@ -126,10 +141,7 @@ const CarListings = ({ setCurrentPage, setSelectedCarId }) => {
                 <CarCards
                   key={car.id}
                   car={car}
-                  onView={(id) => {
-                    setSelectedCarId(id)
-                    setCurrentPage('cardetails')
-                  }}
+                  onView={(id) => navigate(`/cars/${id}`)}
                 />
               ))}
             </div>

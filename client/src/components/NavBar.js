@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Menu, Input, Button, Badge, Avatar, Space, Typography } from 'antd'
-import { SearchOutlined, BellOutlined, UserOutlined } from '@ant-design/icons'
+import { Menu, Input, Button, Badge, Avatar, Space, Typography, Dropdown } from 'antd'
+import { SearchOutlined, BellOutlined, UserOutlined, DownOutlined, LogoutOutlined } from '@ant-design/icons'
 import './NavBar.css'
 
 // Add / remove links here and the navbar updates by itself.
@@ -19,6 +19,7 @@ const Navbar = ({
   currentPage,
   setCurrentPage,
   userName = null,
+  onLogout,
   brandName = 'NexDrive',
   onSearch,
   searchPlaceholder = 'Search cars, bookings',
@@ -33,6 +34,19 @@ const Navbar = ({
   )
 
   const menuItems = visibleLinks.map((link) => ({ key: link.page, label: link.label }))
+
+  const userMenuItems = [
+    {
+      key: 'logout',
+      label: 'Log out',
+      icon: <LogoutOutlined />,
+      danger: true,
+    },
+  ]
+
+  const handleUserMenuClick = ({ key }) => {
+    if (key === 'logout') onLogout && onLogout()
+  }
 
   return (
     <header className="navbar">
@@ -69,8 +83,17 @@ const Navbar = ({
               <Button type="text" shape="circle" size="large" icon={<BellOutlined />} aria-label="Notifications" />
             </Badge>
             <Space>
-              <Avatar size="large" icon={<UserOutlined />} />
-              <Typography.Text strong>Hi, {userName}</Typography.Text>
+              <Dropdown
+                menu={{ items: userMenuItems, onClick: handleUserMenuClick }}
+                trigger={['click']}
+                placement="bottomRight"
+              >
+                <Space style={{ cursor: 'pointer' }}>
+                  <Avatar size="large" icon={<UserOutlined />} />
+                  <Typography.Text strong>Hi, {userName}</Typography.Text>
+                  <DownOutlined style={{ fontSize: 12 }} />
+                </Space>
+              </Dropdown>
             </Space>
           </>
         ) : (

@@ -1,9 +1,12 @@
-import React from 'react'
+import React, {useState, useEffect}from 'react'
 import { Button, Card, Col, DatePicker, Input, Row, Select, Typography } from 'antd'
+import { useNavigate } from 'react-router-dom'
 import dayjs from 'dayjs'
-import Cars from '../data/Cars'
+import './HomePage.css'
+import { fetchCars } from '../api/cars'
 import CarCards from './CarCards'
 import './HomePage.css'
+import heroImage from '../assets/images/expander_heroimage.png'
 
 const { Title, Paragraph, Text } = Typography
 
@@ -28,23 +31,28 @@ const steps = [
   { title: 'Drive away', text: 'Upload your license, pay securely and go.' },
 ]
 
-// ids from data/Cars.js: Xpander, Fortuner, Vios
-const featuredIds = [6, 8, 1]
-const heroCarId = 6
-
 // One component, two versions:
 //   isLoggedIn = false -> landing page: cards say "Book" and go to the Login page
 //   isLoggedIn = true  -> member home:  cards say "View" and go to the Booking page
 const HomePage = ({ isLoggedIn = false, setCurrentPage, setSelectedCarId }) => {
-  const featuredCars = featuredIds.map((id) => Cars.find((c) => c.id === id)).filter(Boolean)
-  const heroCar = Cars.find((c) => c.id === heroCarId)
+  const navigate = useNavigate()
+  const [cars, setCars] = useState([])
+
+    useEffect(() => {
+      fetchCars()
+        .then(setCars)
+        .catch((err) => console.log(err))
+    }, [])
+
+
+  const featuredCars = cars.filter((c) => c.featured)
+  const heroCar = featuredCars.find((c) => c.name === 'Mitsubishi Xpander') || featuredCars[0] 
 
   const handleCarAction = (id) => {
     if (isLoggedIn) {
-      setSelectedCarId(id)
-      setCurrentPage('booking')
+      navigate(`/cars/${id}`)
     } else {
-      setCurrentPage('login')
+      navigate('/login')
     }
   }
 
@@ -73,7 +81,7 @@ const HomePage = ({ isLoggedIn = false, setCurrentPage, setSelectedCarId }) => {
           </div>
 
           {heroCar && (
-            <img className="heroCar" src={heroCar.image} alt={heroCar.name} />
+            <img className="heroCar" src={heroImage} alt={heroCar.name} />
           )}
         </div>
       </section>
@@ -94,7 +102,8 @@ const HomePage = ({ isLoggedIn = false, setCurrentPage, setSelectedCarId }) => {
                 size="large"
                 showTime={{ format: 'h:mm A' }}
                 format="MMM D, h:mm A"
-                defaultValue={dayjs('2026-10-10 09:00')}
+                defaultValue={dayjs().hour(9).minute(0)}
+                disabledDate={(d) => d && d < dayjs().startOf('day')}
               />
             </Col>
             <Col xs={12} lg={5}>
@@ -104,7 +113,8 @@ const HomePage = ({ isLoggedIn = false, setCurrentPage, setSelectedCarId }) => {
                 size="large"
                 showTime={{ format: 'h:mm A' }}
                 format="MMM D, h:mm A"
-                defaultValue={dayjs('2026-10-13 09:00')}
+                defaultValue={dayjs().add(1, 'day').hour(9).minute(0)}
+                disabledDate={(d) => d && d < dayjs().startOf('day')}
               />
             </Col>
             <Col xs={24} lg={4}>

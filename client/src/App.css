@@ -9,17 +9,67 @@ body {
   font-family: 'Manrope', system-ui, sans-serif;
 }
 
+/* =========================================================
+   SHARED: auth pages (login, register, forgot, set new pass)
+   ========================================================= */
+.login-page,
+.register-page,
+.forgotpassword-page,
+.setnewpass-page {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* Left blue panel */
+.login-left,
+.register-left,
+.forgotpassword-left,
+.setnewpass-left {
+  flex: 1;
+  background: radial-gradient(circle at 65% 50%, #17428f 0%, #001E56 65%);
+  color: white;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-left {
+  position: relative;
+}
+
+.login-left h2,
+.register-left h2 {
+  font-family: Georgia, serif;
+  font-size: 24px;
+  margin-bottom: 24px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: #f8fafc;
+  color: #1e293b;
+  font-family: 'Manrope', system-ui, sans-serif;
+}
+
 #brandLogo2 {
-position: absolute;
+  position: absolute;
   top: 40px;
-  left: 60px;          
+  left: 60px;
   margin: 0;
   font-family: Georgia, serif;
   font-size: 24px;
   color: white;
 }
 
-#heading {
+#heading,
+.register-left h1 {
   font-family: Georgia, serif;
   font-size: 38px;
   margin-bottom: 16px;
@@ -27,24 +77,20 @@ position: absolute;
 }
 
 #subheading {
-color: #a5b7d4;
+  color: #a5b7d4;
   font-size: 15px;
   max-width: 380px;
 }
 
-/* login!!!! */
-.login-page {
-  display: flex;
-  height: 100vh;
-  width: 100vw;
+.register-left p {
+  color: #94a3b8;
+  font-size: 13px;
+  max-width: 380px;
 }
 
-.login-form > * {
-  width: 100%;
-  max-width: 400px;
-}
-
-.login-form {
+/* Right white form panel */
+.login-form,
+.register-form {
   flex: 1;
   background-color: white;
   padding: 40px 60px;
@@ -55,41 +101,56 @@ color: #a5b7d4;
   overflow-y: auto;
 }
 
-.login-left {
-  position: relative;
-  flex: 1;
-  background: radial-gradient(circle at 65% 50%, #17428f 0%, #001E56 65%);
-  color: white;
-  padding: 60px;
+.login-form > *,
+.register-form > * {
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-form form,
+.register-form form {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  max-width: 400px;
 }
 
-.login-left h2 {
-  font-family: Georgia, serif;
-  font-size: 24px;
-  margin-bottom: 24px;
+.login-form form {
+  gap: 16px;
 }
 
-.login-form {
-  flex: 1;
-  background-color: white;
-  padding: 60px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+.register-form form {
+  gap: 12px;
 }
 
-.forgotPass {
-  background: none;
-  border: none;
-  color: #991b1b;
+.login-form label,
+.register-form label {
   font-size: 12px;
-  font-weight: 600;
-  text-align: left;
+  color: #475569;
+  font-weight: 500;
 }
 
+.login-form input,
+.register-form input {
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+}
+
+.register-form input {
+  padding: 10px 12px;
+}
+
+.login-form input:focus,
+.register-form input:focus {
+  border-color: #001E56;
+}
+
+/* =========================================================
+   LOGIN
+   ========================================================= */
 #hl-2 {
   font-family: Georgia, serif;
   font-size: 26px;
@@ -103,51 +164,56 @@ color: #a5b7d4;
   margin-bottom: 24px;
 }
 
-.login-form form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  max-width: 400px;
-}
-
-.login-form label {
-  font-size: 12px;
-  color: #475569;
-  font-weight: 500;
-}
-
-.login-form input {
-  padding: 12px;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  font-size: 14px;
-  outline: none;
-}
-
-.login-form input:focus {
-  border-color: #001E56;
-}
-
+/* Every button in the login form starts as a plain red text link
+   (this covers "Forgot password?" and "Register") */
 .login-form button {
   cursor: pointer;
-}
-
-.login-form button:first-of-type {
-  background-color: #001E56;
-  color: white;
-  border: none;
-  padding: 12px;
-  border-radius: 8px;
-  font-weight: 600;
-}
-
-.login-form button:last-of-type {
+  font-family: inherit;
   background: none;
   border: none;
+  padding: 0;                /* removes the default indent that caused the misalignment */
+  margin: 0;
   color: #991b1b;
   font-size: 13px;
   font-weight: 600;
   text-align: left;
+  text-transform: lowercase; /* "REGISTER" -> "Register" (first letter restored below) */
+}
+
+.login-form button::first-letter {
+  text-transform: uppercase;
+}
+
+.login-form button:hover {
+  text-decoration: underline;
+}
+
+/* The main LOG IN button (first button inside the form) */
+.login-form form button:first-of-type {
+  background-color: #001E56;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: background-color 0.15s;
+}
+
+.login-form form button:first-of-type:hover {
+  background-color: #17428f;
+  text-decoration: none;
+}
+
+/* Forgot password sits right under LOG IN, Register under the form */
+.login-form form .forgotPass {
+  align-self: flex-start;
+}
+
+.login-form form + button {
+  margin-top: 12px;
 }
 
 .login-form a {
@@ -158,30 +224,9 @@ color: #a5b7d4;
   text-decoration: none;
 }
 
-/* register or wtv */
-.register-page {
-  display: flex;
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-}
-
-.register-form > * {
-  width: 100%;
-  max-width: 400px;
-}
-
-.register-form {
-  flex: 1;
-  background-color: white;
-  padding: 40px 60px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow-y: auto;
-}
-
+/* =========================================================
+   REGISTER
+   ========================================================= */
 .register-form h1 {
   font-family: Georgia, serif;
   font-size: 26px;
@@ -195,40 +240,21 @@ color: #a5b7d4;
   margin-bottom: 20px;
 }
 
-.register-form form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  max-width: 400px;
-}
-
-.register-form label {
-  font-size: 12px;
-  color: #475569;
-  font-weight: 500;
-}
-
-.register-form input {
-  padding: 10px 12px;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  font-size: 14px;
-  outline: none;
-}
-
-.register-form input:focus {
-  border-color: #001E56;
-}
-
 .register-form button {
   background-color: #001E56;
   color: white;
   border: none;
   padding: 12px;
   border-radius: 8px;
+  font-family: inherit;
   font-weight: 600;
   cursor: pointer;
   margin-top: 6px;
+  transition: background-color 0.15s;
+}
+
+.register-form button:hover {
+  background-color: #17428f;
 }
 
 .register-form a {
@@ -241,79 +267,18 @@ color: #a5b7d4;
   max-width: 400px;
 }
 
-.register-left {
-  flex: 1;
-  background: radial-gradient(circle at 65% 50%, #17428f 0%, #001E56 65%);
-  color: white;
-  padding: 60px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.register-left h2 {
-  font-family: Georgia, serif;
-  font-size: 24px;
-  margin-bottom: 24px;
-}
-
-.register-left h1 {
-  font-family: Georgia, serif;
-  font-size: 38px;
-  margin-bottom: 16px;
-  line-height: 1.2;
-}
-
-.register-left p {
-  color: #94a3b8;
-  font-size: 13px;
-  max-width: 380px;
-}
-
+/* =========================================================
+   BOOKING
+   ========================================================= */
 #booking {
   background-color: #f3f1f2;
   min-height: 100vh;
   padding: 30px 48px 60px;
 }
 
-
-/* forgot password */
-.forgotpassword-page {
-  display: flex;
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-}
-
-.forgotpassword-left {
-  flex: 1;
-  background: radial-gradient(circle at 65% 50%, #17428f 0%, #001E56 65%);
-  color: white;
-  padding: 60px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-/* set new password */
-.setnewpass-page {
-  display: flex;
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-}
-
-.setnewpass-left {
-  flex: 1;
-  background: radial-gradient(circle at 65% 50%, #17428f 0%, #001E56 65%);
-  color: white;
-  padding: 60px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-/* car listings */
+/* =========================================================
+   CAR LISTINGS
+   ========================================================= */
 #fleet {
   --bg: #f3f1f2;
   --surface: #ffffff;

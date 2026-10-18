@@ -1,0 +1,275 @@
+.carDetailsPage {
+  padding: 12px 56px 60px;
+  background: #f3f1f1;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* ---------- TOP ---------- */
+.backBtn {
+  padding: 6px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 11px;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.backBtn:hover {
+  background: #f3f1f1;
+}
+
+.breadcrumb {
+  margin: 16px 0 14px;
+  font-size: 12px;
+  color: #555;
+}
+
+.detailsTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.detailsTitle {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: 34px;
+  font-weight: 700;
+}
+
+/* Ant Design tag override */
+.detailsTitleRow .ant-tag {
+  margin: 0;
+  padding: 2px 12px;
+  border-radius: 999px;
+  background: #d9f5e3;
+  color: #1a9a4a;
+  font-size: 11px;
+}
+
+/* ---------- LAYOUT ---------- */
+.detailsLayout {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+}
+
+.detailsMain {
+  flex: 1.7;
+  min-width: 0;
+}
+
+/* ---------- IMAGE ---------- */
+.detailsImageWrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  margin-bottom: 40px;
+}
+
+.detailsImage {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* ---------- SPECIFICATIONS ---------- */
+.specsCard {
+  padding: 28px 16px 28px 16px;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 20px;
+}
+
+.specsTitle {
+  margin: 0 0 28px;
+  padding-left: 0;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.specsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px 16px;
+  margin-bottom: 22px;
+}
+
+.specItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.specLabel {
+  font-size: 12px;
+  color: #666;
+}
+
+.specValue {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.specsDescription {
+  margin: 0;
+  font-size: 12px;
+  color: #666;
+}
+
+/* ---------- BOOKING CARD ---------- */
+.bookingCard {
+  flex: 0 0 330px;
+  padding: 18px;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 20px;
+  box-sizing: border-box;
+}
+
+.bookingPrice {
+  margin-bottom: 16px;
+}
+
+.bookingAmount {
+  font-family: Georgia, serif;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.bookingUnit {
+  font-size: 11px;
+  color: #666;
+}
+
+.bookingDates {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.bookingDates label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.bookingDates label span {
+  font-size: 11px;
+  color: #666;
+}
+
+.bookingDates input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 12px;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.bookingDates input:focus {
+  outline: none;
+  border-color: #003e86;
+}
+
+/* ---------- CALENDAR ---------- */
+.availabilityTitle {
+  margin: 0 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.calendarDay {
+  padding: 7px 0;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 11px;
+}
+
+.calendarDay.free {
+  background: #d9f5e3;
+  color: #1a9a4a;
+}
+
+.calendarDay.booked {
+  background: #fcdcdc;
+  color: #d03a3a;
+}
+
+/* days inside the chosen pick-up / return range */
+.calendarDay.selected {
+  box-shadow: inset 0 0 0 2px #003e86;
+  font-weight: 700;
+}
+
+.calendarLegend {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.legendChip {
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 10px;
+}
+
+.legendChip.free {
+  background: #d9f5e3;
+  color: #1a9a4a;
+}
+
+.legendChip.booked {
+  background: #fcdcdc;
+  color: #d03a3a;
+}
+
+.bookingNote {
+  margin: 0 0 12px;
+  font-size: 11px;
+  color: #d03a3a;
+}
+
+/* ---------- RESERVE BUTTON (Ant Design override) ---------- */
+.bookingCard .reserveBtn.ant-btn-primary {
+  height: 44px;
+  border: none;
+  border-radius: 10px;
+  background: #003e86;
+  font-size: 13px;
+  box-shadow: none;
+}
+
+.bookingCard .reserveBtn.ant-btn-primary:not(:disabled):hover {
+  background: #002f66;
+}
+
+.bookingCard .reserveBtn.ant-btn-primary:disabled {
+  background: #9fb3cf;
+  color: #fff;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 900px) {
+  .carDetailsPage { padding: 12px 20px 40px; }
+  .detailsLayout { flex-direction: column; }
+  .detailsMain,
+  .bookingCard { flex: none; width: 100%; }
+  .detailsImageWrap { height: 220px; }
+  .specsGrid { grid-template-columns: repeat(2, 1fr); }
+}

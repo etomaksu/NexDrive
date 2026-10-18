@@ -1,11 +1,16 @@
 import React from 'react'
 import Cars from '../../data/Cars'
+import './src/components/users/BookingsPage.css'
 
 const BookingsPage = () => {
   const car = Cars
   return (
     <div>
           <section id="booking">
+
+            <button className="backBtn" onClick={() => navigate(-1)}>
+        ← Car details
+      </button>
       <h1 id="booking-title">Book your car</h1>
       <p id="booking-subtitle">{car.name} · Step 2 of 3</p>
 

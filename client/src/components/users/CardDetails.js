@@ -1,25 +1,63 @@
 import React from 'react'
+import './src/components/users/CardDetails.css'
 
 const CardDetails = () => {
   return (
-    <div>
-      <form className="card-details-form">
-        <h1> Card Details</h1>
+    <form className="pay-card card-details-form" id="card-form">
+        <h2 className="card-details-title">Card details</h2>
+
         <div className="card-details">
-            <label>Card Number</label>
-            <input type="text" placeholder="12344 5678 9100 2346" />
+          <div className="cd-field cd-wide">
+            <label htmlFor="cardNumber">Card number</label>
+            <input
+              id="cardNumber"
+              type="text"
+              inputMode="numeric"
+              autoComplete="cc-number"
+              placeholder="4242 4242 4242 4242"
+            />
+          </div>
 
-            <label>Cardholder Name</label>
-            <input type="text" placeholder="Max of 50 characters" />
+          <div className="cd-field">
+            <label htmlFor="cardExpiry">Expiry</label>
+            <input
+              id="cardExpiry"
+              type="text"
+              inputMode="numeric"
+              autoComplete="cc-exp"
+              placeholder="MM / YY"
+            />
+          </div>
 
-            <label>Expiration Date</label>
-            <input type="text" placeholder="00/00" />
+          <div className="cd-field">
+            <label htmlFor="cardName">Name on card</label>
+            <input
+              id="cardName"
+              type="text"
+              maxLength={50}
+              autoComplete="cc-name"
+              placeholder="Name on card"
+            />
+          </div>
 
-            <label>CVV</label>
-            <input type="text" placeholder="123" />
+          <div className="cd-field">
+            <label htmlFor="cardCvv">CVV</label>
+            <input
+              id="cardCvv"
+              type="password"
+              inputMode="numeric"
+              maxLength={4}
+              autoComplete="cc-csc"
+              placeholder="123"
+            />
+          </div>
+
+          <label className="cd-save">
+            <input type="checkbox" />
+            Save this card for future bookings
+          </label>
         </div>
       </form>
-    </div>
   )
 }
 

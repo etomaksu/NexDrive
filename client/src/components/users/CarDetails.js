@@ -2,7 +2,7 @@ import { Tag, Button, message } from 'antd'
 import { useParams, useNavigate } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
 import { fetchCar } from '../../api/cars'
-//import './CarDetails.css'
+import './src/components/users/CarDetails.css'
 //changes
 // Booked days in October 2026, per car id.
 // Replace this with real booking data later (API / database).

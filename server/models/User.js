@@ -21,8 +21,17 @@ const UserSchema = new mongoose.Schema({
         enum: ['none', 'pending', 'verified', 'rejected'],
         default: 'none'
     }, 
+    address: { type: String, trim: true },
+    licenseFiles: {
+        front: { type: String },
+        back:  { type: String },
+    },
     status: { type: String, enum: ['active', 'inactive', 'blocked'], default: 'active' },
     lastActiveAt: { type: Date },
+    resetCodeHash:     { type: String, select: false },
+    resetCodeExpires:  { type: Date, select: false },
+    resetCodeAttempts: { type: Number, default: 0, select: false },
+    resetCodeSentAt:   { type: Date, select: false },
     ...archiveFields,
     }, { timestamps: true });
 

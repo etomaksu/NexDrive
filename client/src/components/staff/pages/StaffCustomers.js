@@ -1,8 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
-import { message } from "antd";
+import { Modal, message } from "antd";
 import { api } from "../../../api/admin";
 
-const LICENSE_LABEL = { verified: "Verified", pending: "Pending", rejected: "Rejected" };
+const LICENSE_LABEL = {
+  none: "Not submitted",
+  verified: "Verified",
+  pending: "Pending",
+  rejected: "Rejected",
+};
 
 export default function StaffCustomers() {
   const [rows, setRows] = useState([]);
@@ -10,6 +15,7 @@ export default function StaffCustomers() {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [busy, setBusy] = useState(null);
+  const [licenseView, setLicenseView] = useState(null); // { name, front, back } object URLs
 
   const load = useCallback(async () => {
     try {
@@ -36,6 +42,23 @@ export default function StaffCustomers() {
     } finally {
       setBusy(null);
     }
+  };
+
+  // License photos are private: fetch them with the staff login and show them in a popup
+  const viewLicense = async (c) => {
+    try {
+      const get = (side) =>
+        api.get(`/staff/customers/${c.id}/license/${side}`, { responseType: "blob" }).then((r) => URL.createObjectURL(r.data));
+      const [front, back] = await Promise.all([get("front"), c.hasBack ? get("back") : Promise.resolve(null)]);
+      setLicenseView({ customer: c, name: c.name, front, back });
+    } catch (err) {
+      message.error("Could not open the license photos.");
+    }
+  };
+
+  const closeLicense = () => {
+    if (licenseView) [licenseView.front, licenseView.back].forEach((u) => u && URL.revokeObjectURL(u));
+    setLicenseView(null);
   };
 
   const q = search.trim().toLowerCase();
@@ -68,18 +91,18 @@ export default function StaffCustomers() {
                 <tr key={c.id}>
                   <td>{c.name}</td>
                   <td>{c.email}</td>
-                  <td><span className={`badge license-${c.license}`}>{LICENSE_LABEL[c.license]}</span></td>
+                  <td>
+                    {c.license === "none"
+                      ? <span className="muted small">Not submitted</span>
+                      : <span className={`badge license-${c.license}`}>{LICENSE_LABEL[c.license]}</span>}
+                  </td>
                   <td>{c.bookings}</td>
                   <td><span className={`badge account-${c.account}`}>{blocked ? "Blocked" : "Active"}</span></td>
                   <td style={{ display: "flex", gap: 6 }}>
-                    {c.license === "pending" && (
-                      <>
-                        <button className="btn btn-primary" disabled={off} onClick={() => send(c, "license", { license: "verified" }, `${c.name}'s license verified`)}>Verify license</button>
-                        <button className="btn btn-light" disabled={off} onClick={() => send(c, "license", { license: "rejected" }, `${c.name}'s license rejected`)}>Reject</button>
-                      </>
-                    )}
-                    {c.license === "rejected" && (
-                      <button className="btn btn-light" disabled={off} onClick={() => send(c, "license", { license: "verified" }, `${c.name}'s license verified`)}>Review</button>
+                    {c.hasLicense && (
+                      <button className={`btn ${c.license === "pending" ? "btn-primary" : "btn-light"}`} disabled={off} onClick={() => viewLicense(c)}>
+                        {c.license === "pending" ? "Review license" : "View license"}
+                      </button>
                     )}
                     {blocked ? (
                       <button className="btn btn-dark" disabled={off} onClick={() => send(c, "status", { status: "active" }, `${c.name} unblocked`)}>Unblock</button>
@@ -94,6 +117,35 @@ export default function StaffCustomers() {
           </tbody>
         </table>
       </div>
+
+      <Modal
+        title={licenseView ? `${licenseView.name} · Driver's license` : ""}
+        open={Boolean(licenseView)}
+        onCancel={closeLicense}
+        width={720}
+        footer={licenseView && (() => {
+          const c = licenseView.customer;
+          const decide = async (license) => {
+            await send(c, "license", { license }, `${c.name}'s license ${license === "verified" ? "approved" : "declined"}`);
+            closeLicense();
+          };
+          return (
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, alignItems: "center" }}>
+              <span className={`badge license-${c.license}`} style={{ marginRight: "auto" }}>{LICENSE_LABEL[c.license]}</span>
+              <button className="btn btn-light" onClick={closeLicense}>Close</button>
+              {c.license !== "rejected" && <button className="btn btn-danger" disabled={busy === c.id} onClick={() => decide("rejected")}>Decline</button>}
+              {c.license !== "verified" && <button className="btn btn-primary" disabled={busy === c.id} onClick={() => decide("verified")}>Approve</button>}
+            </div>
+          );
+        })()}
+      >
+        {licenseView && (
+          <div style={{ display: "grid", gap: 12 }}>
+            <img src={licenseView.front} alt="License front" style={{ width: "100%", borderRadius: 8 }} />
+            {licenseView.back && <img src={licenseView.back} alt="License back" style={{ width: "100%", borderRadius: 8 }} />}
+          </div>
+        )}
+      </Modal>
     </>
   );
 }

@@ -5,8 +5,9 @@ const OFFSET_MS = 8 * 60 * 60 * 1000 // Manila = UTC+8
 const TYPE_LABEL = {
   downpayment: 'Downpayment (50%)',
   balance: 'Balance (50%)',
+  full: 'Full payment',
 }
-const METHOD_LABEL = { cash: 'Cash', card: 'Card', gcash: 'GCash', maya: 'Maya' }
+const METHOD_LABEL = { cash: 'Cash', card: 'Card', gcash: 'GCash', maya: 'Maya', bank: 'Bank transfer' }
 
 const cap = (s = '') => s.charAt(0).toUpperCase() + s.slice(1)
 const fullName = (u) => (u ? `${u.firstName || ''} ${u.lastName || ''}`.trim() : '')

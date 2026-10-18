@@ -160,7 +160,7 @@ const HomePage = ({ isLoggedIn = false, setCurrentPage, setSelectedCarId }) => {
       </section>
 
       {/* FEATURED CARS */}
-      <section className="homeSection homeInner">
+      <section className="homeSection homeInner howSection">
         <Title level={2} className="serif">Featured cars</Title>
         <Paragraph type="secondary">Our most booked vehicles this month</Paragraph>
         <Row gutter={[24, 24]}>

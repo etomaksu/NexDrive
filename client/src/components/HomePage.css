@@ -15,6 +15,10 @@
   padding-bottom: 16px;
 }
 
+.homeSection .homeInner {
+  margin-bottom: 50px;
+}
+
 .homePage .serif,
 .homePage .heroTitle,
 .homePage .footerLogo {
@@ -30,22 +34,6 @@
   position: relative;
   min-height: 460px;
   overflow: hidden;
-}
-
-/* grey slanted panel + navy block, as in the design */
-.homePage .hero::before {
-  content: '';
-  position: absolute;
-  inset: 0 44% 0 0;
-  background: #a9a9ad;
-  clip-path: polygon(36% 0, 100% 0, 100% 100%, 0 100%);
-}
-
-.homePage .hero::after {
-  content: '';
-  position: absolute;
-  inset: 0 0 0 56%;
-  background: #00247a;
 }
 
 .homePage .heroInner {
@@ -105,6 +93,8 @@
   width: 44%;
   max-width: 640px;
   object-fit: contain;
+  transform: translateY(30px) scale(1.2);
+  transform-origin: center;
 }
 
 /* ---------- find a car ---------- */
@@ -169,14 +159,15 @@
 
 /* ---------- footer ---------- */
 .homePage .homeFooter {
-  margin-top: 80px;
-  padding: 48px 0;
+  margin-top: 120px;  
+  padding: 64px 0;   
   background: #00133b;
   color: #cfd6e6;
   font-size: 13px;
 }
 
 .homePage .footerGrid {
+  margin-top: 80px;
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
   gap: 32px;
@@ -265,8 +256,7 @@
 }
 
 .homePage .homeSection {
-  padding-top: 64px;
-  padding-bottom: 16px;
+  padding-top: 15px;
 }
 
 .homePage .serif,
@@ -406,9 +396,14 @@
   font-weight: 600;
 }
 
+.homePage .howSection {
+  padding-bottom: 80px;
+  margin-bottom: 20px;
+}
+
 /* ---------- footer ---------- */
 .homePage .homeFooter {
-  margin-top: 80px;
+  margin-top: 80px !important;
   padding: 48px 0;
   background: #00133b;
   color: #cfd6e6;
@@ -440,6 +435,10 @@
   color: #fff;
   font-size: 20px;
   font-weight: 700;
+}
+
+.homePage .footer {
+  margin-top: 80px;
 }
 
 /* ---------- small screens ---------- */

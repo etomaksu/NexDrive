@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import carImages from '../../data/carImages'
+import './CustomerDashboard.css'
 
 const sidebarLinks = [
   { to: '/dashboard', text: 'Overview' },

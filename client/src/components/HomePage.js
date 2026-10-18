@@ -204,9 +204,7 @@ const HomePage = ({ isLoggedIn = false, setCurrentPage, setSelectedCarId }) => {
           <div>
             <h4>Company</h4>
             <ul>
-              <li onClick={() => setCurrentPage('about')}>About us</li>
-              <li>Contact</li>
-              <li>FAQ</li>
+              <li className="aboutList" onClick={() => setCurrentPage('about')}>About us <br /> Contact <br /> FAQ</li>
             </ul>
           </div>
           <div>

@@ -194,6 +194,10 @@
   font-weight: 700;
 }
 
+.footer ul li.aboutList {
+  line-height: 2.25;
+}
+
 /* ---------- small screens ---------- */
 @media (max-width: 900px) {
   .homePage .homeInner {
@@ -441,6 +445,9 @@
   margin-top: 80px;
 }
 
+.footer ul li:hover {
+  text-decoration: underline;
+}
 /* ---------- small screens ---------- */
 @media (max-width: 900px) {
   .homePage .homeInner {
@@ -490,3 +497,4 @@
     grid-template-columns: 1fr;
   }
 }
+

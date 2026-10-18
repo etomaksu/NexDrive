@@ -213,6 +213,18 @@
   background: #17428f;
 }
 
+.backBtn {
+  border: none;
+  margin-bottom: 10px;
+  color: #17428f;
+  padding: 0;
+}
+
+.backBtn:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 @media (max-width: 1000px) {
   .carsPage #car-grid {
     grid-template-columns: repeat(2, 1fr);

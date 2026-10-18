@@ -1,0 +1,422 @@
+/* ===== Shared styles for "My bookings" and "Account settings" (matches the customer dashboard) ===== */
+
+.profile-page {
+  display: grid;
+  grid-template-columns: 230px 1fr;
+  gap: 24px;
+  align-items: start;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 24px 90px 64px;
+  box-sizing: border-box;
+  min-height: calc(100vh - 80px);
+  background: #f3f1f1;
+  color: #1a1a1a;
+}
+
+/* ---------- left navigation (back button + AccNavBar) ---------- */
+.profile-page .acc-navbar {
+  position: sticky;
+  top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  background: #fff;
+  border: 1px solid #e6e3e3;
+  border-radius: 14px;
+}
+
+.profile-page .back-btn {
+  align-self: flex-start;
+  padding: 6px 10px;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  color: #1d4fb8;
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.profile-page .back-btn:hover {
+  background: #f3f6fc;
+}
+
+/* works whether AccNavBar wraps its links in a nav, aside, ul or nothing at all */
+.profile-page .acc-navbar nav,
+.profile-page .acc-navbar aside,
+.profile-page .acc-navbar ul {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.profile-page .acc-navbar a {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: #6b6b6b;
+  font-size: 14px;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+
+.profile-page .acc-navbar a:hover {
+  background: #f3f6fc;
+  color: #003b86;
+}
+
+.profile-page .acc-navbar a.active,
+.profile-page .acc-navbar a[aria-current="page"] {
+  background: #dce9ff;
+  color: #003b86;
+  font-weight: 600;
+}
+
+/* the log out button in AccNavBar */
+.profile-page .acc-navbar button:not(.back-btn) {
+  margin-top: 6px;
+  padding: 10px 12px;
+  background: none;
+  border: none;
+  border-top: 1px solid #e6e3e3;
+  border-radius: 0;
+  color: #e00000;
+  font-family: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.profile-page .acc-navbar button:not(.back-btn):hover {
+  text-decoration: underline;
+}
+
+/* ---------- main column ---------- */
+#bookings-main,
+.account-main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.account-main form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#bookings-title,
+.account-header h1 {
+  margin: 0;
+  padding: 12px 0 4px 24px;
+  font-family: 'Fraunces', 'Playfair Display', Georgia, serif;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.account-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.account-header h1 {
+  padding-bottom: 0;
+}
+
+/* ---------- cards ---------- */
+.profile-page .card {
+  padding: 24px;
+  background: #fff;
+  border: 1px solid #e6e3e3;
+  border-radius: 14px;
+}
+
+.profile-page .card h2 {
+  margin: 0 0 16px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* ---------- buttons ---------- */
+.profile-page .btn-primary,
+.profile-page .btn-secondary,
+.profile-page .btn-danger {
+  display: inline-block;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: box-shadow 0.15s, background 0.15s;
+}
+
+.profile-page .btn-primary {
+  background: #003b86;
+  border: 1px solid #003b86;
+  color: #fff;
+}
+
+.profile-page .btn-primary:hover:not(:disabled) {
+  background: #002f6b;
+}
+
+.profile-page .btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.profile-page .btn-secondary {
+  background: #eef4ff;
+  border: 1px solid #1d4fb8;
+  color: #003b86;
+}
+
+.profile-page .btn-secondary:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.profile-page .btn-danger {
+  background: #fff;
+  border: 1px solid #f0b4b4;
+  color: #c40000;
+}
+
+/* ---------- badges ---------- */
+.profile-page .badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #e5e5e5;
+  color: #444;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.profile-page .badge.confirmed,
+.profile-page .badge.approved {
+  background: #dce9ff;
+  color: #1d4fb8;
+}
+
+.profile-page .badge.pending,
+.profile-page .badge.requested,
+.profile-page .badge.badge-pending {
+  background: #fff1c2;
+  color: #9a6a00;
+}
+
+.profile-page .badge.completed,
+.profile-page .badge.badge-verified {
+  background: #d9f5e3;
+  color: #0a7a35;
+}
+
+.profile-page .badge.cancelled,
+.profile-page .badge.badge-rejected {
+  background: #ffe0e0;
+  color: #c40000;
+}
+
+/* ================= My bookings ================= */
+#bookings-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-left: 24px;
+}
+
+#bookings-tabs .tab {
+  padding: 7px 16px;
+  background: #fff;
+  border: 1px solid #e6e3e3;
+  border-radius: 999px;
+  color: #444;
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+#bookings-tabs .tab:hover {
+  border-color: #003b86;
+  color: #003b86;
+}
+
+#bookings-tabs .tab.active {
+  background: #003b86;
+  border-color: #003b86;
+  color: #fff;
+}
+
+#bookings-table-card {
+  overflow-x: auto;
+  background: #fff;
+  border: 1px solid #e6e3e3;
+  border-radius: 14px;
+}
+
+#bookings-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+#bookings-table th {
+  padding: 14px 20px;
+  border-bottom: 1px solid #e6e3e3;
+  color: #8a8a8a;
+  font-size: 12px;
+  font-weight: 500;
+  text-align: left;
+  white-space: nowrap;
+}
+
+#bookings-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f0eded;
+  vertical-align: middle;
+}
+
+#bookings-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+#bookings-table tbody tr:hover {
+  background: #fafbfe;
+}
+
+#bookings-table .actions {
+  display: flex;
+  gap: 8px;
+}
+
+#bookings-table .action-btn {
+  padding: 6px 14px;
+  background: #fff;
+  border: 1px solid #d4d4d4;
+  border-radius: 8px;
+  color: #1a1a1a;
+  font-family: inherit;
+  font-size: 12px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#bookings-table .action-btn:hover {
+  border-color: #003b86;
+  color: #003b86;
+}
+
+#bookings-table .action-btn.cancel {
+  color: #c40000;
+}
+
+#bookings-table .action-btn.cancel:hover {
+  border-color: #c40000;
+  background: #fff5f5;
+  color: #c40000;
+}
+
+/* ================= Account settings ================= */
+.profile-page .form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 20px;
+}
+
+.profile-page .field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.profile-page .field label {
+  color: #6b6b6b;
+  font-size: 13px;
+}
+
+.profile-page .field input {
+  padding: 10px 12px;
+  background: #fff;
+  border: 1px solid #d9d6d6;
+  border-radius: 8px;
+  color: #1a1a1a;
+  font-family: inherit;
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.profile-page .field input:focus {
+  outline: none;
+  border-color: #1d4fb8;
+  box-shadow: 0 0 0 3px rgba(29, 79, 184, 0.12);
+}
+
+.profile-page .dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 28px 16px;
+  margin-bottom: 14px;
+  background: #f7faff;
+  border: 1.5px dashed #b9c9e8;
+  border-radius: 12px;
+  text-align: center;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.profile-page .dropzone-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.profile-page .dropzone-sub {
+  margin: 0;
+  color: #6b6b6b;
+  font-size: 12px;
+}
+
+.profile-page .dropzone .btn-secondary,
+.profile-page .dropzone .btn-primary {
+  margin-top: 8px;
+}
+
+.profile-page .card > .dropzone-sub {
+  margin-bottom: 10px;
+}
+
+@media (max-width: 1000px) {
+  .profile-page {
+    grid-template-columns: 1fr;
+    padding: 16px 20px 48px;
+  }
+
+  .profile-page .acc-navbar {
+    position: static;
+  }
+
+  .profile-page .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #bookings-title,
+  .account-header h1,
+  #bookings-tabs {
+    padding-left: 0;
+  }
+}

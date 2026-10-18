@@ -1,5 +1,5 @@
 import React from 'react'
-import './src/components/users/popups/ReceiptPopUp.css'
+import './ReceiptPopUp.css'
 
 // "Oct 10, 2026 · 9:00 AM"
 const formatDateTime = (iso) => {
@@ -9,6 +9,37 @@ const formatDateTime = (iso) => {
   return `${date} · ${time}`
 }
 
+const peso = (n) => `₱${Number(n || 0).toLocaleString()}`
+
+const METHOD_NAME = { card: 'Credit / debit card', gcash: 'GCash', maya: 'Maya', bank: 'Bank transfer' }
+
+// Saves the receipt as a small standalone page the customer can open or print
+const downloadReceipt = (r) => {
+  const row = (label, value) => `<tr><td>${label}</td><td style="text-align:right">${value}</td></tr>`
+  const html = `<!doctype html><html><head><meta charset="utf-8"><title>Receipt ${r.code}</title>
+<style>body{font-family:Arial,sans-serif;max-width:480px;margin:32px auto;color:#1b1b28}td{padding:6px 0}h1{margin-bottom:0}.m{color:#777;margin-top:4px}hr{border:0;border-top:1px solid #ddd}</style></head><body>
+<h1>NexDrive receipt</h1><p class="m">Reference #${r.code} · ${r.paymentStatus}</p><hr>
+<table width="100%">
+${row('Vehicle', r.carName)}
+${row('Pick-up', `${formatDateTime(r.pickupAt)}<br>${r.pickupLocation || ''}`)}
+${row('Return', `${formatDateTime(r.returnAt)}<br>${r.returnLocation || ''}`)}
+</table><hr><table width="100%">
+${row(`Rental (${r.days} days × ${peso(r.price)})`, peso(r.rentalTotal))}
+${row('Add-ons', peso(r.addonsTotal))}
+${row('Service fee', peso(r.serviceFee))}
+${row('<b>Booking total</b>', `<b>${peso(r.total)}</b>`)}
+${row(`${r.paidLabel}${r.method ? ' via ' + (METHOD_NAME[r.method] || r.method) : ''}`, `<b>${peso(r.paidAmount)}</b>`)}
+${row('Balance due at pick-up', peso(r.balance))}
+</table><p class="m">Transaction ${r.txnId || ''} · ${formatDateTime(r.paidAt)}</p></body></html>`
+  const link = document.createElement('a')
+  link.href = URL.createObjectURL(new Blob([html], { type: 'text/html' }))
+  link.download = `receipt-${r.code}.html`
+  link.click()
+  URL.revokeObjectURL(link.href)
+}
+
+// receipt: { code, paymentStatus, carName, pickupAt, returnAt, pickupLocation, returnLocation, days, price,
+//            rentalTotal, addonsTotal, serviceFee, total, paidLabel, paidAmount, balance, method, txnId, paidAt }
 const ReceiptPopUp = ({ receipt, onClose, onDownload }) => {
   return (
     <div id="receipt-overlay" onClick={onClose}>
@@ -58,7 +89,7 @@ const ReceiptPopUp = ({ receipt, onClose, onDownload }) => {
           <div>
             <span className="receipt-label">Rental</span>
             <span className="receipt-sub block">
-              {receipt.days} days × ₱{receipt.price.toLocaleString()}
+              {receipt.days} {receipt.days === 1 ? 'day' : 'days'} × ₱{receipt.price.toLocaleString()}
             </span>
           </div>
           <span className="receipt-value">₱{receipt.rentalTotal.toLocaleString()}</span>
@@ -80,8 +111,8 @@ const ReceiptPopUp = ({ receipt, onClose, onDownload }) => {
         </div>
 
         <div id="receipt-paid-box">
-          <span id="receipt-paid-label">Downpayment paid (50%)</span>
-          <span id="receipt-paid-amount">₱{receipt.downpayment.toLocaleString()}</span>
+          <span id="receipt-paid-label">{receipt.paidLabel}</span>
+          <span id="receipt-paid-amount">₱{receipt.paidAmount.toLocaleString()}</span>
         </div>
 
         <div className="receipt-row">
@@ -89,7 +120,7 @@ const ReceiptPopUp = ({ receipt, onClose, onDownload }) => {
           <span className="receipt-value">₱{receipt.balance.toLocaleString()}</span>
         </div>
 
-        <button id="receipt-download" onClick={onDownload}>
+        <button id="receipt-download" onClick={onDownload || (() => downloadReceipt(receipt))}>
           Download receipt
         </button>
       </div>

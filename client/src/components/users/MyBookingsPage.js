@@ -1,23 +1,20 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import AccNavBar from "./src/components/users/AccNavBar"; // adjust the path/name to your nav component
-
-// ---- sample data (replace with your real bookings) ----
-const initialBookings = [
-  { id: 1, code: "DE-1051", carName: "Toyota Fortuner", pickupAt: "2026-10-10", returnAt: "2026-10-13", location: "Imus branch", status: "Confirmed" },
-  { id: 2, code: "DE-1022", carName: "Honda Civic", pickupAt: "2026-10-28", returnAt: "2026-11-02", location: "Imus branch", status: "Pending" },
-  { id: 3, code: "DE-0987", carName: "Toyota Vios", pickupAt: "2026-08-04", returnAt: "2026-08-06", location: "Bacoor branch", status: "Completed" },
-  { id: 4, code: "DE-0931", carName: "Mitsubishi Xpander", pickupAt: "2026-05-03", returnAt: "2026-05-05", location: "Imus branch", status: "Cancelled" },
-];
-
-// ---- helpers ----
-const upcoming = (b) => b.status === "Confirmed" || b.status === "Pending";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Modal, message } from "antd";
+import AccNavBar from "./AccNavBar"; // adjust the path/name to your nav component
+import ReceiptPopUp from "./popups/ReceiptPopUp";
+import { fetchMyBookings } from "../../api/bookings";
+import { cancelBooking } from "../../api/account";
+import {
+  STATUS_LABEL, STATUS_CLASS, isUpcoming, isCompleted, isCancelled, canCancel, formatRange, toReceipt,
+} from "./bookingUtils";
+import './Accountpages.css'
 
 const filters = {
   all: () => true,
-  upcoming,
-  completed: (b) => b.status === "Completed",
-  cancelled: (b) => b.status === "Cancelled",
+  upcoming: isUpcoming,
+  completed: isCompleted,
+  cancelled: isCancelled,
 };
 
 const tabDefs = [
@@ -27,40 +24,47 @@ const tabDefs = [
   { key: "cancelled", label: "Cancelled" },
 ];
 
-function formatRange(start, end) {
-  const s = new Date(start);
-  const e = new Date(end);
-  const month = (d) => d.toLocaleDateString("en-PH", { month: "short" });
-  return s.getMonth() === e.getMonth()
-    ? `${month(s)} ${s.getDate()} – ${e.getDate()}`
-    : `${month(s)} ${s.getDate()} – ${month(e)} ${e.getDate()}`;
-}
-
 const MyBookingsPage = () => {
-  const [bookings, setBookings] = useState(initialBookings);
+  const navigate = useNavigate();
+  const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [tab, setTab] = useState("all");
+  const [receipt, setReceipt] = useState(null);
 
-  const tabs = tabDefs.map((t) => ({
-    ...t,
-    count: bookings.filter(filters[t.key]).length,
-  }));
+  useEffect(() => {
+    fetchMyBookings()
+      .then(setBookings)
+      .catch(() => setError("We could not load your bookings. Please try again."))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const tabs = tabDefs.map((t) => ({ ...t, count: bookings.filter(filters[t.key]).length }));
   const visibleBookings = bookings.filter(filters[tab]);
 
-  const handleReschedule = (id) => {
-    console.log("reschedule", id); // TODO: open reschedule flow
-  };
-
-  const handleCancel = (id) => {
-    setBookings((prev) =>
-      prev.map((b) => (b.id === id ? { ...b, status: "Cancelled" } : b))
-    );
+  const handleCancel = (b) => {
+    Modal.confirm({
+      title: `Cancel booking #${b.ref}?`,
+      content: "This can't be undone.",
+      okText: "Cancel booking",
+      okButtonProps: { danger: true },
+      cancelText: "Keep it",
+      onOk: async () => {
+        try {
+          await cancelBooking(b.id);
+          setBookings((prev) => prev.map((x) => (x.id === b.id ? { ...x, status: "cancelled" } : x)));
+          message.success(`Booking ${b.ref} cancelled`);
+        } catch (err) {
+          message.error(err.response?.data?.message || "Could not cancel the booking.");
+        }
+      },
+    });
   };
 
   return (
     <section id="my-bookings">
       <div className="profile-page">
         <div className="acc-navbar">
-          <button type="button" className="back-btn">← Dashboard</button>
           <AccNavBar current="/bookings" />
         </div>
 
@@ -96,38 +100,32 @@ const MyBookingsPage = () => {
               </thead>
 
               <tbody>
+                {loading && <tr><td colSpan={6}>Loading your bookings...</td></tr>}
+                {!loading && error && <tr><td colSpan={6}>{error}</td></tr>}
+                {!loading && !error && visibleBookings.length === 0 && (
+                  <tr><td colSpan={6}>No bookings here yet.</td></tr>
+                )}
+
                 {visibleBookings.map((b) => (
                   <tr key={b.id}>
-                    <td>#{b.code}</td>
-                    <td>{b.carName}</td>
+                    <td>#{b.ref}</td>
+                    <td>{b.car ? b.car.name : "—"}</td>
                     <td>{formatRange(b.pickupAt, b.returnAt)}</td>
-                    <td>{b.location}</td>
+                    <td>{b.pickupLocation || "—"}</td>
                     <td>
-                      <span className={`badge ${b.status.toLowerCase()}`}>{b.status}</span>
+                      <span className={`badge ${STATUS_CLASS[b.status]}`}>{STATUS_LABEL[b.status]}</span>
                     </td>
                     <td>
                       <div className="actions">
-                        {upcoming(b) && (
-                          <>
-                            <button type="button" className="action-btn" onClick={() => handleReschedule(b.id)}>
-                              Reschedule
-                            </button>
-                            <button type="button" className="action-btn cancel" onClick={() => handleCancel(b.id)}>
-                              Cancel
-                            </button>
-                          </>
-                        )}
-
-                        {b.status === "Completed" && (
-                          <Link className="action-btn" to={`/dashboard/bookings/${b.id}/receipt`}>
+                        {b.paidAmount > 0 && (
+                          <button type="button" className="action-btn" onClick={() => setReceipt(toReceipt(b))}>
                             Receipt
-                          </Link>
+                          </button>
                         )}
-
-                        {b.status === "Cancelled" && (
-                          <Link className="action-btn" to={`/dashboard/bookings/${b.id}`}>
-                            Details
-                          </Link>
+                        {canCancel(b) && (
+                          <button type="button" className="action-btn cancel" onClick={() => handleCancel(b)}>
+                            Cancel
+                          </button>
                         )}
                       </div>
                     </td>
@@ -138,6 +136,8 @@ const MyBookingsPage = () => {
           </div>
         </main>
       </div>
+
+      {receipt && <ReceiptPopUp receipt={receipt} onClose={() => setReceipt(null)} />}
     </section>
   );
 };

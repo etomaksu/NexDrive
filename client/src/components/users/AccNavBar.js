@@ -1,10 +1,9 @@
-import "./account-nav.css";
+//import "./account-nav.css";
 
 const links = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/bookings", label: "My Bookings" },
   { href: "/profile", label: "Profile" },
-  { href: "/notif", label: "Notifications" },
 ];
 
 export default function AccountNav({ current, onLogout }) {

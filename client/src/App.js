@@ -12,6 +12,8 @@ import RegistrationPage from './components/users/mainlanding/RegistrationPage';
 import CarListings from './components/users/CarListings';
 import CarDetails from './components/users/CarDetails';
 import CustomerDashboard from './components/users/CustomerDashboard';
+import MyBookingsPage from './components/users/MyBookingsPage';
+import AccSettingsPage from './components/users/AccSettingsPage';
 
 //Admin Dashboard
 import AdminLayout from "./components/admin/layout/AdminLayout";
@@ -24,11 +26,13 @@ import Transactions from "./components/admin/pages/Transactions";
 import Messages from "./components/admin/pages/Messages";
 
 //Staff Dashboard
-//Staff Dashboard
 import StaffLayout from "./components/staff/layout/StaffLayout";
 import StaffReservations from "./components/staff/pages/StaffReservations";
 import StaffVehicles from "./components/staff/pages/StaffVehicles";
 import StaffCustomers from "./components/staff/pages/StaffCustomers";
+
+import BookingsPage from './components/users/BookingsPage';
+import PaymentPage from './components/users/PaymentPage';
 
 const paths = {
   home: '/',
@@ -117,18 +121,32 @@ function App() {
           <Route path="/login" element={<LoginPage setCurrentPage={setCurrentPage} onLogin={handleLogin} />} />
           <Route path="/register" element={<RegistrationPage setCurrentPage={setCurrentPage} />} />
           <Route path="/contact" element={<About setCurrentPage={setCurrentPage} />} />
-          <Route path="/dashboard/*" element={
+          <Route path="/dashboard" element={
+            <ProtectedRoute isLoggedIn={isLoggedIn}><CustomerDashboard user={user} onLogout={handleLogout} /></ProtectedRoute>
+          } />
+          <Route path="/dashboard/bookings" element={
+            <ProtectedRoute isLoggedIn={isLoggedIn}><MyBookingsPage /></ProtectedRoute>
+          } />
+          <Route path="/dashboard/profile" element={
             <ProtectedRoute isLoggedIn={isLoggedIn}>
-              <CustomerDashboard user={user} onLogout={handleLogout} />
+              <AccSettingsPage onUserUpdate={(u) => {
+                const next = { ...user, ...u }
+                localStorage.setItem('user', JSON.stringify(next)); setUser(next)
+              }} />
             </ProtectedRoute>
-            } 
-          />
+          } />
 
           <Route path="/cars" element={
             <ProtectedRoute isLoggedIn={isLoggedIn}><CarListings /></ProtectedRoute>
           } />
           <Route path="/cars/:carId" element={
             <ProtectedRoute isLoggedIn={isLoggedIn}><CarDetails /></ProtectedRoute>
+          } />
+          <Route path="/cars/:carId/book" element={
+            <ProtectedRoute isLoggedIn={isLoggedIn}><BookingsPage /></ProtectedRoute>
+          } />
+          <Route path="/payment" element={
+            <ProtectedRoute isLoggedIn={isLoggedIn}><PaymentPage /></ProtectedRoute>
           } />
 
             <Route
@@ -164,6 +182,10 @@ function App() {
                 <Route path="transactions" element={<Transactions />} />
                 <Route path="messages" element={<Messages />} />
               </Route>
+
+              <Route path="/profile" element={<Navigate to="/dashboard/profile" replace />} />
+              <Route path="/bookings" element={<Navigate to="/dashboard/bookings" replace />} />
+              <Route path="/notifications" element={<Navigate to="/dashboard" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         

@@ -1,5 +1,3 @@
-//import "./account-nav.css";
-
 const links = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/bookings", label: "My Bookings" },

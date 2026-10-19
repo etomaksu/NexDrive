@@ -1,0 +1,384 @@
+
+#dashboard {
+  display: grid;
+  grid-template-columns: 230px 1fr;
+  gap: 24px;
+  align-items: start;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 24px 90px 64px;
+  box-sizing: border-box;
+  min-height: calc(100vh - 80px);
+  background: #f3f1f1;
+  color: #1a1a1a;
+}
+
+/* sidebar*/
+#dashboard #sidebar {
+  position: sticky;
+  top: 24px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  background: #fff;
+  border: 1px solid #e6e3e3;
+  border-radius: 14px;
+}
+
+#dashboard #sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#dashboard .sidebar-link {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: #6b6b6b;
+  font-size: 14px;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+
+#dashboard .sidebar-link:hover {
+  background: #f3f6fc;
+  color: #003b86;
+}
+
+#dashboard .sidebar-link.active {
+  background: #dce9ff;
+  color: #003b86;
+  font-weight: 600;
+}
+
+#dashboard #sidebar-divider {
+  width: 100%;
+  margin: 12px 0 8px;
+  border: none;
+  border-top: 1px solid #e6e3e3;
+}
+
+#dashboard #logout-btn {
+  padding: 10px 12px;
+  background: none;
+  border: none;
+  color: #e00000;
+  font-family: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+}
+
+#dashboard #logout-btn:hover {
+  text-decoration: underline;
+}
+
+
+#dashboard #dashboard-main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+/* welcome */
+#dashboard #welcome {
+  padding: 28px 0 16px 24px;
+}
+
+#dashboard #welcome-title {
+  margin: 0 0 6px;
+  font-family: 'Fraunces', 'Playfair Display', Georgia, serif;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+#dashboard #welcome-text {
+  margin: 0 0 16px;
+  color: #1d4fb8;
+  font-size: 14px;
+}
+
+#dashboard #welcome-actions {
+  display: flex;
+  gap: 12px;
+}
+
+#dashboard #view-booking-btn,
+#dashboard #book-another-btn {
+  display: inline-block;
+  padding: 9px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: box-shadow 0.15s;
+}
+
+#dashboard #view-booking-btn {
+  background: #fff;
+  border: 1px solid #fff;
+  color: #1a1a1a;
+}
+
+#dashboard #book-another-btn {
+  background: #eef4ff;
+  border: 1px solid #1d4fb8;
+  color: #003b86;
+}
+
+#dashboard #view-booking-btn:hover,
+#dashboard #book-another-btn:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* stats */
+#dashboard #stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+#dashboard .stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 18px;
+  background: #fff;
+  border: 1px solid #e6e3e3;
+  border-radius: 14px;
+}
+
+#dashboard .stat-label {
+  color: #6b6b6b;
+  font-size: 13px;
+}
+
+#dashboard .stat-value {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+#dashboard .stat-note {
+  color: #0a9a3c;
+  font-size: 12px;
+}
+
+/* card */
+#dashboard .card {
+  padding: 24px;
+  background: #fff;
+  border: 1px solid #e6e3e3;
+  border-radius: 14px;
+}
+
+#dashboard .card-title {
+  margin: 0 0 16px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+#dashboard .badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #e5e5e5;
+  color: #444;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+#dashboard .badge.confirmed,
+#dashboard .badge.approved {
+  background: #dce9ff;
+  color: #1d4fb8;
+}
+
+#dashboard .badge.pending,
+#dashboard .badge.requested {
+  background: #fff1c2;
+  color: #9a6a00;
+}
+
+#dashboard .badge.cancelled {
+  background: #ffe0e0;
+  color: #c40000;
+}
+
+/* tracker */
+#dashboard #tracker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+#dashboard #tracker-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+#dashboard #tracker {
+  display: flex;
+  align-items: flex-start;
+  padding: 0 8px;
+}
+
+#dashboard .step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 70px;
+}
+
+#dashboard .step-circle {
+  width: 18px;
+  height: 18px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 2px solid #d4d4d4;
+  background: #fff;
+}
+
+#dashboard .step-circle.done {
+  background: #003b86;
+  border-color: #003b86;
+}
+
+#dashboard .step-circle.current {
+  background: #fff;
+  border-color: #003b86;
+}
+
+#dashboard .step-circle.upcoming {
+  background: #fff;
+  border-color: #d4d4d4;
+}
+
+#dashboard .step-label {
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+#dashboard .step-date {
+  min-height: 14px;
+  color: #8a8a8a;
+  font-size: 11px;
+}
+
+#dashboard .line {
+  flex: 1;
+  height: 2px;
+  margin: 8px 6px 0;
+  background: #e4e4e4;
+}
+
+#dashboard .line.filled {
+  background: #003b86;
+}
+
+/* bookings at notifs */
+#dashboard #bottom-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+#dashboard .booking-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 0;
+}
+
+#dashboard .booking-row img {
+  flex-shrink: 0;
+  width: 84px;
+  height: 52px;
+  object-fit: contain;
+}
+
+#dashboard .booking-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+#dashboard .booking-name {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+#dashboard .booking-meta {
+  color: #6b6b6b;
+  font-size: 12px;
+}
+
+#dashboard .view-btn {
+  padding: 6px 16px;
+  background: #fff;
+  border: 1px solid #d4d4d4;
+  border-radius: 8px;
+  color: #1a1a1a;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+#dashboard .view-btn:hover {
+  border-color: #003b86;
+  color: #003b86;
+}
+
+#dashboard .notification {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 0;
+}
+
+#dashboard .notification-title {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+#dashboard .notification-time {
+  color: #8a8a8a;
+  font-size: 11px;
+}
+
+@media (max-width: 1000px) {
+  #dashboard {
+    grid-template-columns: 1fr;
+    padding: 16px 20px 48px;
+  }
+
+  #dashboard #sidebar {
+    position: static;
+  }
+
+  #dashboard #sidebar nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  #dashboard #stats,
+  #dashboard #bottom-row {
+    grid-template-columns: 1fr;
+  }
+
+  #dashboard #welcome {
+    padding-left: 0;
+  }
+}

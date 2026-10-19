@@ -21,7 +21,8 @@ const LogoutIcon = () => (
 );
 
 export default function Sidebar({
-  title = "Admin Dashboard",
+  title = "NexDrive",
+  subtitle,
   links = ADMIN_LINKS,
   onLogout,
   unread = 0,
@@ -31,7 +32,12 @@ export default function Sidebar({
   return (
     <>
       <aside className="sidebar">
-        <h2 className="sidebar-logo">{title}</h2>
+        <div className="sidebar-brand">
+          <div>
+            <h2 className="sidebar-logo">{title}</h2>
+            {subtitle && <span className="sidebar-subtitle">{subtitle}</span>}
+          </div>
+        </div>
 
         <nav className="sidebar-nav">
           {links.map((l) => (

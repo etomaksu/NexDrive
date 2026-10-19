@@ -1,0 +1,238 @@
+/* ---------- PAGE ---------- */
+.checkoutPage {
+  padding: 12px 54px 60px;
+  background: #f3f1f1;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.checkoutBack {
+  padding: 6px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 11px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.checkoutBack:hover {
+  background: #f3f1f1;
+}
+
+.checkoutHeader h1 {
+  margin: 14px 0 4px;
+  font-family: Georgia, serif;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.checkoutHeader p {
+  margin: 0 0 24px;
+  font-size: 13px;
+  color: #666;
+}
+
+/* left stack + invoice side by side */
+.checkoutLayout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.pay-stack {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pay-card {
+  padding: 18px 18px 20px;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 16px;
+}
+
+/* ---------- PAYMENT METHOD ---------- */
+.payment-method {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.payment-method legend {
+  padding: 0;
+  margin-bottom: 14px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.option:last-child {
+  margin-bottom: 0;
+}
+
+/* selected row turns blue, no extra class needed */
+.option:has(input:checked) {
+  background: #dce9fb;
+  border-color: #2a6fd6;
+}
+
+/* custom radio circle */
+.option input[type='radio'] {
+  appearance: none;
+  display: grid;
+  place-content: center;
+  flex: none;
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  border: 1.5px solid #cfcfcf;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+}
+
+.option input[type='radio']:checked {
+  border-color: #003e86;
+  background: #003e86;
+  box-shadow: inset 0 0 0 3px #dce9fb;
+}
+
+.option > span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.label-title {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.label-sub {
+  font-size: 10px;
+  color: #777;
+}
+
+/* ---------- INVOICE (right column) ---------- */
+.invoiceCard {
+  flex: 0 0 280px;
+  position: sticky;
+  top: 16px;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 16px;
+  box-sizing: border-box;
+}
+
+.invoiceTitle {
+  margin: 0 0 18px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.invoiceLines {
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.invoiceLine {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 11px;
+  color: #666;
+}
+
+.invoiceLine:last-child {
+  margin-bottom: 0;
+}
+
+.invoiceLine span:last-child {
+  color: #000;
+  font-weight: 600;
+}
+
+.invoiceTotal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 16px 0 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.invoiceTotal strong {
+  font-size: 17px;
+}
+
+.invoiceDue,
+.invoiceBalance {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 11px;
+}
+
+.invoiceDue {
+  font-weight: 600;
+}
+
+.invoiceDue span:last-child {
+  color: #003e86;
+}
+
+.invoiceBalance {
+  color: #666;
+  margin-bottom: 14px;
+}
+
+.invoiceBalance span:last-child {
+  color: #000;
+  font-weight: 500;
+}
+
+.payBtn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #003e86;
+  color: #fff;
+  font-size: 11px;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.payBtn:hover {
+  background: #002f66;
+}
+
+.invoiceSecure {
+  margin: 10px 0 0 4px;
+  font-size: 9px;
+  color: #666;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 900px) {
+  .checkoutPage { padding: 12px 20px 40px; }
+  .checkoutLayout { flex-direction: column; }
+  .invoiceCard { position: static; flex: none; width: 100%; }
+}

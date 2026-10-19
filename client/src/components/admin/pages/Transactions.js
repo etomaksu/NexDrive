@@ -7,8 +7,8 @@ const PAGE_SIZE = 6;
 const TODAY = new Date(Date.now() + 8 * 60 * 60 * 1000).toISOString().slice(0, 10);
 
 const STATUSES = ["Pending", "Paid", "Refunded", "Failed"];
-const METHODS = ["Cash", "Card", "GCash", "Maya"];
-const TYPES = ["Downpayment (50%)", "Balance (50%)"];
+const METHODS = ["Cash", "Card", "GCash", "Maya", "Bank transfer"];
+const TYPES = ["Downpayment (50%)", "Balance (50%)", "Full payment"];
 
 const PRESETS = [
   { key: "today", label: "Today", days: 0 },

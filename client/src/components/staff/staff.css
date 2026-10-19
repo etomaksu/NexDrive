@@ -1,0 +1,22 @@
+/* Staff reservations board */
+.rsv-board { display: grid; gap: 16px; align-items: start; }
+.rsv-col { background: #fff; border: 1px solid #ececf1; border-radius: 14px; padding: 16px; min-width: 0; }
+.rsv-col-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 15px; }
+.rsv-count { background: #e6eefb; color: #003b86; font-size: 11px; font-weight: 600; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; }
+
+.rsv-card { background: #f6f6f8; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+.rsv-ref { font-size: 11px; color: #8a8a98; }
+.rsv-name { font-weight: 600; font-size: 14px; margin: 2px 0; }
+.rsv-meta { font-size: 11px; color: #8a8a98; }
+.rsv-total { display: flex; justify-content: space-between; align-items: baseline; margin: 14px 0 10px; font-size: 11px; color: #8a8a98; }
+.rsv-total strong { font-size: 14px; color: #1b1b28; }
+
+.rsv-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.rsv-btn { border: 1px solid transparent; border-radius: 6px; padding: 5px 12px; font-size: 11px; font-weight: 600; font-family: inherit; cursor: pointer; line-height: 1.4; }
+.rsv-btn:disabled { opacity: .5; cursor: not-allowed; }
+.rsv-btn.primary { background: #003b86; color: #fff; }
+.rsv-btn.primary:hover:not(:disabled) { background: #002f6b; }
+.rsv-btn.danger { background: #fde4e4; color: #d93636; }
+.rsv-btn.light { background: #fff; color: #1b1b28; border-color: #dcdce4; }
+
+.rsv-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; }

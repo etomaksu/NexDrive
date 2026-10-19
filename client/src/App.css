@@ -47,6 +47,17 @@ body {
   margin-bottom: 24px;
 }
 
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: #f8fafc;
+  color: #1e293b;
+  font-family: 'Manrope', system-ui, sans-serif;
+}
+
 #brandLogo2 {
   position: absolute;
   top: 40px;
@@ -280,3 +291,118 @@ body {
   --track: #e5e2e3;
   --radius: 16px;
 }
+
+/* Password field with show/hide eye */
+.login-form .password-wrap {
+  position: relative;
+}
+
+.login-form .password-wrap input {
+  width: 100%;
+  padding-right: 44px;
+}
+
+/* a longer selector than the LOG IN button rule, so the eye doesn't get its blue button style */
+.login-form .password-wrap button.eye-btn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  color: #64748b;
+  letter-spacing: 0;
+  text-transform: none;
+  cursor: pointer;
+}
+
+.login-form .password-wrap button.eye-btn:hover {
+  background: #f1f5f9;
+  color: #001E56;
+  text-decoration: none;
+}
+
+/* hide Edge's built-in reveal icon so you don't get two eyes */
+.login-form input::-ms-reveal,
+.login-form input::-ms-clear {
+  display: none;
+}
+
+/* Password field with show/hide eye */
+.register-form .password-wrap {
+  position: relative;
+}
+
+.register-form .password-wrap input {
+  width: 100%;
+  padding-right: 44px;
+}
+
+/* a longer selector than the Create Account button rule, so the eye doesn't get its navy button style */
+.register-form .password-wrap button.eye-btn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.register-form .password-wrap button.eye-btn:hover {
+  background: #f1f5f9;
+  color: #001E56;
+}
+
+/* hide Edge's built-in reveal icon so you don't get two eyes */
+.register-form input::-ms-reveal,
+.register-form input::-ms-clear {
+  display: none;
+}
+
+/* password requirements checklist */
+.register-form .pw-rules {
+  list-style: none;
+  margin: -4px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 12px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.register-form .pw-rules li.ok {
+  color: #15803d;
+}
+
+.register-form .pw-mark {
+  display: inline-block;
+  width: 16px;
+}
+
+/* match message (p.pw-match beats the general ".register-form p" rule) */
+.register-form p.pw-match {
+  margin: -4px 0 0;
+  font-size: 12px;
+}
+
+.register-form p.pw-match.ok { color: #15803d; }
+.register-form p.pw-match.bad { color: #b91c1c; }

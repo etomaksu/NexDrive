@@ -14,6 +14,10 @@
   padding: 60px 0 70px;
 }
 
+.aboutContainerText {
+  margin-left: 0px;
+}
+
 .aboutHead .aboutContainer > p {
   font-size: 15px;
   color: #64748b;
@@ -22,9 +26,8 @@
 
 .aboutGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 20px;
-  justify-content: center; 
 }
 
 .infoBox {
@@ -32,11 +35,8 @@
   border: 1px solid #e2e8f0;
   border-radius: 16px;
   padding: 28px;
-  width: 400px;
-  justify-content: center;
-  flex-wrap: wrap;
-  flex-direction: column;
-  align-items: center;  
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .infoBox h3 {
@@ -203,23 +203,21 @@
 }
 
 .footer ul li {
-  
+  margin: 0 0 10px 0;
   cursor: pointer;
 }
 
-.footerGrid {
-  display: grid;
-  grid-template-columns: repeat(3, auto);
-  justify-content: start;    
-  column-gap: 80px;          
-  align-items: start;
-  max-width: none;           
-  margin: 0;
-  padding: 0 48px;            
+.footer ul li.aboutList {
+  line-height: 2.25;
+  margin-top: -5px;  
 }
-.footerLogo {
-  font-family: Georgia, serif;
+
+.footer .footerLogo {
+  font-family: 'Fraunces', 'Playfair Display', Georgia, serif;
   font-size: 20px;
+  font-weight: 700;
   line-height: 1.2;
-  margin: 0 0 16px 0;           
+  margin: 0 0 8px 0;
+  color: #fff;
 }
+

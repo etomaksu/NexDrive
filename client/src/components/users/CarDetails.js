@@ -1,50 +1,56 @@
-import { Tag, Button, message } from 'antd'
+import { Tag, Button } from 'antd'
 import { useParams, useNavigate } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
 import { fetchCar } from '../../api/cars'
-//import './CarDetails.css'
-//changes
-// Booked days in October 2026, per car id.
-// Replace this with real booking data later (API / database).
-const bookedByCar = {
-  1: [2, 3, 14, 15, 27],
-  2: [8, 9, 10, 25],
-  3: [1, 2, 17, 18, 19],
-  4: [6, 7, 21, 22, 30],
-  5: [11, 12, 26],
-  6: [4, 5, 18, 19, 20],
-  7: [13, 14, 15, 28, 29],
-  8: [4, 5, 6, 12, 13, 20, 21, 22],
-  9: [9, 10, 23, 24],
+import { fetchAvailability } from '../../api/bookings'
+import './CarDetails.css'
+
+const STATUS_TAG = {
+  available: { color: 'green', label: 'Available' },
+  rented: { color: 'blue', label: 'Rented' },
+  maintenance: { color: 'red', label: 'Maintenance' },
 }
 
-const YEAR = 2026
-const MONTH = 10 // October
-const DAYS_IN_MONTH = new Date(YEAR, MONTH, 0).getDate()
+const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+  'August', 'September', 'October', 'November', 'December']
 
-// "2026-10-10" -> 10 (only if the date is inside October 2026)
-const dayOfOctober = (iso) => {
-  const [y, m, d] = iso.split('-').map(Number)
-  return y === YEAR && m === MONTH ? d : null
+const pad = (n) => String(n).padStart(2, '0')
+const toIso = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
+const addDays = (n) => { const d = new Date(); d.setDate(d.getDate() + n); return toIso(d) }
+
+// ["2026-10-14".."2026-10-19"] -> every day in between, as "YYYY-MM-DD" strings
+const expandRange = ({ from, to }) => {
+  const days = []
+  const cur = new Date(`${from}T00:00:00`)
+  const end = new Date(`${to}T00:00:00`)
+  while (cur <= end) { days.push(toIso(cur)); cur.setDate(cur.getDate() + 1) }
+  return days
 }
 
 const CarDetails = () => {
   const { carId } = useParams()
-  const [car, setCar] = useState(null)
   const navigate = useNavigate()
-  const [pickup, setPickup] = useState('2026-10-10')
-  const [returnDate, setReturnDate] = useState('2026-10-13')
+  const [car, setCar] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [pickup, setPickup] = useState(addDays(1))
+  const [returnDate, setReturnDate] = useState(addDays(4))
+  const [bookedDays, setBookedDays] = useState(new Set())
+
+  const loadAvailability = () =>
+    fetchAvailability(carId)
+      .then((ranges) => setBookedDays(new Set(ranges.flatMap(expandRange))))
+      .catch(() => setBookedDays(new Set()))
 
   useEffect(() => {
     fetchCar(carId)
-    .then(setCar)
-    .catch(() => setCar(null))
-    .finally(() =>setLoading(false))
-  },[carId])
+      .then(setCar)
+      .catch(() => setCar(null))
+      .finally(() => setLoading(false))
+    loadAvailability()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [carId])
 
   if (loading) return <p style={{ padding: 24 }}>Loading...</p>
-
 
   if (!car) {
     return (
@@ -57,23 +63,21 @@ const CarDetails = () => {
     )
   }
 
-  const booked = bookedByCar[car.id] || []
-  const days = Array.from({ length: DAYS_IN_MONTH }, (_, i) => i + 1)
+  // The calendar shows the month of the pick-up date
+  const [year, month] = (pickup || addDays(1)).split('-').map(Number)
+  const daysInMonth = new Date(year, month, 0).getDate()
+  const days = Array.from({ length: daysInMonth }, (_, i) => i + 1)
+  const dayKey = (d) => `${year}-${pad(month)}-${pad(d)}`
 
-  // selected range (only days inside October are checked against the calendar)
-  const startDay = dayOfOctober(pickup)
-  const endDay = dayOfOctober(returnDate)
-  const invalidRange = !pickup || !returnDate || returnDate < pickup
-  const conflict =
-    !invalidRange &&
-    startDay !== null &&
-    endDay !== null &&
-    booked.some((d) => d >= startDay && d <= endDay)
+  const today = toIso(new Date())
+  const invalidRange = !pickup || !returnDate || returnDate < pickup || pickup < today
+  const conflict = !invalidRange && expandRange({ from: pickup, to: returnDate }).some((d) => bookedDays.has(d))
+  const inRange = (d) => !invalidRange && dayKey(d) >= pickup && dayKey(d) <= returnDate
+  const unavailable = car.status === 'maintenance'
 
-  const inRange = (d) => !invalidRange && startDay && endDay && d >= startDay && d <= endDay
-
+  // Step 2: the booking page (trip details + add-ons). The reservation is saved from there.
   const handleReserve = () => {
-    message.success(`${car.name} reserved: ${pickup} to ${returnDate}`)
+    navigate(`/cars/${carId}/book?pickup=${pickup}&return=${returnDate}`)
   }
 
   const specs = [
@@ -81,11 +85,13 @@ const CarDetails = () => {
     { label: 'Transmission', value: car.transmission },
     { label: 'Seats', value: car.seats },
     { label: 'Fuel', value: car.fuel },
-    { label: 'Luggage', value: `${car.luggage} bags` },
+    { label: 'Luggage', value: `${car.luggage ?? 0} bags` },
     { label: 'Year', value: car.year },
     { label: 'Doors', value: car.doors },
-    { label: 'Mileage', value: `${car.mileage.toLocaleString()} km` },
+    { label: 'Mileage', value: `${(car.mileage ?? 0).toLocaleString()} km` },
   ]
+
+  const tag = STATUS_TAG[car.status] || STATUS_TAG.available
 
   return (
     <div className="carDetailsPage">
@@ -99,7 +105,7 @@ const CarDetails = () => {
 
       <div className="detailsTitleRow">
         <h1 className="detailsTitle">{car.name}</h1>
-        <Tag color="green" bordered={false}>Available</Tag>
+        <Tag color={tag.color} bordered={false}>{tag.label}</Tag>
       </div>
 
       <div className="detailsLayout">
@@ -136,6 +142,7 @@ const CarDetails = () => {
               <input
                 type="date"
                 value={pickup}
+                min={today}
                 onChange={(e) => setPickup(e.target.value)}
               />
             </label>
@@ -150,10 +157,10 @@ const CarDetails = () => {
             </label>
           </div>
 
-          <h3 className="availabilityTitle">Availability · October {YEAR}</h3>
+          <h3 className="availabilityTitle">Availability · {MONTH_NAMES[month - 1]} {year}</h3>
           <div className="calendarGrid">
             {days.map((d) => {
-              const isBooked = booked.includes(d)
+              const isBooked = bookedDays.has(dayKey(d))
               return (
                 <div
                   key={d}
@@ -162,7 +169,7 @@ const CarDetails = () => {
                     (isBooked ? 'booked' : 'free') +
                     (inRange(d) ? ' selected' : '')
                   }
-                  aria-label={`October ${d}, ${isBooked ? 'booked' : 'available'}`}
+                  aria-label={`${MONTH_NAMES[month - 1]} ${d}, ${isBooked ? 'booked' : 'available'}`}
                 >
                   {d}
                 </div>
@@ -176,17 +183,20 @@ const CarDetails = () => {
           </div>
 
           {invalidRange && (
-            <p className="bookingNote">Return date must be on or after the pick-up date.</p>
+            <p className="bookingNote">Pick a future pick-up date, and a return date on or after it.</p>
           )}
           {conflict && (
             <p className="bookingNote">Some of the days you picked are already booked.</p>
+          )}
+          {unavailable && (
+            <p className="bookingNote">This car is under maintenance right now.</p>
           )}
 
           <Button
             type="primary"
             block
             className="reserveBtn"
-            disabled={invalidRange || conflict}
+            disabled={invalidRange || conflict || unavailable}
             onClick={handleReserve}
           >
             Reserve now

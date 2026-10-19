@@ -7,8 +7,10 @@ function AboutPage({ setCurrentPage }) {
 
       <section className="aboutHead">
         <div className="aboutContainer">
+          <div className="aboutContainerText">
           <h1>About NexDrive</h1>
           <p>A local car rental service based in Imus, Cavite.</p>
+          </div>
           
           <div className="aboutGrid">
             <div className="infoBox">
@@ -95,9 +97,7 @@ function AboutPage({ setCurrentPage }) {
           <div>
             <h4>Company</h4>
             <ul>
-              <li onClick={() => setCurrentPage('about')}>About us</li>
-              <li>Contact</li>
-              <li>FAQ</li>
+              <li className="aboutList" onClick={() => setCurrentPage('about')}>About us <br /> Contact <br /> FAQ</li>
             </ul>
           </div>
           <div>

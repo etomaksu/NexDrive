@@ -6,8 +6,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 80px;                 /* fixed height keeps every page's navbar identical */
-  padding: 0 90px;              /* left/right page margin, as in the design */
+  gap: 16px;
+  height: 80px;
+  padding: 0 90px;
   background: #fff;
   border-bottom: 1px solid #f0f0f0;
   font-family: 'Manrope', system-ui, sans-serif;
@@ -19,7 +20,10 @@
 .navbarLeft {
   display: flex;
   align-items: center;
-  gap: 40px;                    /* logo -> links -> search */
+  gap: 40px;
+  flex: 1;
+  min-width: 0;       
+  overflow: hidden;           
 }
 
 /* logo: serif, bold, tight letter-spacing */
@@ -30,6 +34,8 @@
   line-height: 1;
   letter-spacing: -0.01em;
   color: #1a1a1a;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* links: 15px, regular weight, grey; active = navy + medium */
@@ -40,6 +46,9 @@
   font-weight: 400;
   line-height: 80px;
   min-width: 0;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .navbar .navMenu .ant-menu-item {

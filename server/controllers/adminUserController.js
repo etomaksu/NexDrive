@@ -11,6 +11,8 @@ const splitName = (full = '') => {
 const toDto = (u, selfId) => ({
   id: u._id,
   name: `${u.firstName || ''} ${u.lastName || ''}`.trim(),
+  firstName: u.firstName || '',
+  lastName: u.lastName || '',
   email: u.email,
   role: u.role,
   status: u.status || 'active',
@@ -43,13 +45,23 @@ exports.listUsers = async (req, res) => {
   }
 }
 
-// POST /api/admin/users  { name, email, role, password }
+// POST /api/admin/users  { firstName, lastName, email, role, password }
+// (a single "name" is still accepted as a fallback)
 exports.createUser = async (req, res) => {
   try {
-    const { name, email, role, password } = req.body
-    const { firstName, lastName } = splitName(name)
+    const { email, role, password } = req.body
 
-    if (!firstName || !lastName) return res.status(400).json({ message: 'Enter first and last name.' })
+    const names =
+      req.body.firstName !== undefined || req.body.lastName !== undefined
+        ? {
+            firstName: String(req.body.firstName || '').trim(),
+            lastName: String(req.body.lastName || '').trim(),
+          }
+        : splitName(req.body.name)
+
+    if (!names.firstName || !names.lastName) {
+      return res.status(400).json({ message: 'Enter first and last name.' })
+    }
     if (!email) return res.status(400).json({ message: 'Email is required.' })
     if (!ASSIGNABLE_ROLES.includes(role)) return res.status(400).json({ message: 'Invalid role.' })
     if (!password || password.length < 8) {
@@ -58,8 +70,7 @@ exports.createUser = async (req, res) => {
 
     const hash = await bcrypt.hash(password, 10)
     const user = await User.create({
-      firstName,
-      lastName,
+      ...names,
       email: String(email).toLowerCase().trim(),
       password: hash,
       role,
@@ -71,19 +82,25 @@ exports.createUser = async (req, res) => {
   }
 }
 
-// PUT /api/admin/users/:id  { name, email, role }
+// PUT /api/admin/users/:id  { firstName?, lastName?, name?, email?, role? }
 exports.updateUser = async (req, res) => {
   try {
     const user = await findActive(req.params.id)
     if (!user) return res.status(404).json({ message: 'User not found.' })
 
-    const { name, email, role } = req.body
+    const { name, firstName, lastName, email, role } = req.body
 
-    if (name !== undefined) {
-      const { firstName, lastName } = splitName(name)
-      if (!firstName || !lastName) return res.status(400).json({ message: 'Enter first and last name.' })
-      user.firstName = firstName
-      user.lastName = lastName
+    if (firstName !== undefined || lastName !== undefined) {
+      const f = String(firstName ?? user.firstName).trim()
+      const l = String(lastName ?? user.lastName).trim()
+      if (!f || !l) return res.status(400).json({ message: 'Enter first and last name.' })
+      user.firstName = f
+      user.lastName = l
+    } else if (name !== undefined) {
+      const { firstName: f, lastName: l } = splitName(name)
+      if (!f || !l) return res.status(400).json({ message: 'Enter first and last name.' })
+      user.firstName = f
+      user.lastName = l
     }
 
     if (email !== undefined) user.email = String(email).toLowerCase().trim()

@@ -9,7 +9,6 @@ export default function Topbar({
   return (
     <header className="topbar">
       <div className="topbar-left">
-        <input className="topbar-search" placeholder="Search reservations, users, vehicles" />
       </div>
       <div className="topbar-user">
         <span>{user.name} · {user.role}</span>

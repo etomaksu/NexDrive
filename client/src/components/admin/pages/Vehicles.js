@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Button, Col, Form, Input, InputNumber, Modal, Row, Select, Upload, message } from "antd";
 import { api } from "../../../api/admin";
 import { getPages } from "../utils";
+import ConfirmFlow from "./ConfirmFlow";
 
 const PAGE_SIZE = 6; // change this to 9 to match the rows in your design
 
@@ -48,6 +49,7 @@ export default function Vehicles() {
   const [image, setImage] = useState({ file: null, url: "" }); // picture shown in the form (file = newly picked)
   const [imageRemoved, setImageRemoved] = useState(false); // admin removed the saved picture
   const [form] = Form.useForm();
+  const [archiveId, setArchiveId] = useState(null); // vehicle waiting for the archive confirmation
 
   const loadVehicles = useCallback(async () => {
     try {
@@ -118,15 +120,11 @@ export default function Vehicles() {
     }
   };
 
-  const handleArchive = async (id) => {
-    if (!window.confirm("Archive this vehicle?")) return;
-    try {
-      await api.patch(`/admin/cars/${id}/archive`, { reason: "Archived" });
-      message.success("Vehicle archived");
-      await loadVehicles();
-    } catch (err) {
-      message.error(err.response?.data?.message || "Could not archive the vehicle");
-    }
+  // runs after the confirmation and the admin password were accepted
+  const archiveVehicle = async () => {
+    await api.patch(`/admin/cars/${archiveId}/archive`, { reason: "Archived" });
+    message.success("Vehicle archived");
+    await loadVehicles();
   };
 
   const goTo = (p) => {
@@ -195,7 +193,7 @@ export default function Vehicles() {
                 <td>
                   <div className="row-actions">
                     <button className="btn-edit" onClick={() => handleEdit(v)}>Edit</button>
-                    <button className="btn-archive" onClick={() => handleArchive(v.id)}>Archive</button>
+                    <button className="btn-archive" onClick={() => setArchiveId(v.id)}>Archive</button>
                   </div>
                 </td>
               </tr>
@@ -362,6 +360,10 @@ export default function Vehicles() {
           </Form.Item>
         </Form>
       </Modal>
+
+      {archiveId && (
+        <ConfirmFlow kind="archive-vehicle" onClose={() => setArchiveId(null)} onConfirmed={archiveVehicle} />
+      )}
     </>
   );
 }

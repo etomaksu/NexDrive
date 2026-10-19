@@ -14,6 +14,13 @@ const ReservationSchema = new mongoose.Schema(
     pickupLocation: { type: String, trim: true },
     returnLocation: { type: String, trim: true },
 
+    // set by staff when handling the request
+    staffMessage: { type: String, trim: true },        // optional note sent with an approval
+    declineReason: { type: String, trim: true },
+    declineNote: { type: String, trim: true },
+    readyForPickup: { type: Boolean, default: false },
+    readyAt: { type: Date },
+
     days: { type: Number, required: true, min: 1 },
     dailyRate: { type: Number, required: true, min: 0 },
     addons: [{ _id: false, id: String, name: String, pricePerDay: Number }],

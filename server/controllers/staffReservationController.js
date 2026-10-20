@@ -21,7 +21,8 @@ const toDto = (r) => ({
   total: r.totalAmount,
   status: r.status,
   plate: r.car ? r.car.plate : '',
-  branch: r.pickupLocation || 'Main branch',
+  pickupLocation: r.pickupLocation || '—',
+  returnLocation: r.returnLocation || r.pickupLocation || '—',
   readyForPickup: Boolean(r.readyForPickup),
 })
 

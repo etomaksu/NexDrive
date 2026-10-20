@@ -139,7 +139,7 @@ export default function StaffReservations() {
         {head("Approving", "blue", "✓")}
         <h2 className="rsv-title">Approve #{r.ref}?</h2>
         <p className="rsv-sub">The customer will be notified that the vehicle is confirmed.</p>
-        <Info rows={[["Pickup", when(r.pickupAt)], ["Branch", r.branch], ["Notify customer", "In-app"]]} />
+        <Info rows={[["Pickup", when(r.pickupAt)], ["Pickup place", r.pickupLocation], ["Return place", r.returnLocation], ["Notify customer", "In-app"]]} />
         <label className="rsv-label">Message to customer (optional)</label>
         <textarea className="rsv-text" rows={3} maxLength={500} placeholder="Bring your original license and ID at pickup" value={msg} onChange={(e) => setMsg(e.target.value)} />
         <div className="rsv-foot">
@@ -183,7 +183,7 @@ export default function StaffReservations() {
             </label>
           ))}
         </div>
-        <Info rows={[["Plate number", r.plate || "—"], ["Pickup", when(r.pickupAt)]]} />
+        <Info rows={[["Plate number", r.plate || "—"], ["Pickup", when(r.pickupAt)], ["Pickup place", r.pickupLocation], ["Return place", r.returnLocation]]} />
         <div className="rsv-foot">
           <button className="rsv-out" onClick={closeDialog}>Not yet</button>
           <button className="rsv-solid" disabled={off || !all} onClick={() => markReady(r)}>Mark ready for pickup</button>
@@ -233,6 +233,10 @@ export default function StaffReservations() {
                     <div className="rsv-ref">#{r.ref}{r.status === "approved" && r.readyForPickup && <span className="rsv-ready">Ready for pickup</span>}</div>
                     <div className="rsv-name">{r.customer}</div>
                     <div className="rsv-meta">{r.car} · {range(r.pickupAt, r.returnAt)}</div>
+                    <div className="rsv-places">
+                      <div><span>Pickup</span>{r.pickupLocation}</div>
+                      <div><span>Return</span>{r.returnLocation}</div>
+                    </div>
                     <div className="rsv-total">
                       <span>Total</span>
                       <strong>₱{Number(r.total).toLocaleString()}</strong>

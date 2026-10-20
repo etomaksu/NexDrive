@@ -155,7 +155,7 @@ body {
   font-family: Georgia, serif;
   font-size: 26px;
   color: #0f172a;
-  margin-bottom: 10px;
+  margin-bottom: -10px;
 }
 
 #desc-1 {

@@ -66,7 +66,7 @@ const HomePage = ({ isLoggedIn = false, setCurrentPage, setSelectedCarId }) => {
               Book a car in three minutes. Pick it up today.
             </h1>
             <Paragraph className="heroText">
-              Self-drive rentals from Imus, Cavite. Choose your dates, add what you
+              Self-drive rentals from Pasay City. Choose your dates, add what you
               need and pay online.
             </Paragraph>
 
@@ -93,7 +93,7 @@ const HomePage = ({ isLoggedIn = false, setCurrentPage, setSelectedCarId }) => {
           <Row gutter={[16, 12]} align="bottom">
             <Col xs={24} lg={7}>
               <Text type="secondary">Pick-up location</Text>
-              <Input size="large" defaultValue="Imus, Cavite" />
+              <Input size="large" placeholder="Enter pick-up location" defaultValue="Pasay City, Philippines" />
             </Col>
             <Col xs={12} lg={5}>
               <Text type="secondary">Pick-up date</Text>
@@ -198,8 +198,8 @@ const HomePage = ({ isLoggedIn = false, setCurrentPage, setSelectedCarId }) => {
           <div>
             <h3 className="footerLogo">NexDrive</h3>
             <ul>
-              <li>Car rental made simple. <br /> Imus, Cavite, Philippines</li>
-          </ul>
+              <li>Car rental made simple. <br /> Pasay City, Philippines</li>
+            </ul>
           </div>
           <div>
             <h4>Company</h4>
@@ -212,7 +212,7 @@ const HomePage = ({ isLoggedIn = false, setCurrentPage, setSelectedCarId }) => {
           <h4>Support</h4>
           <ul>
               <li>help@nexdrive.ph</li>
-              <li>+63 900 000 0000</li>
+              <li>0910 - 117 - 6684</li>
           </ul>
           </div>
           </div>

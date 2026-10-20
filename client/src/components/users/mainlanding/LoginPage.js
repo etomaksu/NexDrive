@@ -206,10 +206,15 @@ const LoginPage = ({ setCurrentPage, onLogin }) => {
                         Forgot password?
                     </button>
                 </form>
-
-                <button type="button" onClick={() => setCurrentPage('register')}>
+                <div style={{ textAlign: 'center', marginTop: 16 }}>
+                    <p style={{ color: '#64748b', fontSize: '14px' }}>Don't have an account? &nbsp;
+                    <button style={{ color: '#021333', fontSize: '14px' }}type="button" onClick={() => setCurrentPage('register')}>
                     REGISTER
                 </button>
+                </p>
+                </div>
+                
+                
             </div>
 
             {/* Step 1: email */}

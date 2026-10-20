@@ -91,7 +91,11 @@ export default function AdminDashboard() {
           <div className="bar-chart">
             {revenue.map((r) => (
               <div className="bar-col" key={r.month}>
-                <div className="bar" style={{ height: `${r.value}%` }} />
+                <div
+                  className="bar"
+                  title={`₱${(r.value * 1000).toLocaleString()}`}
+                  style={{ height: `${r.value > 0 ? Math.max((r.value / maxRevenue) * 100, 3) : 1}%` }}
+                />
                 <span className="small muted">{r.month}</span>
               </div>
             ))}

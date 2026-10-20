@@ -20,6 +20,10 @@ const toDto = (r) => ({
   returnAt: r.returnAt,
   total: r.totalAmount,
   status: r.status,
+  plate: r.car ? r.car.plate : '',
+  pickupLocation: r.pickupLocation || '—',
+  returnLocation: r.returnLocation || r.pickupLocation || '—',
+  readyForPickup: Boolean(r.readyForPickup),
 })
 
 // GET /api/staff/reservations   (staff + admin)
@@ -27,7 +31,7 @@ exports.listReservations = async (req, res) => {
   try {
     const rows = await Reservation.find({ isArchived: { $ne: true } })
       .populate('customer', 'firstName lastName')
-      .populate('car', 'name')
+      .populate('car', 'name plate')
       .sort({ createdAt: -1 })
       .lean()
     res.json(rows.map(toDto))
@@ -40,7 +44,7 @@ exports.listReservations = async (req, res) => {
 // PATCH /api/staff/reservations/:id/status   { status }
 exports.setReservationStatus = async (req, res) => {
   try {
-    const { status } = req.body
+    const { status, message, reason, note } = req.body
     const r = await Reservation.findOne({ _id: req.params.id, isArchived: { $ne: true } })
     if (!r) return res.status(404).json({ message: 'Reservation not found' })
 
@@ -48,7 +52,16 @@ exports.setReservationStatus = async (req, res) => {
       return res.status(400).json({ message: `Cannot change a ${r.status} reservation to ${status}` })
     }
 
+    if (status === 'rejected' && !String(reason || '').trim()) {
+      return res.status(400).json({ message: 'Choose a reason for declining.' })
+    }
+
     r.status = status
+    if (status === 'approved' && message) r.staffMessage = String(message).trim().slice(0, 500)
+    if (status === 'rejected') {
+      r.declineReason = String(reason).trim().slice(0, 100)
+      r.declineNote = String(note || '').trim().slice(0, 500)
+    }
     r.handledBy = req.user.id
     r.statusHistory.push({ status, at: new Date(), by: req.user.id })
 
@@ -67,8 +80,25 @@ exports.setReservationStatus = async (req, res) => {
     if (status === 'returned') await Car.updateOne({ _id: r.car }, { status: 'available' })
 
     const full = await Reservation.findById(r._id)
-      .populate('customer', 'firstName lastName').populate('car', 'name').lean()
+      .populate('customer', 'firstName lastName').populate('car', 'name plate').lean()
     res.json(toDto(full))
+  } catch (err) {
+    if (err.name === 'CastError') return res.status(400).json({ message: 'Invalid id' })
+    console.error(err)
+    res.status(500).json({ message: 'Server error.' })
+  }
+}
+
+// PATCH /api/staff/reservations/:id/ready   (approved only) -> vehicle is prepared for pick-up
+exports.markReady = async (req, res) => {
+  try {
+    const r = await Reservation.findOneAndUpdate(
+      { _id: req.params.id, status: 'approved', isArchived: { $ne: true } },
+      { readyForPickup: true, readyAt: new Date() },
+      { new: true }
+    ).populate('customer', 'firstName lastName').populate('car', 'name plate').lean()
+    if (!r) return res.status(404).json({ message: 'Reservation not found or not approved' })
+    res.json(toDto(r))
   } catch (err) {
     if (err.name === 'CastError') return res.status(400).json({ message: 'Invalid id' })
     console.error(err)

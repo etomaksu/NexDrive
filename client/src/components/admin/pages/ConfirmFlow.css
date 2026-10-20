@@ -1,0 +1,19 @@
+.cf-modal .ant-modal-content { border-radius: 16px; padding: 28px 32px; }
+.cf-modal .ant-modal-close { top: 16px; inset-inline-end: 16px; width: 32px; height: 32px; border-radius: 50%; background: #f1f1f3; }
+.cf-modal .ant-modal-close:hover { background: #e6e6ea; }
+.cf-close { font-size: 12px; color: #1b1b28; }
+.cf-title { font-family: 'Fraunces', 'Playfair Display', Georgia, serif; font-size: 22px; line-height: 1.25; font-weight: 700; margin: 0 28px 10px 0; color: #1b1b28; }
+.cf-title-lg { font-size: 28px; margin-bottom: 4px; }
+.cf-text { font-size: 12px; color: #6b6b76; margin: 0 0 22px; }
+.cf-tight { margin-bottom: 18px; }
+.cf-actions { display: flex; justify-content: center; gap: 14px; }
+.cf-btn { border-radius: 8px; padding: 10px 28px; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; min-width: 110px; }
+.cf-btn-light { background: #fff; border: 1px solid #dcdce4; color: #1b1b28; }
+.cf-btn-solid { background: #003b86; border: 1px solid #003b86; color: #fff; }
+.cf-btn-solid:hover:not(:disabled) { background: #002f6b; }
+.cf-btn:disabled { opacity: .6; cursor: not-allowed; }
+.cf-btn-wide { width: 100%; padding: 13px; font-size: 14px; }
+.cf-input { width: 100%; box-sizing: border-box; border: 1px solid #dcdce4; border-radius: 8px; padding: 14px 12px; font: inherit; font-size: 13px; margin-bottom: 16px; }
+.cf-input:focus { outline: none; border-color: #003b86; }
+.cf-input-error { border-color: #d93636; margin-bottom: 6px; }
+.cf-error { color: #d93636; font-size: 12px; margin: 0 0 12px; }

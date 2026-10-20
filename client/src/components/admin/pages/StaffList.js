@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Modal, Form, Input, Select, message } from "antd";
 import dayjs from "dayjs";
 import {api} from "../../../api/admin";
+import ConfirmFlow from "./ConfirmFlow";
 
 // DB role -> label + badge class (admin reuses your existing red "role-super-admin" badge)
 const ROLE_META = {
@@ -45,6 +46,7 @@ export default function StaffList() {
   const [form, setForm] = useState({ name: "", email: "", role: "staff" });
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [confirm, setConfirm] = useState(null); // { kind: "archive-user" | "block-user", user }
 
   const [addOpen, setAddOpen] = useState(false);
   const [adding, setAdding] = useState(false);
@@ -99,25 +101,37 @@ export default function StaffList() {
     }
   };
 
+  const setBlocked = async (u, blocked) => {
+    await api.patch(`/admin/users/${u.id}/status`, { status: blocked ? "blocked" : "active" });
+    await loadUsers();
+  };
+
+  // blocking asks for confirmation + password, unblocking happens right away
   const toggleBlock = async (u) => {
+    if (u.status !== "blocked") return setConfirm({ kind: "block-user", user: u });
     try {
-      await api.patch(`/admin/users/${u.id}/status`, {
-        status: u.status === "blocked" ? "active" : "blocked",
-      });
-      await loadUsers();
+      await setBlocked(u, false);
     } catch (err) {
       message.error(errMsg(err, "Could not update status."));
     }
   };
 
-  const archiveUser = async (id) => {
-    if (!window.confirm("Archive this user?")) return;
-    try {
-      await api.patch(`/admin/users/${id}/archive`, { reason: "Archived" });
-      if (selectedId === id) setSelectedId(null);
+  const archiveUser = (id) => {
+    const user = users.find((u) => u.id === id);
+    if (user) setConfirm({ kind: "archive-user", user });
+  };
+
+  // runs after the confirmation and the admin password were accepted
+  const runConfirmed = async () => {
+    const { kind, user } = confirm;
+    if (kind === "block-user") {
+      await setBlocked(user, true);
+      message.success("User blocked");
+    } else {
+      await api.patch(`/admin/users/${user.id}/archive`, { reason: "Archived" });
+      if (selectedId === user.id) setSelectedId(null);
       await loadUsers();
-    } catch (err) {
-      message.error(errMsg(err, "Could not archive user."));
+      message.success("User archived");
     }
   };
 
@@ -325,6 +339,10 @@ export default function StaffList() {
           </Form.Item>
         </Form>
       </Modal>
+
+      {confirm && (
+        <ConfirmFlow kind={confirm.kind} onClose={() => setConfirm(null)} onConfirmed={runConfirmed} />
+      )}
     </>
   );
 }

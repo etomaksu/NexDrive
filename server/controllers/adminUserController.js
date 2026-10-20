@@ -157,3 +157,19 @@ exports.archiveUser = async (req, res) => {
     handleError(res, err)
   }
 }
+
+exports.verifyPassword = async (req, res) => {
+  try {
+    const { password } = req.body
+    if (!password) return res.status(400).json({ message: 'Enter your password.' })
+ 
+    const me = await User.findById(req.user.id).select('+password')
+    if (!me || !(await bcrypt.compare(String(password), me.password))) {
+      return res.status(400).json({ message: 'Incorrect password.' })
+    }
+    res.json({ ok: true })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ message: 'Server error.' })
+  }
+}

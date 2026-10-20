@@ -104,7 +104,7 @@ function AboutPage({ setCurrentPage }) {
           <div>
             <h3 className="footerLogo">NexDrive</h3>
             <ul>
-              <li>Car rental made simple. <br /> Imus, Cavite, Philippines</li>
+              <li>Car rental made simple. <br /> Pasay City, Philippines</li>
           </ul>
           </div>
           <div>
@@ -118,7 +118,7 @@ function AboutPage({ setCurrentPage }) {
           <h4>Support</h4>
           <ul>
               <li>help@nexdrive.ph</li>
-              <li>+63 900 000 0000</li>
+              <li>0910 - 117 - 6684</li>
           </ul>
           </div>
           </div>
